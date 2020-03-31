@@ -24,51 +24,29 @@ quote}}
 
 {{index [JavaScript, "availability of"], "casual computing"}}
 
-At one point language-based interfaces, such as the BASIC and DOS
-prompts of the 1980s and 1990s, were the main method of interacting with
-computers. They have largely been replaced with visual interfaces,
-which are easier to learn but offer less freedom. Computer languages
-are still there, if you know where to look. One such language,
-JavaScript, is built into every modern web ((browser)) and is thus
-available on almost every device.
+曾经命令模式的界面，比如 80、90年代的 BASIC 和 DOS，是和电脑沟通的主流方式。如今它们几乎被更简易但不够灵活的视觉界面替代。不过编程语言依旧存在，如果你知道去哪里找寻。比如 JavaScript 就被内置到了每一个现代网络((浏览器))里，因此几乎每个电子设备都兼容。
 
 {{indexsee "web browser", browser}}
 
-This book will try to make you familiar enough with this language to
-do useful and amusing things with it.
+本书尽可能让你足够了解 JavaScript，从而用它编写有趣的应用。
 
 ## On programming
 
 {{index [programming, "difficulty of"]}}
 
-Besides explaining JavaScript, I will introduce the basic
-principles of programming. Programming, it turns out, is hard. The
-fundamental rules are simple and clear, but programs built on top of
-these rules tend to become complex enough to introduce their own rules
-and complexity. You're building your own maze, in a way, and you might
-just get lost in it.
+除了讲解 JavaScript 以外，本书还会包括基本的编程理论。编程其实很难。尽管基本规则简洁明了，但是这些简单的基本概念往往叠加、组合，从而形成许多新的且更加复杂的理论。好比你在搭建一个迷宫，一不小心就会迷失。
 
 {{index learning}}
 
-There will be times when reading this book feels terribly frustrating.
-If you are new to programming, there will be a lot of new material to
-digest. Much of this material will then be _combined_ in ways that
-require you to make additional connections.
+有些时候阅读本书会让你变得沮丧。如果你从未接触过编程，那么你需要吸收理解大量新的内容。这些内容会被 _连接_ 在一起成为新的知识点。
 
-It is up to you to make the necessary effort. When you are struggling
-to follow the book, do not jump to any conclusions about your own
-capabilities. You are fine—you just need to keep at it. Take a break,
-reread some material, and make sure you read and understand the
-example programs and ((exercises)). Learning is hard work, but
-everything you learn is yours and will make subsequent learning
-easier.
+一分耕耘，一分收获。如果你学的吃力，不要怀疑自己，轻言放弃。坚持就是胜利。休息片刻，重新来过。一定要确保你明白了相关例题和((习题))。虽说学海无涯，不过你可以逐渐利用已掌握的知识举一反三。
 
 {{quote {author: "Ursula K. Le Guin", title: "The Left Hand of Darkness"}
 
 {{index "Le Guin, Ursula K."}}
 
-When action grows unprofitable, gather information; when information
-grows unprofitable, sleep.
+当行动变得无利可图是，去采集信息；当信息变得无利可图时，去休息。
 
 quote}}
 
