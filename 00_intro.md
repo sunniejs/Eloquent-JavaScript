@@ -52,59 +52,29 @@ quote}}
 
 {{index [program, "nature of"], data}}
 
-A program is many things. It is a piece of text typed by a programmer,
-it is the directing force that makes the computer do what it does, it
-is data in the computer's memory, yet it controls the actions
-performed on this same memory. Analogies that try to compare programs
-to objects we are familiar with tend to fall short. A superficially
-fitting one is that of a machine—lots of separate parts tend to be
-involved, and to make the whole thing tick, we have to consider the
-ways in which these parts interconnect and contribute to the operation
-of the whole.
+一个程序包括了许多东西。它是一篇由程序员谱写的乐章，它直接对电脑下达运行指令，它是电脑内存中的数据，与此同时它亦控制着同一内存的运行。我们熟悉的事物中找不到可以用来比喻程序的东西。硬要比拟的话，可以想象一个机器，涉及许多分散的零件，但要让全部零件运转，我们需要考虑这些零件间的关系及对整体系统的作用。
 
-A ((computer)) is a physical machine that acts as a host for these immaterial
-machines. Computers themselves can do only stupidly straightforward
-things. The reason they are so useful is that they do these things at
-an incredibly high ((speed)). A program can ingeniously combine an
-enormous number of these simple actions to do very
-complicated things.
+((电脑))是一个容纳这些非物质零件的实体机器。电脑本身只能做非常笨拙的事情。它们之所以有用是因为它们的运行((速度))惊人。一个程序可以十分巧妙的结合数以万计的简单运算，从而完成相当复杂的事情。
 
 {{index [programming, "joy of"]}}
 
-A program is a building of thought. It is costless to build, it is
-weightless, and it grows easily under our typing hands.
+程序是一次思想建设。它本身无成本、无体积、而且在我们打字的过程中，轻松增长。
 
-But without care, a program's size and ((complexity)) will grow out of
-control, confusing even the person who created it. Keeping programs
-under control is the main problem of programming. When a program
-works, it is beautiful. The art of programming is the skill of
-controlling complexity. The great program is subdued—made simple in
-its complexity.
+但一不小心，程序的大小和((复杂度))就会变得难以附加，甚至连原作者都难以理解。编程的主要问题在于如何掌控程序。一个正常运行的程序是赏心悦目的。编程的造诣是对其复杂度的掌控自如。一个出色的程序的复杂度应该化繁为简。
 
 {{index "programming style", "best practices"}}
 
-Some programmers believe that this complexity is best managed by using
-only a small set of well-understood techniques in their programs. They
-have composed strict rules ("best practices") prescribing the form
-programs should have and carefully stay within their safe little
-zone.
+有些程序员认为仅用一小部分众所周知的技术是掌控复杂度的最好方法。他们对程序制定了严格的规则（“最佳做法”）后，小心翼翼的踏步在这个狭小的安全地带。
 
 {{index experiment}}
 
-This is not only boring, it is ineffective. New problems often
-require new solutions. The field of programming is young and still
-developing rapidly, and it is varied enough to have room for wildly
-different approaches. There are many terrible mistakes to make in
-program design, and you should go ahead and make them so that you
-understand them. A sense of what a good program looks like is
-developed in practice, not learned from a list of rules.
+然而这不仅无聊，且无效。随着时代的日新月异，程序也在与时俱进。编程领域正处于突飞猛进的发展阶段，这里有无限的空间去探索、去尝试。程序设计中存有许多致命的错误，而你应该通过这些错误，慢慢摸索出其背后的原理。好的程序是在反复实践中总结出来的，而不是按部就班那一成不变的规定。
 
 ## Why language matters
 
 {{index "programming language", "machine code", "binary data"}}
 
-In the beginning, at the birth of computing, there were no programming
-languages. Programs looked something like this:
+起初，在电脑最初的阶段，并没有任何编程语言。当时的程序长这个样子:
 
 ```{lang: null}
 00110001 00000000 00000000
@@ -120,21 +90,11 @@ languages. Programs looked something like this:
 
 {{index [programming, "history of"], "punch card", complexity}}
 
-That is a program to add the numbers from 1 to 10 together and print
-out the result: `1 + 2 + ... + 10 = 55`. It could run on a simple,
-hypothetical machine. To program early computers, it was necessary to
-set large arrays of switches in the right position or punch holes in
-strips of cardboard and feed them to the computer. You can probably
-imagine how tedious and error-prone this procedure was. Even writing
-simple programs required much cleverness and discipline. Complex ones
-were nearly inconceivable.
+上面这个程序是把 1 到 10 的整数相加后输出结果：`1 + 2 + ... + 10 = 55`. 它可以在一个简单的、虚构的机器上运行。对于早期的电脑而言，编程者需要确保大量开关的位置正确，或者在纸盒版上打孔后将其馈送到计算机中。你可以想象这个过程是多么的无聊乏味且易出错。就连编写最简单的程序都需要大量的才智和耐心。编写复杂的程序简直匪夷所思。
 
 {{index bit, "wizard (mighty)"}}
 
-Of course, manually entering these arcane patterns of bits (the ones
-and zeros) did give the programmer a profound sense of being a mighty
-wizard. And that has to be worth something in terms of job
-satisfaction.
+当然，手动输入这些神秘的位模式（1 & 0），好比一个魔法师，的确让程序员印象深刻。这也是值得吹嘘的。
 
 {{index memory, instruction}}
 
