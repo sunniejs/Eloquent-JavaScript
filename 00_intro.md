@@ -98,57 +98,41 @@ quote}}
 
 {{index memory, instruction}}
 
-Each line of the previous program contains a single instruction. It
-could be written in English like this:
+上一个程序中的每一行都是一个指令。翻译成中文则是：
 
- 1. Store the number 0 in memory location 0.
- 2. Store the number 1 in memory location 1.
- 3. Store the value of memory location 1 in memory location 2.
- 4. Subtract the number 11 from the value in memory location 2.
- 5. If the value in memory location 2 is the number 0,
-    continue with instruction 9.
- 6. Add the value of memory location 1 to memory location 0.
- 7. Add the number 1 to the value of memory location 1.
- 8. Continue with instruction 3.
- 9. Output the value of memory location 0.
+ 1. 把数字0存入内存地址0。
+ 2. 把数字1存入内存地址1。
+ 3. 把内存地址1的值存入内存地址2。
+ 4. 用内存地址2的值减去11。
+ 5. 如果内存地址2的值是数字0的话，去第九个指令。
+ 6. 把内存地址1的值加入内存地址0。
+ 7. 内存地址1的值加1。
+ 8. 回第三个指令。
+ 9. 返回内存地址0的值。
 
 {{index readability, naming, binding}}
 
-Although that is already more readable than the soup of bits, it is
-still rather obscure. Using names instead of numbers for the
-instructions and memory locations helps.
+虽然改成中文后的指令相对易懂了些，但它还是让人一头雾水。用名字来代替数字的步骤和内存地址会更好理解。
 
 ```{lang: "text/plain"}
- Set “total” to 0.
- Set “count” to 1.
-[loop]
- Set “compare” to “count”.
- Subtract 11 from “compare”.
- If “compare” is zero, continue at [end].
- Add “count” to “total”.
- Add 1 to “count”.
- Continue at [loop].
-[end]
- Output “total”.
+将“总数”设置为0。
+将“计数”设置为1。
+[循环]
+将“对比”设置为“计数”
+“对比”减去11
+如果“对比”是0，跳至[结束]。
+ “总数”加“计数”
+ “计数”加1。
+ 跳至[循环]。
+[结束]
+返回“总数”
 ```
 
 {{index loop, jump, "summing example"}}
 
-Can you see how the program works at this point? The first two lines
-give two memory locations their starting values: `total` will be used
-to build up the result of the computation, and `count` will keep track
-of the number that we are currently looking at. The lines using
-`compare` are probably the weirdest ones. The program wants to see
-whether `count` is equal to 11 to decide whether it can stop
-running. Because our hypothetical machine is rather primitive, it can
-only test whether a number is zero and make a decision based
-on that. So it uses the memory location labeled `compare` to compute
-the value of `count - 11` and makes a decision based on that value.
-The next two lines add the value of `count` to the result and
-increment `count` by 1 every time the program has decided that `count`
-is not 11 yet.
+你现在看明白上面的程序是如何运行的了么？头两行分别给两个内存地址它们的起始值：“总数”是用来储存计算结果的，“计数”是用来记录当前的数字的。“对比”那行最为古怪。该程序想知道“计数”是否等于11，从而决定它是否要停止运行。因为我们虚构的机器过于简单，以至于它只能根据一个数字是不是零而做选择。所以它利用“对比”这个内存地址来计算 `计数 - 11` 的值来决定下一步。之后的两行先把“计数”加入“总数”值中，之后在把“计数”加1，直到“计数”是11为止。
 
-Here is the same program in JavaScript:
+写成 JavaSript 就是：
 
 ```
 let total = 0, count = 1;
@@ -162,27 +146,15 @@ console.log(total);
 
 {{index "while loop", loop, [braces, block]}}
 
-This version gives us a few more improvements. Most important, there
-is no need to specify the way we want the program to jump back and
-forth anymore. The `while` construct takes care of that. It continues
-executing the block (wrapped in braces) below it as long as the
-condition it was given holds. That condition is `count <= 10`, which
-means “_count_ is less than or equal to 10”. We no longer have to
-create a temporary value and compare that to zero, which was just an
-uninteresting detail. Part of the power of programming languages is
-that they can take care of uninteresting details for us.
+这个版本有几大好处。最重要的一点，我们不再需要告诉该程序如何跳来跳去。`while`帮我们完成了。它会一直运行代码块（大括号围绕的代码）中的指令直到前提失效为止。这个前提`count <= 10`就是“_计数_ 小于或等于10”。我们也不再需要创建一个临时的值去和零相比，毕竟这是个无聊的知识点。而编程语言的一大优势就是它可以自动帮我们解决这些无聊的知识点。
 
 {{index "console.log"}}
 
-At the end of the program, after the `while` construct has finished,
-the `console.log` operation is used to write out the result.
+程序的结尾，在`while`结束以后，`console.log`操作用来返回结果。
 
 {{index "sum function", "range function", abstraction, function}}
 
-Finally, here is what the program could look like if we happened to
-have the convenient operations `range` and `sum` available, which
-respectively create a ((collection)) of numbers within a range and
-compute the sum of a collection of numbers:
+最后，如果我们有`range`和`sum`这两个便捷的操作。`range`会创建一个固定范围内的数字((序列))，`sum`则计算一个((序列))的合。这个程序可以简化成：
 
 ```{startCode: true}
 console.log(sum(range(1, 10)));
@@ -191,21 +163,11 @@ console.log(sum(range(1, 10)));
 
 {{index readability}}
 
-The moral of this story is that the same program can be expressed in
-both long and short, unreadable and readable ways. The first version of the
-program was extremely obscure, whereas this last one is almost
-English: `log` the `sum` of the `range` of numbers from 1 to 10. (We
-will see in [later chapters](data) how to define operations like `sum`
-and `range`.)
+这个故事告诉我们，同一个程序有多种表达方式。最开始的程序犹如天书，而最后一个程序就好比一句话：记录（`log`)从1到10的序列(`range`)总和(`sum`)。（[后面](data)我们会讲到如何创建类似`sum`和`range`的操作。）
 
 {{index ["programming language", "power of"], composability}}
 
-A good programming language helps the programmer by allowing them to
-talk about the actions that the computer has to perform on a higher
-level. It helps omit details, provides convenient building blocks
-(such as `while` and `console.log`), allows you to define your own
-building blocks (such as `sum` and `range`), and makes those blocks
-easy to compose.
+一个好的编程语言应该把复杂的电脑操作简单化。它会删除细节，提供一系列方便的积木（比如`while`、`console.log`），允许你自创其他积木（比如`sum`、`range`），而且还会轻松拼搭建起这些积木。
 
 ## What is JavaScript?
 
@@ -353,11 +315,7 @@ necessary to run the code for a given chapter.
 
 ## Overview of this book
 
-This book contains roughly three parts. The first 12 chapters discuss
-the JavaScript language. The next seven chapters are about web
-((browsers)) and the way JavaScript is used to program them. Finally,
-two chapters are devoted to ((Node.js)), another environment to
-program JavaScript in.
+本书大约分为三部分。前12章探讨 JavaScript。之后的七章是关于网络((浏览器))和如何用 JavaScript 去编写它们。最后两章用来讲 ((Node.js))，另一个可以编写 JavaScript 的环境。
 
 Throughout the book, there are five _project chapters_, which describe
 larger example programs to give you a taste of actual programming. In
@@ -404,10 +362,7 @@ if}}
 
 {{index "factorial function"}}
 
-In this book, text written in a `monospaced` font will represent
-elements of programs—sometimes they are self-sufficient fragments, and
-sometimes they just refer to part of a nearby program. Programs (of
-which you have already seen a few) are written as follows:
+本书中，`等距`的字体代表程序的一部分。它们也许是一个独立的程序片段，或者是取自附近程序的一个碎片。程序（你已经见过许多）会用下面的写法表达：
 
 ```
 function factorial(n) {
@@ -421,13 +376,11 @@ function factorial(n) {
 
 {{index "console.log"}}
 
-Sometimes, to show the output that a program produces, the
-expected output is written after it, with two slashes and an arrow in
-front.
+有时，为了表示一个程序的结果，该结果会写在下面。前面会有两条斜线和一个箭头。
 
 ```
 console.log(factorial(8));
 // → 40320
 ```
 
-Good luck!
+加油！
