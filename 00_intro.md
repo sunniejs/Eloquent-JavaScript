@@ -177,111 +177,47 @@ console.log(sum(range(1, 10)));
 
 {{indexsee Web, "World Wide Web"}}
 
-JavaScript was introduced in 1995 as a way to add programs to web
-pages in the Netscape Navigator browser. The language has since been
-adopted by all other major graphical web browsers. It has made modern
-web applications possible—applications with which you can interact
-directly without doing a page reload for every action. JavaScript is also
-used in more traditional websites to provide various forms of
-interactivity and cleverness.
+Netscape Navigator 浏览器于1995年推出了 JavaScript，以便在页面上添加程序。此后所有主要图形网络浏览器都支持该语言。它创建了现代网络程序——用户可以直接和应用互动，而不再需要为每一个操作重新加载页面。更传统的网站也会用 JavaScript 来提供各种形式的互动。
 
 {{index Java, naming}}
 
-It is important to note that JavaScript has almost nothing to do with
-the programming language named Java. The similar name was inspired by
-marketing considerations rather than good judgment. When JavaScript
-was being introduced, the Java language was being heavily marketed and
-was gaining popularity. Someone thought it was a good idea to try to
-ride along on this success. Now we are stuck with the name.
+一定要记住 JavaScript 和另一个叫 Java 的编程语言没有半点关系。名字的相似度只是为了更好的市场行销。JavaScript 刚面世时，Java 语言正因为大量市场销售而备受欢迎。有些人觉得搭个顺风车，可以事半功倍。这名字就这么保留了下来。
 
 {{index ECMAScript, compatibility}}
 
-After its adoption outside of Netscape, a ((standard)) document was
-written to describe the way the JavaScript language should work so
-that the various pieces of software that claimed to support JavaScript
-were actually talking about the same language. This is called the
-ECMAScript standard, after the Ecma International organization that
-did the standardization. In practice, the terms ECMAScript and
-JavaScript can be used interchangeably—they are two names for the same
-language.
+自从被外界采用后，就有一个((标准))文档用来描述 JavaScript 的运行方式，以便于所有声称支持 JavaScript 的应用可以达成统一。由 Ecma 国际组织标准化的这个文档叫做 ECMAScript standard。实际上，ECMAScript 和 JavaScript 可互换使用——它们都指同一个语言。
 
 {{index [JavaScript, "weaknesses of"], debugging}}
 
-There are those who will say _terrible_ things about JavaScript. Many
-of these things are true. When I was required to write something in
-JavaScript for the first time, I quickly came to despise it. It would
-accept almost anything I typed but interpret it in a way that was
-completely different from what I meant. This had a lot to do with the
-fact that I did not have a clue what I was doing, of course, but there
-is a real issue here: JavaScript is ridiculously liberal in what it
-allows. The idea behind this design was that it would make programming
-in JavaScript easier for beginners. In actuality, it mostly makes
-finding problems in your programs harder because the system will not
-point them out to you.
+有些人会例举许多 JavaScript 中_糟糕_的点，而且大部分是事实。在我第一次被要求写 JavaScript 时，我立即鄙视了这个语言。它几乎接受了我打出的所有代码，只是编译结果和我想象的大相径庭。当然，这绝大程度上是因为我当时并不知道自己在做什么。可是，隐藏的真正的问题是：JavaScript 的接受范围广义的可怕。JavaScript 的这种设计初衷是让新手更容易编程。但事实上，它复杂化了代码调试，因为系统不会告诉你问题出在哪里。
 
 {{index [JavaScript, "flexibility of"], flexibility}}
 
-This flexibility also has its advantages, though. It leaves space for
-a lot of techniques that are impossible in more rigid languages, and
-as you will see (for example in [Chapter ?](modules)), it can be used
-to overcome some of JavaScript's shortcomings. After ((learning)) the
-language properly and working with it for a while, I have learned to
-actually _like_ JavaScript.
+当然，这种灵活性也有它的优势。相比其他更为严谨的语言，它提供了更多的技术空间。后面你会看到(比如[第十章](modules))，它甚至可以用来克服部分自身的缺点。在系统的((学习))和运用 JavaScript 后，我发现我其实_喜欢_它。
 
 {{index future, [JavaScript, "versions of"], ECMAScript, "ECMAScript 6"}}
 
-There have been several versions of JavaScript. ECMAScript version 3
-was the widely supported version in the time of JavaScript's ascent to
-dominance, roughly between 2000 and 2010. During this time, work was
-underway on an ambitious version 4, which planned a number of radical
-improvements and extensions to the language. Changing a living, widely
-used language in such a radical way turned out to be politically
-difficult, and work on the version 4 was abandoned in 2008, leading to
-a much less ambitious version 5, which made only some uncontroversial
-improvements, coming out in 2009. Then in 2015 version 6 came out, a
-major update that included some of the ideas planned for version 4.
-Since then we've had new, small updates every year.
+现有许多版本的 JavaScript。EMCAScript 第3版在 JavaScript 统治时期，大约在2000-2010年，被广泛支持。这期间，被寄予厚望的第4版正在开发中，其中包括了大量的改善和扩展。事实证明，如此大规模的完善一个被广泛运用的语言是相当困难的。在2008年，第4版宣告流产后，仅有少许无争议改善的第5版于2009年问世了。第6版发表于2015年，是一个包括了部分第4版的重要更新。此后的每一年都会有一些小更新。
 
-The fact that the language is evolving means that browsers have to
-constantly keep up, and if you're using an older browser, it may not
-support every feature. The language designers are careful to not make
-any changes that could break existing programs, so new browsers can
-still run old programs. In this book, I'm using the 2017 version of
-JavaScript.
+语言的不断更新意味着浏览器必须与时俱进。如果你用一个老旧的浏览器，很多新的特性可能都不被支持。语言构架师们异常小心谨慎，避免做任何可能破坏现有程序的更改，所以新的浏览器还支持老旧的程序。本书用的是2017版的 JavaScript。
 
 {{index [JavaScript, "uses of"]}}
 
-Web browsers are not the only platforms on which JavaScript is used.
-Some databases, such as MongoDB and CouchDB, use JavaScript as their
-scripting and query language. Several platforms for desktop and server
-programming, most notably the ((Node.js)) project (the subject of
-[Chapter ?](node)), provide an environment for programming JavaScript
-outside of the browser.
+网页浏览器不是 JavaScript 的唯一平台。有些数据库，比如 MongoDB 和 CouchDB，用 JavaScript 作为它们的脚本和查询语言。部分桌面和服务器编程平台，最普遍的是((Node.js))（[第二十章](node)内容），提供浏览器外可编译 JavaScript 的环境。
 
 ## Code, and what to do with it
 
 {{index "reading code", "writing code"}}
 
-_Code_ is the text that makes up programs. Most chapters in this book
-contain quite a lot of code. I believe reading code and writing ((code))
-are indispensable parts of ((learning)) to program. Try to not just
-glance over the examples—read them attentively and understand them.
-This may be slow and confusing at first, but I promise that you'll
-quickly get the hang of it. The same goes for the ((exercises)). Don't
-assume you understand them until you've actually written a working
-solution.
+_代码_是组成程序的文本。本书中大部分的章节都有大量代码。我坚信读写((代码))与((学习))编程密不可分。对于例题，请不要一目十行——认真阅读且理解它们。起初也许难以理解，但要相信功夫不负有心人。对于((练习题))也是一样。在你真正写出解题前，不要以为你已经学会了。
 
 {{index interpretation}}
 
-I recommend you try your solutions to exercises in an actual
-JavaScript interpreter. That way, you'll get immediate feedback on
-whether what you are doing is working, and, I hope, you'll be tempted
-to ((experiment)) and go beyond the exercises.
+我建议你在一个真正的 JavaScript 编译器中做练习题。这样，你可以立刻检验答案的准确性。但愿你会试图((尝试))习题以外的挑战。
 
 {{if interactive
 
-When reading this book in your browser, you can edit (and run) all
-example programs by clicking them.
+在使用浏览器阅读本书时，你可以点击修改（和运行）所有例题。
 
 if}}
 
@@ -289,74 +225,27 @@ if}}
 
 {{index download, sandbox, "running code"}}
 
-The easiest way to run the example code in the book, and to experiment
-with it, is to look it up in the online version of the book at
-[_https://eloquentjavascript.net_](https://eloquentjavascript.net/). There,
-you can click any code example to edit and run it and to see the
-output it produces. To work on the exercises, go to
-[_https://eloquentjavascript.net/code_](https://eloquentjavascript.net/code),
-which provides starting code for each coding exercise and allows you
-to look at the solutions.
+通过网页[_https://eloquentjavascript.net_](https://eloquentjavascript.net/)是运行和实践本书中代码的最简单方法。你可以点击修改（和运行）任何例题并看到它输出的结果。[_https://eloquentjavascript.net/code_](https://eloquentjavascript.net/code)不仅给每到练习题都提供了起始码，还有参考答案。
 
 if}}
 
 {{index "developer tools", "JavaScript console"}}
 
-If you want to run the programs defined in this book outside of the
-book's website, some care will be required. Many examples stand on their
-own and should work in any JavaScript environment. But code in later
-chapters is often written for a specific environment (the browser or
-Node.js) and can run only there. In addition, many chapters define
-bigger programs, and the pieces of code that appear in them depend on
-each other or on external files. The
-[sandbox](https://eloquentjavascript.net/code) on the website provides
-links to Zip files containing all the scripts and data files
-necessary to run the code for a given chapter.
+如果你想在其他网页运行本书中的代码，你需要一些额外的步骤。大部分代码是独立的，所以可以在所有 JavaScript 环境下运行。但后几章的代码需要具体的运行环境（浏览器或者 Node.js），且只能在那些环境下运行。此外，因为很多章节的程序较大，所以部分代码相互依赖或者需要外来文件。网页的[沙盒模式](https://eloquentjavascript.net/code)提供的 zip 文件包含了所需的数据和脚本文件。
 
 ## Overview of this book
 
 本书大约分为三部分。前12章探讨 JavaScript。之后的七章是关于网络((浏览器))和如何用 JavaScript 去编写它们。最后两章用来讲 ((Node.js))，另一个可以编写 JavaScript 的环境。
 
-Throughout the book, there are five _project chapters_, which describe
-larger example programs to give you a taste of actual programming. In
-order of appearance, we will work through building a [delivery
-robot](robot), a [programming language](language), a [platform
-game](game), a [pixel paint program](paint), and a [dynamic
-website](skillsharing).
+全书共有五个_项目章节_，提供更大的示例程序，从而让你体验更真实的编程。按出场顺序，我们会一起搭建一个[送货机器人](robot)，一个[编程语言](language)，一个[平台游戏](game)，一个[像素画程序]](paint)，和一个[动态网页](skillsharing).
 
-The language part of the book starts with four chapters that introduce
-the basic structure of the JavaScript language. They introduce
-[control structures](program_structure) (such as the `while` word you
-saw in this introduction), [functions](functions) (writing your own
-building blocks), and [data structures](data). After these, you will
-be able to write basic programs. Next, Chapters [?](higher_order) and
-[?](object) introduce techniques to use functions and objects to write
-more _abstract_ code and keep complexity under control.
+本书的前四章介绍了 JavaScript 的基本结构。包括了[控制结构](program_structure) (比如前面看到的`while`)，[函数](functions) (编写自己的积木)，和[数据结构](data)。结束后，你将会编写简单的程序。[第五章](higher_order)和[第六章](object)讲述了如何用函数和对象编写更抽象的代码和更复杂的指令。
 
-After a [first project chapter](robot), the language part of the book
-continues with chapters on [error handling and bug fixing](error),
-[regular expressions](regexp) (an important tool for working with
-text), [modularity](modules) (another defense against complexity), and
-[asynchronous programming](async) (dealing with events that take
-time). The [second project chapter](language) concludes the first part
-of the book.
+[第一个项目章节](robot)结束后，我们将继续探索 JavaScript 的[错误处理和修复](error)，[正则表达式](regexp) (处理文本的重要工具), [模块化](modules) (防止复杂性的另一道防线)，和[异步编程](async) (处理需要时间的事件)。[第二个项目章节](language)为本书的第一部分画上句号。
 
-The second part, Chapters [?](browser) to [?](paint), describes the
-tools that browser JavaScript has access to. You'll learn to display
-things on the screen (Chapters [?](dom) and [?](canvas)), respond to
-user input ([Chapter ?](event)), and communicate over the network
-([Chapter ?](http)). There are again two project chapters in this
-part.
+第二部分，从[第十三章](browser)至[第十九章](paint)，描述了JavaScript 可以在浏览器中访问的工具。你会学会如何在显示器上展现东西([第十四章](dom)和[第十七章](canvas))，响应用户输入 ([第十五章](event))，以及通过网络交流([第十八章](http))。本部分也有两个项目章节。
 
-After that, [Chapter ?](node) describes Node.js, and [Chapter
-?](skillsharing) builds a small website using that tool.
-
-{{if commercial
-
-Finally, [Chapter ?](fast) describes some of the considerations that
-come up when optimizing JavaScript programs for speed.
-
-if}}
+之后，[第二十章](node)讲述了 Node.js，和[第二十一章](skillsharing)会通过 Node.js 创建一个小网站。
 
 ## Typographic conventions
 
