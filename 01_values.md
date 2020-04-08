@@ -4,10 +4,7 @@
 
 {{quote {author: "Master Yuan-Ma", title: "The Book of Programming", chapter: true}
 
-Below the surface of the machine, the program moves. Without effort,
-it expands and contracts. In great harmony, electrons scatter and
-regroup. The forms on the monitor are but ripples on the water. The
-essence stays invisibly below.
+程序在机器内部运转。它不废吹灰之力的伸展或收缩。电子非常和谐的散开或重组。显示器上的画面无非是水面的涟漪。其本质皆隐藏在下面。
 
 quote}}
 
@@ -17,67 +14,36 @@ quote}}
 
 {{index "binary data", data, bit, memory}}
 
-Inside the computer's world, there is only data. You can read data,
-modify data, create new data—but that which isn't data cannot be
-mentioned. All this data is stored as long sequences of bits and is
-thus fundamentally alike.
+在电脑的世界里只有数据。你可以读取数据、改写数据、创建新的数据——但任何非数据的东西都是禁止的。所有数据的本质皆相同，因此被储存为长位序列。
 
 {{index CD, signal}}
 
-_Bits_ are any kind of two-valued things, usually described as zeros and
-ones. Inside the computer, they take forms such as a high or low
-electrical charge, a strong or weak signal, or a shiny or dull spot on
-the surface of a CD. Any piece of discrete information can be reduced
-to a sequence of zeros and ones and thus represented in bits.
+_位_是任何二值事物，一般用零和一表示。在电脑里，它们可以是高低电荷、强弱信号、或者 CD 光盘表面的亮暗点。任何离散信息都可以转换成零和一的序列，从而用位表示。
 
 {{index "binary number", radix, "decimal number"}}
 
-For example, we can express the number 13 in bits. It works the same
-way as a decimal number, but instead of 10 different ((digit))s, you
-have only 2, and the weight of each increases by a factor of 2 from
-right to left. Here are the bits that make up the number 13, with the
-weights of the digits shown below them:
+我们可以用位表示数字13。这和十进制原理相同，只不过由2个((数字))代替10个数字。所以每次进位的倍数也是2。下面就是以位表示数字13和相对应的进位倍数：
 
 ```{lang: null}
    0   0   0   0   1   1   0   1
  128  64  32  16   8   4   2   1
 ```
 
-So that's the binary number 00001101. Its non-zero digits stand for
-8, 4, and 1, and add up to 13.
+二进制数 00001101，非0的数字分别代表8、4、1，相加在一起就是13。
 
 ## Values
 
 {{index [memory, organization], "volatile data storage", "hard drive"}}
 
-Imagine a sea of bits—an ocean of them. A typical modern computer has
-more than 30 billion bits in its volatile data storage (working
-memory). Nonvolatile storage (the hard disk or equivalent) tends to
-have yet a few orders of magnitude more.
+想象一片汪洋大海，其每一滴水都是一个位。一个典型的现代计算机的易失性存储器（RAM等）可容纳超过300亿个位。却也只是其非易失性存储器（硬盘等）的一个零头而已。
 
-To be able to work with such quantities of bits without getting lost,
-we must separate them into chunks that represent pieces of
-information. In a JavaScript environment, those chunks are called
-_((value))s_. Though all values are made of bits, they play different
-roles. Every value has a ((type)) that determines its role. Some
-values are numbers, some values are pieces of text, some values are
-functions, and so on.
+为了避免如此庞大的位流失，我们必须把这些位分成代表信息的组。在 JavaScript 中，这些分组叫做((值))。尽管所有的值都是由位组成，但它们各司其职。每个值都有一个代表它职位的((类型))。有些值是数字，有些值是字符，有些值是函数等。
 
 {{index "garbage collection"}}
 
-To create a value, you must merely invoke its name. This is
-convenient. You don't have to gather building material for your values
-or pay for them. You just call for one, and _whoosh_, you have it. They
-are not really created from thin air, of course. Every value has to be
-stored somewhere, and if you want to use a gigantic amount of them at
-the same time, you might run out of memory. Fortunately, this is a
-problem only if you need them all simultaneously. As soon as you no
-longer use a value, it will dissipate, leaving behind its bits to be
-recycled as building material for the next generation of values.
+创建一个值是相当简单方便的。你只需要叫他的名字而已。不需要任何多余的操作或准备。当然值不是无中生有出来的。每个值都必须被储存在某个地方。所以如果你想同时用成千上万个值的话，你的电脑很可能会内存不足。庆幸的是，这只有在你同时需要这些值的时候发生。当你不再需要某个值时，它就会消失，代表它的位这时将被回收，以便用来表示后面的值。
 
-This chapter introduces the atomic elements of JavaScript programs,
-that is, the simple value types and the operators that can act on such
-values.
+本章将介绍 JavaScript 中最核心的部分，包括简单的类型和可以进行类型运算的运算符。
 
 ## Numbers
 
