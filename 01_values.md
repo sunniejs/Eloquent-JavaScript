@@ -48,9 +48,7 @@ _位_是任何二值事物，一般用零和一表示。在电脑里，它们可
 ## Numbers
 
 {{index [syntax, number], number, [number, notation]}}
-
-Values of the _number_ type are, unsurprisingly, numeric values. In a
-JavaScript program, they are written as follows:
+_数字_类的值顾名思义指数值。在 JavaScript 里，它们写做：
 
 ```
 13
@@ -58,40 +56,21 @@ JavaScript program, they are written as follows:
 
 {{index "binary number"}}
 
-Use that in a program, and it will cause the bit pattern for the
-number 13 to come into existence inside the computer's memory.
+把它放在一个程序里，它相对应的位模式13就会被存放在电脑的内存里。
 
 {{index [number, representation], bit}}
 
-JavaScript uses a fixed number of bits, 64 of them, to store a
-single number value. There are only so many patterns you can make with
-64 bits, which means that the number of different numbers that can be
-represented is limited. With _N_ decimal ((digit))s, you can represent
-10^N^ numbers. Similarly, given 64 binary
-digits, you can represent 2^64^ different numbers, which is about 18
-quintillion (an 18 with 18 zeros after it). That's a lot.
+JavaScript 使用固定的64位浮点（双精度IEEE 754）储存一个数值。因为64位的组合有限，所以支持的数字是有限的。在_N_位十进制中，可以有 10^N^ 个数字。所以，在64位的二进制里，总共可以有 2^64^ 的不同的数字，大约是 1800京（18后面根18个0）。算是个天文数字。
 
-Computer memory used to be much smaller, and people tended to use
-groups of 8 or 16 bits to represent their numbers. It was easy to
-accidentally _((overflow))_ such small numbers—to end up with a number
-that did not fit into the given number of bits. Today, even computers
-that fit in your pocket have plenty of memory, so you are free to use
-64-bit chunks, and you need to worry about overflow only when dealing
-with truly astronomical numbers.
+曾经的电脑内存相当有限，以至于大家习惯用8位或16位来代表数字。在如此小的范围内，数字经常会意外_((溢出))_，得到一个无法无法被8位或16位表示的数字。今天，即使掌上电脑都有相当大的内存储蓄，所以我们可以随便用64位来代表数字。只有和真正的天文数字打交道时，才需要担心溢出。
 
 {{index sign, "floating-point number", "sign bit"}}
 
-Not all whole numbers less than 18 quintillion fit in a JavaScript number,
-though. Those bits also store negative numbers, so one bit indicates
-the sign of the number. A bigger issue is that nonwhole numbers must
-also be represented. To do this, some of the bits are used to store
-the position of the decimal point. The actual maximum whole number
-that can be stored is more in the range of 9 quadrillion (15
-zeros)—which is still pleasantly huge.
+但是 JavaScript 的数字并无法支持所有小于 1800京 的整数。除了正数外，我们还需要支持负数。所以第一个位用来表示负号。此外，我们也需要支持小数。因此，有些位用来存放小数点的位置。因此，JavaScript 支持的最大的正整数大约是 9千兆（15个零）。依旧是相当庞大的数字。
 
 {{index [number, notation], "fractional number"}}
 
-Fractional numbers are written by using a dot.
+分数也用小数来表示。
 
 ```
 9.81
@@ -99,35 +78,23 @@ Fractional numbers are written by using a dot.
 
 {{index exponent, "scientific notation", [number, notation]}}
 
-For very big or very small numbers, you may also use scientific
-notation by adding an _e_ (for _exponent_), followed by the exponent
-of the number.
+对特别大或小的数字，我们也可以用科学计数法：_e_ ((代表 _指数_ exponent))后面跟上相对应的指数。
 
 ```
 2.998e8
 ```
 
-That is 2.998 × 10^8^ = 299,800,000.
+这就是 2.998 x 10^8^ = 299,800,000。
 
 {{index pi, [number, "precision of"], "floating-point number"}}
 
-Calculations with whole numbers (also called _((integer))s_) smaller
-than the aforementioned 9 quadrillion are guaranteed to always be
-precise. Unfortunately, calculations with fractional numbers are
-generally not. Just as π (pi) cannot be precisely expressed by a
-finite number of decimal digits, many numbers lose some precision when
-only 64 bits are available to store them. This is a shame, but it
-causes practical problems only in specific situations. The important
-thing is to be aware of it and treat fractional digital numbers as
-approximations, not as precise values.
+小于 9千兆的整数运算永远都是精准的。不过，分数运算往往无法保证精准度。正如 π（圆周率）只能约等于一个有限小数一样，很多数字在64位二进制中会失去精准率。虽然可惜，好在这只会在特定情况下引起实际问题。更重要的是知道它的存在，因此用约等，而不是对等，对待分数。
 
 ### Arithmetic
 
 {{index [syntax, operator], operator, "binary operator", arithmetic, addition, multiplication}}
 
-The main thing to do with numbers is arithmetic. Arithmetic operations
-such as addition or multiplication take two number values and produce
-a new number from them. Here is what they look like in JavaScript:
+数字最重要的就是算术。算术运算，比如加、乘，是用两个数字得出一个新的数字。在 JavaScript 中这样表示：
 
 ```
 100 + 4 * 11
@@ -135,17 +102,11 @@ a new number from them. Here is what they look like in JavaScript:
 
 {{index [operator, application], asterisk, "plus character", "* operator", "+ operator"}}
 
-The `+` and `*` symbols are called _operators_. The first stands for
-addition, and the second stands for multiplication. Putting an
-operator between two values will apply it to those values and produce
-a new value.
+`+`和`*`是 _算术运算符_。第一个代表加法，第二个是乘法。把一个算术运算符放置两个数值间，会对这两个数值进行算术，从而得到一个新的值。
 
 {{index grouping, parentheses, precedence}}
 
-But does the example mean "add 4 and 100, and multiply the result by 11,"
-or is the multiplication done before the adding? As you might have
-guessed, the multiplication happens first. But as in mathematics, you
-can change this by wrapping the addition in parentheses.
+但上面的例子是“100加上4之后乘以11”还是先做乘法再做加法呢？你也许猜到了，先做乘法。但和数学一样，你可以把加法运算放进括号内，以提升其优先权。
 
 ```
 (100 + 4) * 11
@@ -153,51 +114,29 @@ can change this by wrapping the addition in parentheses.
 
 {{index "hyphen character", "slash character", division, subtraction, minus, "- operator", "/ operator"}}
 
-For subtraction, there is the `-` operator, and division can be done
-with the `/` operator.
+减法的算术运算符是`-`，除法的则是`/`。
 
-When operators appear together without parentheses, the order in which
-they are applied is determined by the _((precedence))_ of the
-operators. The example shows that multiplication comes before
-addition. The `/` operator has the same precedence as `*`. Likewise
-for `+` and `-`. When multiple operators with the same precedence
-appear next to each other, as in `1 - 2 + 1`, they are applied left to
-right: `(1 - 2) + 1`.
+在没有括号的前提下，运算的先后顺序是根据算术运算符自身的优先权而决定的。如前面例子所示，乘法的优先权在加法之前。除法(`/`)和乘法(`*`)的优先权一致，加法(`+`)和减法(`-`)的优先权一致。在算术运算符的优先权一致的情况下，比如`1 - 2 + 1`，运算会按照从左到右的顺序依次进行：`(1 - 2) + 1`。
 
-These rules of precedence are not something you should worry about.
-When in doubt, just add parentheses.
+你不需要担心运算顺序。如果不确定的话，直接加括号。
 
 {{index "modulo operator", division, "remainder operator", "% operator"}}
 
-There is one more arithmetic operator, which you might not immediately
-recognize. The `%` symbol is used to represent the _remainder_
-operation. `X % Y` is the remainder of dividing `X` by `Y`. For
-example, `314 % 100` produces `14`, and `144 % 12` gives `0`.
-The remainder operator's precedence is the same as that of multiplication and
-division. You'll also often see this operator referred to as _modulo_.
+除此之外，还有一个你也许不熟悉的算术运算符。`%`代表求余。`X % Y`的意思是`X`除以`Y`的余数。比如，`314 % 100`的结果是`14`，`144 % 12`的结果是`0`。求余的优先权和乘除法一致。
 
 ### Special numbers
 
 {{index [number, "special values"]}}
 
-There are three special values in JavaScript that are considered
-numbers but don't behave like normal numbers.
+JavaScript 中有三个特殊的数值。尽管它们是数字，却和普通的数字不一样。
 
 {{index infinity}}
 
-The first two are `Infinity` and `-Infinity`, which represent the
-positive and negative infinities. `Infinity - 1` is still `Infinity`,
-and so on. Don't put too much trust in infinity-based computation,
-though. It isn't mathematically sound, and it will quickly lead to the
-next special number: `NaN`.
+前两个是`Infinity`和`-Infinity`，分别代表正负无穷大。需要注意的是，`Infinity - 1`还是`Infinity`。不要太相信无穷大的运算。它不具备一定的数学合理性，而且很快就会导致`NaN`，也是第三个特殊数。
 
 {{index NaN, "not a number", "division by zero"}}
 
-`NaN` stands for "not a number", even though it _is_ a value of the
-number type. You'll get this result when you, for example, try to
-calculate `0 / 0` (zero divided by zero), `Infinity - Infinity`, or
-any number of other numeric operations that don't yield a meaningful
-result.
+`NaN` 代表“不是数字”（英文：Not A Number)，尽管它的值_是_数值。任何导致无意义结果的数字运算，比如`0 / 0`（零除以零）或者`Infinity - Infinity`，都会得到这个结果。
 
 ## Strings
 
