@@ -144,8 +144,7 @@ JavaScript 中有三个特殊的数值。尽管它们是数字，却和普通的
 
 {{index [syntax, string], text, character, [string, notation], "single-quote character", "double-quote character", "quotation mark", backtick}}
 
-The next basic data type is the _((string))_. Strings are used to
-represent text. They are written by enclosing their content in quotes.
+下一个基本的数据类型是_字符串_。字符串是用来表示文字的。字符串的内容是被引号包围的。
 
 ```
 `Down on the sea`
@@ -153,111 +152,68 @@ represent text. They are written by enclosing their content in quotes.
 'Float on the ocean'
 ```
 
-You can use single quotes, double quotes, or backticks to mark
-strings, as long as the quotes at the start and the end of the string
-match.
+你可以用单引号、双引号、或者反引号去表示字符串，只要起始和结尾的引号一致。
 
 {{index "line break", "newline character"}}
 
-Almost anything can be put between quotes, and JavaScript will make a
-string value out of it. But a few characters are more difficult. You
-can imagine how putting quotes between quotes might be hard.
-_Newlines_ (the characters you get when you press [enter]{keyname}) can be
-included without escaping only when the string is quoted with backticks
-(`` ` ``).
+JavaScript 几乎把所以被引号包围的东西都转换成字符串。但也有些特殊字符。比如用引号包围引号。_换行符_（在你输入[回车键]{keyname}所得到的字符）在不通过转义字符的情况下，只能在反引号中表达(`` ` ``)。
 
 {{index [escaping, "in strings"], ["backslash character", "in strings"]}}
 
-To make it possible to include such characters in a string, the
-following notation is used: whenever a backslash (`\`) is found inside
-quoted text, it indicates that the character after it has a special
-meaning. This is called _escaping_ the character. A quote that is
-preceded by a backslash will not end the string but be part of it.
-When an `n` character occurs after a backslash, it is interpreted as a
-newline. Similarly, a `t` after a backslash means a ((tab character)).
-Take the following string:
+为了让所有字符都可以被转换成字符串，我们引入了反斜杠（`\`）。它后面的字符有特殊的意义。它就是_转义字符_。在反斜杠后面的引号只是字符串里的一个字符，而不是字符串的结束标志。而紧随反斜杠其后的`n`代表换行符。紧随反斜杠后面的`t`是((水平制表符))。如下面的例子：
 
 ```
-"This is the first line\nAnd this is the second"
+"第一行文字\n第二行文字"
 ```
 
-The actual text contained is this:
+它实际的文字展现是:
 
 ```{lang: null}
-This is the first line
-And this is the second
+第一行文字
+第二行文字
 ```
 
-There are, of course, situations where you want a backslash in a
-string to be just a backslash, not a special code. If two backslashes
-follow each other, they will collapse together, and only one will be
-left in the resulting string value. This is how the string "_A newline
-character is written like `"`\n`"`._" can be expressed:
+当然，有时候我们想要反斜杠作为一个普通字符，而不是转义字符。当两个反斜杠挨在一起，它们会合二为一，成为一个普通的字符出现在我们的字符串中。比如字符串 "一个换行符可以写做\"\\n\"。" 的字符串表达方式是：
 
 ```
-"A newline character is written like \"\\n\"."
+"一个换行符可以写做 \"\\n\"."
 ```
 
 {{id unicode}}
 
 {{index [string, representation], Unicode, character}}
 
-Strings, too, have to be modeled as a series of bits to be able to
-exist inside the computer. The way JavaScript does this is based on
-the _((Unicode))_ standard. This standard assigns a number to
-virtually every character you would ever need, including characters
-from Greek, Arabic, Japanese, Armenian, and so on. If we have a number
-for every character, a string can be described by a sequence of
-numbers.
+字符串也需要给转换成一连串的位存在电脑的内存中。JavaScript 是根据_((Unicode))_标准转换的。这个标准给每一个我们可能遇到的字符了一个编号，包括各种语言。因为每一个字符都有一个编号，一个字符串可以由一系列的编号组成。
 
 {{index "UTF-16", emoji}}
 
-And that's what JavaScript does. But there's a complication:
-JavaScript's representation uses 16 bits per string element, which can
-describe up to 2^16^ different characters. But Unicode defines more
-characters than that—about twice as many, at this point. So some
-characters, such as many emoji, take up two "character positions" in
-JavaScript strings. We'll come back to this in [Chapter
-?](higher_order#code_units).
+JavaScript 正是这么做的。可是有一个问题：JavaScript 用16位来表示每一个字符，所以只支持 2^16^ 个不同的字符。但是 Unicode 支持的字符数量差不多是这个的一倍。所以许多字符，比如表情符号，需要两个“字符位置”。我们[第五章](higher_order#code_units)会重温这个问题。
 
 {{index "+ operator", concatenation}}
 
-Strings cannot be divided, multiplied, or subtracted, but the `+`
-operator _can_ be used on them. It does not add, but it
-_concatenates_—it glues two strings together. The following line will
-produce the string `"concatenate"`:
+字符串不可以被乘、被除、或被剪，但是支持`+`运算符号。虽然字符串无法相加，但是它们可以相连在一起。必须下面的字符串运算结果是`"concatenate"`：
 
 ```
 "con" + "cat" + "e" + "nate"
 ```
 
-String values have a number of associated functions (_methods_) that
-can be used to perform other operations on them. I'll say more about
-these in [Chapter ?](data#methods).
+字符串值支持一系列函数操作，可以用来做字符串运算。详情会在[第四章](data#methods)讲。
 
 {{index interpolation, backtick}}
 
-Strings written with single or double quotes behave very much the
-same—the only difference is in which type of quote you need to escape
-inside of them. Backtick-quoted strings, usually called _((template
-literals))_, can do a few more tricks. Apart from being able to span
-lines, they can also embed other values.
+单引号和双引号的字符串本质上没什么区别，除了在字符串内需要转义的引号不同。反引号的字符串，也叫_((模板字面量))_，略微不同。除了支持换行符外，也支持其他变量值。
 
 ```
-`half of 100 is ${100 / 2}`
+`一百的一半是 ${100 / 2}`
 ```
 
-When you write something inside `${}` in a template literal, its
-result will be computed, converted to a string, and included at that
-position. The example produces "_half of 100 is 50_".
+任何在模板字面量里的`${}`都会先得出其相对应的值后在转换成字符串。所以上面的最终结果是 "一百的一半是 50"。
 
 ## Unary operators
 
 {{index operator, "typeof operator", type}}
 
-Not all operators are symbols. Some are written as words. One example
-is the `typeof` operator, which produces a string value naming the
-type of the value you give it.
+不是所有的操作都是符号。有些可以是单词，比如 `typeof`操作，返回一个字符串表示被操作的值的类型。
 
 ```
 console.log(typeof 4.5)
@@ -270,17 +226,11 @@ console.log(typeof "x")
 
 {{id "console.log"}}
 
-We will use `console.log` in example code to indicate that we want to
-see the result of evaluating something. More about that in the [next
-chapter](program_structure).
+在例题中，我们会用 `console.log` 来表示我们想鉴定结果。[下一章](program_structure)中会遇到更多。
 
 {{index negation, "- operator", "binary operator", "unary operator"}}
 
-The other operators shown all operated on two values, but `typeof`
-takes only one. Operators that use two values are called _binary_
-operators, while those that take one are called _unary_ operators. The
-minus operator can be used both as a binary operator and as a unary
-operator.
+以上所有例题中，除了 `typeof` 外，其他操作皆需要两个值。需要两个值的操作叫做_二元_操作，需要一个值的操作叫做_一元_操作。减号可以是一元也可以是二元操作。
 
 ```
 console.log(- (10 - 2))
@@ -291,16 +241,13 @@ console.log(- (10 - 2))
 
 {{index Boolean, operator, true, false, bit}}
 
-It is often useful to have a value that distinguishes between only two
-possibilities, like "yes" and "no" or "on" and "off". For this
-purpose, JavaScript has a _Boolean_ type, which has just two values,
-true and false, which are written as those words.
+一般用于表示一个只可能有两种结果的值，比如“是”和“否”，“开”和“关”。为此，JavaScript 中有一个_布尔_值，只能有两个值：真和假，写做 true（真）和 false（假）。
 
 ### Comparison
 
 {{index comparison}}
 
-Here is one way to produce Boolean values:
+下面是一种可以得到布尔值的情况：
 
 ```
 console.log(3 > 2)
@@ -311,12 +258,9 @@ console.log(3 < 2)
 
 {{index [comparison, "of numbers"], "> operator", "< operator", "greater than", "less than"}}
 
-The `>` and `<` signs are the traditional symbols for "is greater
-than" and "is less than", respectively. They are binary operators.
-Applying them results in a Boolean value that indicates whether they
-hold true in this case.
+`>`和`<`是两个传统符号，分别用来表示“大于”和“小于”。它们是二元操作。通过它们可以得到一个布尔值，从而知道结果是否正确。
 
-Strings can be compared in the same way.
+字符串也可以用相同的方法进行比较。
 
 ```
 console.log("Aardvark" < "Zoroaster")
@@ -325,17 +269,11 @@ console.log("Aardvark" < "Zoroaster")
 
 {{index [comparison, "of strings"]}}
 
-The way strings are ordered is roughly alphabetic but not really what
-you'd expect to see in a dictionary: uppercase letters are always
-"less" than lowercase ones, so `"Z" < "a"`, and nonalphabetic
-characters (!, -, and so on) are also included in the ordering. When
-comparing strings, JavaScript goes over the characters from left to
-right, comparing the ((Unicode)) codes one by one.
+尽管字符串是按字母顺序排列的，但和字典中的顺序并不完全相同。大写字母永远排在小写字母后面，即`"Z" < "a"`。而且非字母的字符（比如标点符号）也在排列顺序中。在字符串排序中，JavaScript 会从左到右依次比较每一个((Unicode))。
 
 {{index equality, ">= operator", "<= operator", "== operator", "!= operator"}}
 
-Other similar operators are `>=` (greater than or equal to), `<=`
-(less than or equal to), `==` (equal to), and `!=` (not equal to).
+其他相似的操作包括：`>=`（大于或等于），`<=`（小于或等于），`==`（等于），和`!=`（不等于）。
 
 ```
 console.log("Itchy" != "Scratchy")
@@ -346,30 +284,24 @@ console.log("Apple" == "Orange")
 
 {{index [comparison, "of NaN"], NaN}}
 
-There is only one value in JavaScript that is not equal to itself, and
-that is `NaN` ("not a number").
+在 JavaScript 中，只有一个值不等于它自身。那就是`NaN`（不是数字）。
 
 ```
 console.log(NaN == NaN)
 // → false
 ```
 
-`NaN` is supposed to denote the result of a nonsensical computation,
-and as such, it isn't equal to the result of any _other_ nonsensical
-computations.
+`NaN`理论上表示一个不荒谬的运算，所以它也等于任何_其他_荒谬的运算。
 
 ### Logical operators
 
 {{index reasoning, "logical operators"}}
 
-There are also some operations that can be applied to Boolean values
-themselves. JavaScript supports three logical operators: _and_, _or_,
-and _not_. These can be used to "reason" about Booleans.
+还有一些可以运用在布尔值上的操作。JavaScript 支持三种逻辑运算符：_逻辑与_，_逻辑或_，以及_逻辑非_。这些可以用来“推理”出布尔值。
 
 {{index "&& operator", "logical and"}}
 
-The `&&` operator represents logical _and_. It is a binary operator,
-and its result is true only if both the values given to it are true.
+`&&`是_逻辑与_操作符。它是一个二元操作，而且返回的结果只有在两个值都是真的情况下才会是真。
 
 ```
 console.log(true && false)
@@ -380,8 +312,7 @@ console.log(true && true)
 
 {{index "|| operator", "logical or"}}
 
-The `||` operator denotes logical _or_. It produces true if either of
-the values given to it is true.
+`||`是_逻辑或_操作符。它的返回结果在任意值是真的情况下皆为真。
 
 ```
 console.log(false || true)
@@ -392,19 +323,11 @@ console.log(false || false)
 
 {{index negation, "! operator"}}
 
-_Not_ is written as an exclamation mark (`!`). It is a unary operator
-that flips the value given to it—`!true` produces `false`, and `!false`
-gives `true`.
+_逻辑非_是用感叹号（`!`）表示的。这是一个一元操作，它会转换原来的值：`!true`（真）是`false`（假），而`!false`（假）的结果是`true`（真）。
 
 {{index precedence}}
 
-When mixing these Boolean operators with arithmetic and other
-operators, it is not always obvious when parentheses are needed. In
-practice, you can usually get by with knowing that of the operators we
-have seen so far, `||` has the lowest precedence, then comes `&&`,
-then the comparison operators (`>`, `==`, and so on), and then the
-rest. This order has been chosen such that, in typical expressions
-like the following one, as few parentheses as possible are necessary:
+在布尔值和其他运算操作混搭的时候，括号有时至关重要。实际上，我们所见到的所以运算符中，`||`的运算顺序排在最下面，其次是`&&`，之后是对比符号（`>`、`==` 等），再之后是其余的符号。这个顺序的选择是为了在一般运算中，尽可能避免用到括号：
 
 ```
 1 + 1 == 2 && 10 * 10 > 50
@@ -412,9 +335,7 @@ like the following one, as few parentheses as possible are necessary:
 
 {{index "conditional execution", "ternary operator", "?: operator", "conditional operator", "colon character", "question mark"}}
 
-The last logical operator I will discuss is not unary, not binary, but
-_ternary_, operating on three values. It is written with a question
-mark and a colon, like this:
+最后一个逻辑运算符不是一元，不是二元，而是三元：需要三个值的操作。它同时需要一个问号和一个冒号，如下所示：
 
 ```
 console.log(true ? 1 : 2);
@@ -423,36 +344,23 @@ console.log(false ? 1 : 2);
 // → 2
 ```
 
-This one is called the _conditional_ operator (or sometimes just
-the _ternary_ operator since it is the only such operator in the
-language). The value on the left of the question mark "picks" which of
-the other two values will come out. When it is true, it chooses the
-middle value, and when it is false, it chooses the value on the right.
+这是一个_条件_运算符（有时也叫做_三元_运算符，因为它是唯一需要三个值的操作）。在问号左边的有值选择剩下两个值的权利。如果是真的，它会选中间的值，否则它会选最右边的值。
 
 ## Empty values
 
 {{index undefined, null}}
 
-There are two special values, written `null` and `undefined`, that are
-used to denote the absence of a _meaningful_ value. They are
-themselves values, but they carry no information.
+JavaScript 中还有两个特殊的值，`null`和`undefined`。它们用来表示缺席一个_有意义_的值。它们本身虽然也是一个值，但是不具有任何信息意义。
 
-Many operations in the language that don't produce a meaningful value
-(you'll see some later) yield `undefined` simply because they have to
-yield _some_ value.
+需要操作在无法得出有意义的值时（后面会遇到许多），都会因为必须得出_某些_值而返回`undefined`。
 
-The difference in meaning between `undefined` and `null` is an accident
-of JavaScript's design, and it doesn't matter most of the time. In cases
-where you actually have to concern yourself with these values, I
-recommend treating them as mostly interchangeable.
+然而`undefined`和`null`的区别是 JavaScript 设计本身的一个错误。一般情况下，可以忽略不计。纵使在个别情况下，需要在意这两个值的不同时，我也建议尽可能把它们看作一体，混淆来用。
 
 ## Automatic type conversion
 
 {{index NaN, "type coercion"}}
 
-In the Introduction, I mentioned that JavaScript goes out of its way
-to accept almost any program you give it, even programs that do odd
-things. This is nicely demonstrated by the following expressions:
+开篇时，我说过 JavaScript 几乎接收任何程序，即使程序本身很奇怪。下面的例子完美的展示了这一点：
 
 ```
 console.log(8 * null)
@@ -469,33 +377,15 @@ console.log(false == 0)
 
 {{index "+ operator", arithmetic, "* operator", "- operator"}}
 
-When an operator is applied to the "wrong" type of value, JavaScript
-will quietly convert that value to the type it needs, using a set of
-rules that often aren't what you want or expect. This is called
-_((type coercion))_. The `null` in the first expression becomes `0`,
-and the `"5"` in the second expression becomes `5` (from string to
-number). Yet in the third expression, `+` tries string concatenation
-before numeric addition, so the `1` is converted to `"1"` (from number
-to string).
+当一个操作运用在错误的值上时，JavaScript 会尽可能根据一些条件转换这个值的类型，从而得到一个你意想不到的结果。这就是_((强制类型转换))_。第一个例子中的`null`变成了`0`，第二个例子中的`"5"`变成了`5`（从字符串变成了数字）。然而第三个例子中的`+`选择连接字符串而不是加法，所以`1`变成了`"1"`（从数字变成字符串）。
 
 {{index "type coercion", [number, "conversion to"]}}
 
-When something that doesn't map to a number in an obvious way (such as
-`"five"` or `undefined`) is converted to a number, you get the value
-`NaN`. Further arithmetic operations on `NaN` keep producing `NaN`, so
-if you find yourself getting one of those in an unexpected place, look
-for accidental type conversions.
+当任何无法被轻易转变成数字的值（比如上面的`"five"`和`undefined`）被转换成数字时，你会得到`NaN`。任何在`NaN`上的运算都会得到`NaN`。因此，如果你发现你意外得到一个`NaN`，可以仔细检查是否有被强制类型转换的值。
 
 {{index null, undefined, [comparison, "of undefined values"], "== operator"}}
 
-When comparing values of the same type using `==`, the outcome is easy
-to predict: you should get true when both values are the same, except
-in the case of `NaN`. But when the types differ, JavaScript uses a
-complicated and confusing set of rules to determine what to do. In
-most cases, it just tries to convert one of the values to the other
-value's type. However, when `null` or `undefined` occurs on either
-side of the operator, it produces true only if both sides are one of
-`null` or `undefined`.
+在用`==`对比同一类型的值时，结果很容易预测：除了`NaN`意外，只要两个值相等，就是真。但如果是不同的两个类型，JavaScript 又会通过一系列莫名其妙的转换来决定结果。大部分时间，它尽可能把其中一个值的类型转换成另一个值的类型。但如果任意一个转换后得`null`或者`undefined`的值，结果只有在另一边也是`null`或者`undefined`时才是真。
 
 ```
 console.log(null == undefined);
@@ -504,41 +394,23 @@ console.log(null == 0);
 // → false
 ```
 
-That behavior is often useful. When you want to test whether a value
-has a real value instead of `null` or `undefined`, you can compare it
-to `null` with the `==` (or `!=`) operator.
+一般情况下，这一点很有用。比如你想确认一个值有意义，而不是`null`或者`undefined`，你就可以用它和`null`相比较（`==`或者`!=`）。
 
 {{index "type coercion", [Boolean, "conversion to"], "=== operator", "!== operator", comparison}}
 
-But what if you want to test whether something refers to the precise
-value `false`? Expressions like `0 == false` and `"" == false` are
-also true because of automatic type conversion. When you do _not_ want
-any type conversions to happen, there are two additional operators:
-`===` and `!==`. The first tests whether a value is _precisely_ equal
-to the other, and the second tests whether it is not precisely equal.
-So `"" === false` is false as expected.
+但如果你想知道一件东西的精确值是不是`false`呢？`0 == false`和`"" == false`在强制类型转换下的结果都是真。但如果你_不_想被强制类型转换时，你可以用`===`或者`!==`操作。第一个确保两件东西的_精确_值相等，而第二个确保它们的精确值不等。因此`"" === false`是假的。
 
-I recommend using the three-character comparison operators defensively to
-prevent unexpected type conversions from tripping you up. But when you're
-certain the types on both sides will be the same, there is no problem with
-using the shorter operators.
+我建议用三个字符的对比符号，这样可以避免不必要的类型转换。当然，你如果确信两个值的类型一致的话，也可以使用两个字符的对比符号。
 
 ### Short-circuiting of logical operators
 
 {{index "type coercion", [Boolean, "conversion to"], operator}}
 
-The logical operators `&&` and `||` handle values of different types
-in a peculiar way. They will convert the value on their left side to
-Boolean type in order to decide what to do, but depending on the
-operator and the result of that conversion, they will return either the
-_original_ left-hand value or the right-hand value.
+逻辑运算符`&&`和`||`对不同类型的值的方式也很奇怪。它们首先会把左边的值强制转换成布尔值后，在决定如何继续。它们会返回_原始_的左边值或者右边值。
 
 {{index "|| operator"}}
 
-The `||` operator, for example, will return the value to its left when
-that can be converted to true and will return the value on its right
-otherwise. This has the expected effect when the values are Boolean
-and does something analogous for values of other types.
+比如，如果左边的值在转换后是真的，`||`会直接返回左边的值。不如就返回右边的值。这一点，无论是对布尔值或者其他类型的值都一样。
 
 ```
 console.log(null || "user")
@@ -549,47 +421,22 @@ console.log("Agnes" || "user")
 
 {{index "default value"}}
 
-We can use this functionality as a way to fall back on a default
-value. If you have a value that might be empty, you can put `||` after
-it with a replacement value. If the initial value can be converted to
-false, you'll get the replacement instead. The rules for converting
-strings and numbers to Boolean values state that `0`, `NaN`, and the
-empty string (`""`) count as `false`, while all the other values count
-as `true`. So `0 || -1` produces `-1`, and `"" || "!?"` yields `"!?"`.
+我们可以用此方法来保证一个默认值。对于一个可能为空的值，只需在它后面放`||`和默认值。如果转换后的到的值是假的，你会直接得到默认值。只有`0`、`NaN`和空字符串（`""`）在转换成布尔值后是假的。其他都是真的。所以`0 || -1`得`-1`，`"" || "!?"`得`"!?"`。
 
 {{index "&& operator"}}
 
-The `&&` operator works similarly but the other way around. When the
-value to its left is something that converts to false, it returns that
-value, and otherwise it returns the value on its right.
+`&&`的逻辑相似，但决定方式相反。在左边的值是假的时候，它返回左边的值。否则它将返回右边的值。
 
-Another important property of these two operators is that the part to
-their right is evaluated only when necessary. In the case of `true ||
-X`, no matter what `X` is—even if it's a piece of program that does
-something _terrible_—the result will be true, and `X` is never
-evaluated. The same goes for `false && X`, which is false and will
-ignore `X`. This is called _((short-circuit evaluation))_.
+还需注意的一点是，这两个操作只有在必须的情况下，才会转换右边的值。比如 `true || X`，不管 X 是什么，纵使它对程序本身百害而无一益，因为结果是真，所以`X`不会被运转。同理，如果是`false && X`的话，因为是假，所以`X`也被无视了。这就是_((短路计算))_。
 
 {{index "ternary operator", "?: operator", "conditional operator"}}
 
-The conditional operator works in a similar way. Of the second and
-third values, only the one that is selected is evaluated.
+条件运算符的工作原理类似。只有被选则的第二或第三个值才会被执行。
 
 ## Summary
 
-We looked at four types of JavaScript values in this chapter: numbers,
-strings, Booleans, and undefined values.
+我们本章看了 JavaScript 中四个不同类型的值：数字，字符串，布尔，和不存在的值。
 
-Such values are created by typing in their name (`true`, `null`) or
-value (`13`, `"abc"`). You can combine and transform values with
-operators. We saw binary operators for arithmetic (`+`, `-`, `*`, `/`,
-and `%`), string concatenation (`+`), comparison (`==`, `!=`, `===`,
-`!==`, `<`, `>`, `<=`, `>=`), and logic (`&&`, `||`), as well as
-several unary operators (`-` to negate a number, `!` to negate
-logically, and `typeof` to find a value's type) and a ternary operator
-(`?:`) to pick one of two values based on a third value.
+这些值是通过它们自身的名字（`true`，`null`）或者值（`13`，`"abc"`）而决定的。你可以通过不同操作来改变这些值。我们还接触了数学运算（`+`，`-`，`*`，`/`，和`%`），字符串连接（`+`），对比（`==`，`!=`，`===`，`!==`，`<`，`>`，`<=`，`>=`），和逻辑（`&&`，`||`），还有许多一元操作（`-`负数符号，`!`逻辑非，和`typeof`查询值的类型），以及三元操作（`?:`）通过第三个值进行二选一。
 
-This gives you enough information to use JavaScript as a pocket
-calculator but not much more. The [next
-chapter](program_structure) will start tying
-these expressions together into basic programs.
+以上内容足以让你把 JavaScript 当中掌声计算机。[下一章](program_structure)我们会通过这些表达式写基本的程序。
