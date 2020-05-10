@@ -401,26 +401,13 @@ if}}
 
 {{index [array, "as table"], [nesting, "of arrays"]}}
 
-We can represent a two-by-two ((table)) in JavaScript with a
-four-element array (`[76, 9, 4, 1]`). We could also use other
-representations, such as an array containing two two-element arrays
-(`[[76, 9], [4, 1]]`) or an object with property names like `"11"` and
-`"01"`, but the flat array is simple and makes the expressions that
-access the table pleasantly short. We'll interpret the indices to the
-array as two-((bit)) ((binary number))s, where the leftmost (most
-significant) digit refers to the squirrel variable and the rightmost
-(least significant) digit refers to the event variable. For example,
-the binary number `10` refers to the case where Jacques did turn into
-a squirrel, but the event (say, "pizza") didn't occur. This happened
-four times. And since binary `10` is 2 in decimal notation, we will
-store this number at index 2 of the array.
+在 JavaScript 中，我们可以用一个四个元素的数组（`[76, 9, 4, 1]`）来表示一个 2x2 的((表格))。我们也可以用其他方式，比如一个包含两个元素数组的数组（`[[76, 9], [4, 1]]`）或者一个属性为`"11"`，`"01"`的对象。不过第一个数组更加简洁明了。我们把数组的索引定义为两位的二进制，最左边（最有效）的数字表示松鼠变量，最右边（最不有效）的数字表示事件变量。比如二进制`10`表示 Jacque 变成了松鼠，但是他并没有做这个事件（如吃 pizza）。这总共发生了4次。因为二进制`10`是十进制中的 2，我们把这个数字（4）存放在数组索引2的位置上。
 
 {{index "phi coefficient", "phi function"}}
 
 {{id phi_function}}
 
-This is the function that computes the _ϕ_ coefficient from such an
-array:
+下面的函数计算上述数组中的 _ϕ_ 系数：
 
 ```{includeCode: strip_log, test: clip}
 function phi(table) {
@@ -437,28 +424,15 @@ console.log(phi([76, 9, 4, 1]));
 
 {{index "square root", "Math.sqrt function"}}
 
-This is a direct translation of the _ϕ_ formula into JavaScript.
-`Math.sqrt` is the square root function, as provided by the `Math`
-object in a standard JavaScript environment. We have to add two fields
-from the table to get fields like [n~1•~]{if
-html}[[$n_{1\bullet}$]{latex}]{if tex} because the sums of rows or
-columns are not stored directly in our data structure.
+这是把 _ϕ_ 公式直译转换成 JavaScript。`Math.sqrt` 是平方根函数，由 JavaScript 中的 `Math`对象提供。我们需要把表格中的两个数据相加，从而得到 [n~1•~]{if html}[[$n_{1\bullet}$]{latex}]{if tex} 因为我们的数据结构并没有直接储存行和列的和
 
 {{index "JOURNAL data set"}}
 
-Jacques kept his journal for three months. The resulting ((data set))
-is available in the [coding
-sandbox](https://eloquentjavascript.net/code#4) for this chapter[
-([_https://eloquentjavascript.net/code#4_](https://eloquentjavascript.net/code#4))]{if
-book}, where it is stored in the `JOURNAL` binding and in a
-downloadable
-[file](https://eloquentjavascript.net/code/journal.js).
+Jacque 记录了三个月的日志。最后的((数据集))在本章[([_https://eloquentjavascript.net/code#4_](https://eloquentjavascript.net/code#4))]{if book}的[代码沙盒](https://eloquentjavascript.net/code#4)中一个叫 `JOURNAL` 的变量里。你可以下载这个[文件](https://eloquentjavascript.net/code/journal.js)。
 
 {{index "tableFor function"}}
 
-To extract a two-by-two ((table)) for a specific event from the
-journal, we must loop over all the entries and tally how many times
-the event occurs in relation to squirrel transformations.
+在日志里，从一个 2x2的((表格))中提取一个指定的活动，我们必须循环所有的数据，统计和变身松鼠相关的事件发生的次数。
 
 ```{includeCode: strip_log}
 function tableFor(event, journal) {
@@ -478,22 +452,13 @@ console.log(tableFor("pizza", JOURNAL));
 
 {{index [array, searching], "includes method"}}
 
-Arrays have an `includes` method that checks whether a given value
-exists in the array. The function uses that to determine whether the
-event name it is interested in is part of the event list for a given
-day.
+数组有一个 `includes`方法，可以检查一个值是否存在于该数组中。这个函数用此方法来确保某个事件在指定的一天内发生过。
 
 {{index [array, indexing]}}
 
-The body of the loop in `tableFor` figures out which box in the table
-each journal entry falls into by checking whether the entry contains
-the specific event it's interested in and whether the event happens
-alongside a squirrel incident. The loop then adds one to the correct
-box in the table.
+`tableFor` 中的循环通过检验事件和变身松鼠的关系来计算出每个日志数据应该属于表格的哪一栏中。该循环在表格中正确的那栏里加一。
 
-We now have the tools we need to compute individual ((correlation))s.
-The only step remaining is to find a correlation for every type of
-event that was recorded and see whether anything stands out.
+我们现在可以计算出个体相关性了。如今只剩下找到每个事件的相关性，好检查有没有可疑事件。
 
 {{id for_of_loop}}
 
@@ -501,21 +466,18 @@ event that was recorded and see whether anything stands out.
 
 {{index "for loop", loop, [array, iteration]}}
 
-In the `tableFor` function, there's a loop like this:
+在 `tableFor` 函数中，有以下循环：
 
 ```
 for (let i = 0; i < JOURNAL.length; i++) {
   let entry = JOURNAL[i];
-  // Do something with entry
+  // 对该 entry 做些什么
 }
 ```
 
-This kind of loop is common in classical JavaScript—going over arrays
-one element at a time is something that comes up a lot, and to do that
-you'd run a counter over the length of the array and pick out each
-element in turn.
+这种循环在传统对 JavaScript 中很常见：一个元素一个元素的走完真个数组。为此，你需要一个计数器，从0到数组的长度，之后依次读取每个元素。
 
-There is a simpler way to write such loops in modern JavaScript.
+在新的 JavaScript 中，有个更简短的循环方法：
 
 ```
 for (let entry of JOURNAL) {
@@ -525,11 +487,7 @@ for (let entry of JOURNAL) {
 
 {{index "for/of loop"}}
 
-When a `for` loop looks like this, with the word `of` after a variable
-definition, it will loop over the elements of the value given after
-`of`. This works not only for arrays but also for strings and some
-other data structures. We'll discuss _how_ it works in [Chapter
-?](object).
+类似上面的这种用一个在变量定义后根一个 `of` 词的 `for` 循环，它会把 `of` 后的值从头到尾走一遍。这个方法不仅适用于数组，同时也适用于字符串和其他一些数据结构。我们在[第六章](object)中会深入探讨其原理。
 
 {{id analysis}}
 
@@ -537,9 +495,7 @@ other data structures. We'll discuss _how_ it works in [Chapter
 
 {{index journal, "weresquirrel example", "journalEvents function"}}
 
-We need to compute a correlation for every type of event that occurs
-in the data set. To do that, we first need to _find_ every type of
-event.
+我们需要计算每一个事件的相关性。首先，我们需要_找到_所有类型的事件。
 
 {{index "includes method", "push method"}}
 
@@ -560,11 +516,9 @@ console.log(journalEvents(JOURNAL));
 // → ["carrot", "exercise", "weekend", "bread", …]
 ```
 
-By going over all the events and adding those that aren't already in
-there to the `events` array, the function collects every type of
-event.
+上面的函数走过所有的事件，把任何新的事件都添加到 `events`数组中，从而得到所有类型的事件。
 
-Using that, we can see all the ((correlation))s.
+通过这个数组，我们可以得出所有的相关性。
 
 ```{test: no}
 for (let event of journalEvents(JOURNAL)) {
@@ -578,10 +532,7 @@ for (let event of journalEvents(JOURNAL)) {
 // and so on...
 ```
 
-Most correlations seem to lie close to zero. Eating carrots, bread, or
-pudding apparently does not trigger squirrel-lycanthropy. It _does_
-seem to occur somewhat more often on weekends. Let's filter the
-results to show only correlations greater than 0.1 or less than -0.1.
+大部分的相关性都接近于 0。吃胡萝卜、面包、布丁很明显和变身松鼠没什么关联。此外周末变身的次数相对频繁。我们过滤掉一些结果，只看大于 0.1 或者小于 -0.1的相关性。
 
 ```{test: no, startCode: true}
 for (let event of journalEvents(JOURNAL)) {
@@ -599,12 +550,9 @@ for (let event of journalEvents(JOURNAL)) {
 // → peanuts:        0.5902679812
 ```
 
-Aha! There are two factors with a ((correlation)) that's clearly stronger
-than the others. Eating ((peanuts)) has a strong positive effect on
-the chance of turning into a squirrel, whereas brushing his teeth has
-a significant negative effect.
+这里有两个明显比其他((相关性))强的事件。吃((花生))和变身松鼠有一个强正相关性，而刷牙则是一个强负相关性。
 
-Interesting. Let's try something.
+有意思。让我们试试其他：
 
 ```
 for (let entry of JOURNAL) {
@@ -617,40 +565,25 @@ console.log(phi(tableFor("peanut teeth", JOURNAL)));
 // → 1
 ```
 
-That's a strong result. The phenomenon occurs precisely when Jacques
-eats ((peanuts)) and fails to brush his teeth. If only he weren't such
-a slob about dental hygiene, he'd have never even noticed his
-affliction.
+这是一个肯定的结果。在 Jacque 吃花生后不刷牙的情况下，他肯定会变成松鼠。如果他不是如此不重视他个人的口腔卫生的话，他也不会发现他这隐藏的痛苦。
 
-Knowing this, Jacques stops eating peanuts altogether and finds that
-his transformations don't come back.
+发现这点后，Jacque 再也不吃花生了。从此他也再也没变身过。
 
 {{index "weresquirrel example"}}
 
-For a few years, things go great for Jacques. But at some point he
-loses his job. Because he lives in a nasty country where having no job
-means having no medical services, he is forced to take employment with
-a ((circus)) where he performs as _The Incredible Squirrelman_,
-stuffing his mouth with peanut butter before every show.
+以后的几年里，Jacque 的日子过的一帆风顺。直到有一天，他失业了。因为他国家的问题，没有工作就意味着没有医疗。他被迫和一家((马戏团))签约，在里面表演_不可思议的松鼠人_。为此，他每次出演前都要吃好多花生。
 
-One day, fed up with this pitiful existence, Jacques fails to change
-back into his human form, hops through a crack in the circus tent, and
-vanishes into the forest. He is never seen again.
+有一天，他厌倦了这种可怜的生活，Jacque 再也没有变回人。他跳出了马戏团，消失在了森林里。
 
 ## Further arrayology
 
 {{index [array, methods], [method, array]}}
 
-Before finishing the chapter, I want to introduce you to a few more
-object-related concepts. I'll start by introducing some generally
-useful array methods.
+在本章结束前，还有几个和对象相关的知识点。我们先来看看一些对数组有帮助的方法。
 
 {{index "push method", "pop method", "shift method", "unshift method"}}
 
-We saw `push` and `pop`, which add and remove elements at the
-end of an array, [earlier](data#array_methods) in this
-chapter. The corresponding methods for adding and removing things at
-the start of an array are called `unshift` and `shift`.
+我们[前面](data#array_methods)已经见过 `push` 和 `pop` 了，分别添加和移除数组结尾的元素。同理，在数组前添加或移除元素的方法叫做 `unshift` 和 `shift`。
 
 ```
 let todoList = [];
@@ -667,19 +600,11 @@ function rememberUrgently(task) {
 
 {{index "task management example"}}
 
-That program manages a queue of tasks. You add tasks to the end of the
-queue by calling `remember("groceries")`, and when you're ready to do
-something, you call `getTask()` to get (and remove) the front item
-from the queue. The `rememberUrgently` function also adds a task but
-adds it to the front instead of the back of the queue.
+上面的程序管理一个队列的任务。你通过调用 `remember("买菜")` 把任务添加到队列的后面。在你准备做某件事时，通过调用 `getTask()` 从队列的前面得到（并移除）任务。函数 `rememberUrgently` 可以把任务添加到队列的前面。
 
 {{index [array, searching], "indexOf method", "lastIndexOf method"}}
 
-To search for a specific value, arrays provide an `indexOf` method. The method
-searches through the array from the start to the end and returns the
-index at which the requested value was found—or -1 if it wasn't found.
-To search from the end instead of the start, there's a similar method
-called `lastIndexOf`.
+数组还有一个 `indexOf` 方法，可以找寻一个指定的值。这个方法会从头到尾走一遍数组，之后返回指定值的第一个索引，或者 -1 如果该值不存在的话。如果需要从尾到头找寻一个元素的话，用 `lastIndexOf` 方法。
 
 ```
 console.log([1, 2, 3, 2, 1].indexOf(2));
@@ -688,14 +613,11 @@ console.log([1, 2, 3, 2, 1].lastIndexOf(2));
 // → 3
 ```
 
-Both `indexOf` and `lastIndexOf` take an optional second argument that
-indicates where to start searching.
+`indexOf` 和 `lastIndexOf` 也可以有一个选择性参数，指定起始的索引值。
 
 {{index "slice method", [array, indexing]}}
 
-Another fundamental array method is `slice`, which takes start and end
-indices and returns an array that has only the elements between them.
-The start index is inclusive, the end index exclusive.
+还有一个重要的数组方法是 `slice`，它的参数是起始和结束两个索引，并返回一个包含所以从起始到结束索引元素的数组。该数组包括起始元素，但不包括结束元素。
 
 ```
 console.log([0, 1, 2, 3, 4].slice(2, 4));
@@ -706,18 +628,13 @@ console.log([0, 1, 2, 3, 4].slice(2));
 
 {{index [string, indexing]}}
 
-When the end index is not given, `slice` will take all of the elements
-after the start index. You can also omit the start index to copy the
-entire array.
+如果结束索引不存在的话，`slice` 会返回所有起始索引后面的元素。如果起始索引也不存在的话，则返回一个复制的原数组。
 
 {{index concatenation, "concat method"}}
 
-The `concat` method can be used to glue arrays together to create a
-new array, similar to what the `+` operator does for strings.
+`concat`方法可以用来合并多个数组，类似于字符串中的 `+` 运算符。
 
-The following example shows both `concat` and `slice` in action. It takes
-an array and an index, and it returns a new array that is a copy of
-the original array with the element at the given index removed.
+下面的例题运用了 `concat` 和 `slice`。它的参数是一个数组和一个索引，返回一个新的数组，是复制原数组后移除索引的值。
 
 ```
 function remove(array, index) {
@@ -728,15 +645,13 @@ console.log(remove(["a", "b", "c", "d", "e"], 2));
 // → ["a", "b", "d", "e"]
 ```
 
-If you pass `concat` an argument that is not an array, that value will
-be added to the new array as if it were a one-element array.
+你如果给 `concat` 一个非数组的参数，它会以一个元素数组的形式添加到新的数组里。
 
 ## Strings and their properties
 
 {{index [string, properties]}}
 
-We can read properties like `length` and `toUpperCase` from string
-values. But if you try to add a new property, it doesn't stick.
+我们可以读取字符串中的 `length` 和 `toUpperCase` 属性。但是你却无法给其添加新的属性。
 
 ```
 let kim = "Kim";
@@ -745,16 +660,11 @@ console.log(kim.age);
 // → undefined
 ```
 
-Values of type string, number, and Boolean are not objects, and though
-the language doesn't complain if you try to set new properties on
-them, it doesn't actually store those properties. As mentioned earlier,
-such values are immutable and cannot be changed.
+字符串、数字、和布尔的值并不是对象，尽管 JavaScript 允许你给它们定义新的属性。但是这些属性并不会被储存。正如上面提到过的，这些值是不可以更改的。
 
 {{index [string, methods], "slice method", "indexOf method", [string, searching]}}
 
-But these types do have built-in properties. Every string value has a
-number of methods. Some very useful ones are `slice` and `indexOf`,
-which resemble the array methods of the same name.
+但是这些类型的确有内置的属性。每个字符串都有一系列的方法。一些常用的包括 `slice` 和 `indexOf`，和数组中的同名方法相同。
 
 ```
 console.log("coconuts".slice(4, 7));
@@ -763,9 +673,7 @@ console.log("coconut".indexOf("u"));
 // → 5
 ```
 
-One difference is that a string's `indexOf` can search for a string
-containing more than one character, whereas the corresponding array
-method looks only for a single element.
+需要注意的是，字符串中的 `indexOf` 可以查询多个字符串，但是数组的只能查找一个元素。
 
 ```
 console.log("one two three".indexOf("ee"));
@@ -774,17 +682,14 @@ console.log("one two three".indexOf("ee"));
 
 {{index [whitespace, trimming], "trim method"}}
 
-The `trim` method removes whitespace (spaces, newlines, tabs, and
-similar characters) from the start and end of a string.
+`trim` 方法移除字符串开头和结尾的所有空格（包括空格、换行符、tab等）。
 
 ```
 console.log("  okay \n ".trim());
 // → okay
 ```
 
-The `zeroPad` function from the [previous chapter](functions) also
-exists as a method. It is called `padStart` and takes the desired
-length and padding character as arguments.
+[上一章](functions)中的 `zeroPad` 函数也是字符串的方法之一。它的名字是 `padStart`，它的参数是添加的长度和字符。
 
 ```
 console.log(String(6).padStart(3, "0"));
@@ -793,8 +698,7 @@ console.log(String(6).padStart(3, "0"));
 
 {{id split}}
 
-You can split a string on every occurrence of another string with
-`split` and join it again with `join`.
+你可以通过 `split` 把字符串分开，也可以通过 `join` 把它们重新连起来。
 
 ```
 let sentence = "Secretarybirds specialize in stomping";
@@ -807,9 +711,7 @@ console.log(words.join(". "));
 
 {{index "repeat method"}}
 
-A string can be repeated with the `repeat` method, which creates a new
-string containing multiple copies of the original string, glued
-together.
+字符串可以通过 `repeat` 方法而自我重复，从而得到一个新的字符串。
 
 ```
 console.log("LA".repeat(3));
@@ -818,10 +720,7 @@ console.log("LA".repeat(3));
 
 {{index ["length property", "for string"], [string, indexing]}}
 
-We have already seen the string type's `length` property. Accessing
-the individual characters in a string looks like accessing array
-elements (with a caveat that we'll discuss in [Chapter
-?](higher_order#code_units)).
+我们已经见过字符串的 `length`属性了。读取字符串中的一个字符和读取数组中的元素很像。（除了一点，我们会在[下一章](higher_order#code_units))中探讨）
 
 ```
 let string = "abc";
