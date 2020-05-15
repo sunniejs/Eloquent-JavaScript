@@ -4,10 +4,7 @@
 
 {{quote {author: "Charles Babbage", title: "Passages from the Life of a Philosopher (1864)", chapter: true}
 
-On two occasions I have been asked, 'Pray, Mr. Babbage, if you put
-into the machine wrong figures, will the right answers come out?'
-[...] I am not able rightly to apprehend the kind of confusion of
-ideas that could provoke such a question.
+我被问过两次，“Mr. Babbage 如果你对机器提供了错误的数据，它会返回正确的结果么？”我实在无法理解这个问题背后的思路。
 
 quote}}
 
@@ -17,29 +14,15 @@ quote}}
 
 {{index object, "data structure"}}
 
-Numbers, Booleans, and strings are the atoms that ((data)) structures
-are built from. Many types of information require more than one
-atom, though. _Objects_ allow us to group values—including other
-objects—to build more complex structures.
+数字、布尔值、和字符串是((数据))结构中的原子。许多信息类型都需要多种不同的原子。_对象_可以组合多个值，包括对象本身，形成更复杂的结构。
 
-The programs we have built so far have been limited by the fact that
-they were operating only on simple data types. This chapter will
-introduce basic data structures. By the end of it, you'll know enough
-to start writing useful programs.
+截止到目前，我们写的所有程序都仅限于简单的数据类型。本章将探索基本的数据结构。完成后，你将会书写更有用的程序。
 
-The chapter will work through a more or less realistic programming
-example, introducing concepts as they apply to the problem at hand.
-The example code will often build on functions and bindings that were
-introduced earlier in the text.
+本章会应用新的概念，循序渐进的解锁一个较现实的程序例题。例题中的代码会在原有的基础上逐渐完善。
 
 {{if book
 
-The online coding ((sandbox)) for the book
-([_https://eloquentjavascript.net/code_](https://eloquentjavascript.net/code))
-provides a way to run code in the context of a specific chapter. If
-you decide to work through the examples in another environment, be
-sure to first download the full code for this chapter from the sandbox
-page.
+网上的有本书的((沙盒))([_https://eloquentjavascript.net/code_](https://eloquentjavascript.net/code))，提供一个可以运行本书例题的环境。你如果想用其他环境的话，请先从沙盒中下载本章所需的代码。
 
 if}}
 
@@ -47,56 +30,31 @@ if}}
 
 {{index "weresquirrel example", lycanthropy}}
 
-Every now and then, usually between 8 p.m. and 10 p.m.,
-((Jacques)) finds himself transforming into a small furry rodent with
-a bushy tail.
+时不时的，一般在晚上 8 - 10点，((Jacque))发现他会变成一个有尾巴的毛绒小松鼠。
 
-On one hand, Jacques is quite glad that he doesn't have classic
-lycanthropy. Turning into a squirrel does cause fewer problems than
-turning into a wolf. Instead of having to worry about accidentally
-eating the neighbor (_that_ would be awkward), he worries about being
-eaten by the neighbor's cat. After two occasions where he woke up on a
-precariously thin branch in the crown of an oak, naked and
-disoriented, he has taken to locking the doors and windows of his room
-at night and putting a few walnuts on the floor to keep himself busy.
+尽管 Jacque 万幸他不会变成狼人。毕竟小松鼠比狼人安全多了。不过与其担心他不小心吃到他的邻居，他现在需要提防被他邻居的猫吃掉。在他两次赤身从危险的橡树枝上醒来后，他开始每晚锁紧门窗，且在卧室地板上放置许多核桃。
 
-That takes care of the cat and tree problems. But Jacques would prefer
-to get rid of his condition entirely. The irregular occurrences of the
-transformation make him suspect that they might be triggered by
-something. For a while, he believed that it happened only on days when
-he had been near oak trees. But avoiding oak trees did not stop the
-problem.
+虽然猫和树的问题解决了，Jacques 依旧希望可以彻底解决这个变身的问题。这个没有规律的变身让他怀疑可能是由某个东西引起的。起初他怀疑是因为他离橡树过近，但是远离橡树后并没有解决这个问题。
 
 {{index journal}}
 
-Switching to a more scientific approach, Jacques has started keeping a
-daily log of everything he does on a given day and whether he changed
-form. With this data he hopes to narrow down the conditions that
-trigger the transformations.
+于是他开始改用更科学的方法，每天都精准的记录下一切活动，以及他有没有变身。他希望由此可以缩小引发变身的因素范围。
 
-The first thing he needs is a data structure to store this
-information.
+首先，他需要一个数据结构来储存这些信息。
 
 ## Data sets
 
 {{index ["data structure", collection], [memory, organization]}}
 
-To work with a chunk of digital data, we'll first have to find a way
-to represent it in our machine's memory. Say, for example, that we
-want to represent a ((collection)) of the numbers 2, 3, 5, 7, and 11.
+首先我们要在电脑内存中找到可以代表大量数据的方法。比如，我们需要一个包含 2，3，5，7，11 的数字((集合))。
 
 {{index string}}
 
-We could get creative with strings—after all, strings can have any
-length, so we can put a lot of data into them—and use `"2 3 5 7 11"`
-as our representation. But this is awkward. You'd have to somehow
-extract the digits and convert them back to numbers to access them.
+因为字符串没有字数限制，我们可以巧用字符串来储存这些数据`"2 3 5 7 11"`。但是这非常奇怪。你不仅要提取，还需要把它们转换回数字。
 
 {{index [array, creation], "[] (array)"}}
 
-Fortunately, JavaScript provides a data type specifically for storing
-sequences of values. It is called an _array_ and is written as a list
-of values between ((square brackets)), separated by commas.
+好在 JavaScript 提供一种专门储存一序列值的数据类型。这就是_数组_，是一系列在((中括号))内，被逗号分开的值。
 
 ```
 let listOfNumbers = [2, 3, 5, 7, 11];
@@ -110,20 +68,12 @@ console.log(listOfNumbers[2 - 1]);
 
 {{index "[] (subscript)", [array, indexing]}}
 
-The notation for getting at the elements inside an array also uses
-((square brackets)). A pair of square brackets immediately after an
-expression, with another expression inside of them, will look up the
-element in the left-hand expression that corresponds to the
-_((index))_ given by the expression in the brackets.
+提取数组中的一个值也是用((中括号))表示。一个表达式后面紧跟着一组中括号，中间包含着另一个表达式。这会读取左边表达式中对应括号中_((索引))_表达式的值。
 
 {{id array_indexing}}
 {{index "zero-based counting"}}
 
-The first index of an array is zero, not one. So the first element is
-retrieved with `listOfNumbers[0]`. Zero-based counting has a long
-tradition in technology and in certain ways makes a lot of sense, but
-it takes some getting used to. Think of the index as the amount of
-items to skip, counting from the start of the array.
+数组的第一个索引是 0，不是 1。所以第一个能被提取的值是 `listOfNumbers[0]`。从零数起是科技的一个习俗，虽然理论上说得通，但的确需要一段适应期。将索引想像成需要跳过的数量，从数组的头开始数起。
 
 {{id properties}}
 
@@ -131,19 +81,11 @@ items to skip, counting from the start of the array.
 
 {{index "Math object", "Math.max function", ["length property", "for string"], [object, property], "period character", [property, access]}}
 
-We've seen a few suspicious-looking expressions like `myString.length`
-(to get the length of a string) and `Math.max` (the maximum function)
-in past chapters. These are expressions that access a _property_
-of some value. In the first case, we access the `length` property of
-the value in `myString`. In the second, we access the property named
-`max` in the `Math` object (which is a collection of
-mathematics-related constants and functions).
+前面的章节中，我们见过一些可疑的表达式，比如 `myString.length`（得到字符串的长度）和 `Math.max`（最大值函数）。这些表达式都在访问一些值的_属性_。第一个例子中，我们在访问 `myString`中的 `length`属性。第二个例子中，我们在访问 `Math`对象（一组和数学相关的函数和常数）中名为 `max` 的属性。
 
 {{index [property, access], null, undefined}}
 
-Almost all JavaScript values have properties. The exceptions are
-`null` and `undefined`. If you try to access a property on one of
-these nonvalues, you get an error.
+除了 `null` 和 `undefined` 外的所有 JavaScript 值都有属性。你如果试图访问它们俩的属性，你会得到错误提示。
 
 ```{test: no}
 null.length;
@@ -153,35 +95,15 @@ null.length;
 {{indexsee "dot character", "period character"}}
 {{index "[] (subscript)", "period character", "square brackets", "computed property", [property, access]}}
 
-The two main ways to access properties in JavaScript are with a dot
-and with square brackets. Both `value.x` and `value[x]` access a
-property on `value`—but not necessarily the same property. The
-difference is in how `x` is interpreted. When using a dot, the word
-after the dot is the literal name of the property. When using square
-brackets, the expression between the brackets is _evaluated_ to get
-the property name. Whereas `value.x` fetches the property of `value`
-named "x", `value[x]` tries to evaluate the expression `x` and uses
-the result, converted to a string, as the property name.
+JavaScript 中两种常用访问属性的方法是点和中括号。`value.x` 和 `value[x]` 都可以访问 `value` 的一个属性（不一定是相等）。区别在于如何解读 `x`。如果用点，那么点后面的词就是被访问的属性名。如果用中括号，其包含的表达式在被评估后得到的值才是被访问的属性名。所以 `value.x` 得到的是名为 `value` 中名为 `x` 的属性，而 `value[x]` 会先评估表达式 `x`在通过那个值（转换成字符串）得到将被访问的属性名。
 
-So if you know that the property you are interested in is called
-_color_, you say `value.color`. If you want to extract the property
-named by the value held in the binding `i`, you say `value[i]`.
-Property names are strings. They can be any string, but the dot notation works only with
-names that look like valid binding names. So if you want to access a
-property named _2_ or _John Doe_, you must use square brackets:
-`value[2]` or `value["John Doe"]`.
+所以你如果直到你要访问的属性是 _color_ 的话，直接叫 `value.color`。如果你想访问的属性名绑定在变量 `i` 上，就需要叫 `value[i]`。属性的名字都是字符串。它们可以是任何字符串，不过点只适用于类似变量名的属性名。如果你需要访问属性 _2_ 或者 _John Doe_，那么你必须用中括号：`value[2]` 或者 `value["John Doe"]`。
 
-The elements in an ((array)) are stored as the array's properties, using
-numbers as property names. Because you can't use the dot notation with
-numbers and usually want to use a binding that holds the index
-anyway, you have to use the bracket notation to get at them.
+((数组))中的元素是以数组属性的方式储存的，数字则是属性名。因为点无法读取数字属性，而且通常习惯用变量代表索引，所以数字属性必须用中括号读取。
 
 {{index ["length property", "for array"], [array, "length of"]}}
 
-The `length` property of an array tells us how many elements it has.
-This property name is a valid binding name, and we know its name in
-advance, so to find the length of an array, you typically write
-`array.length` because that's easier to write than `array["length"]`.
+数组的`length`属性返回这个数组所含元素数量。这是一个有效的变量名，而且我们已知这个名字，所以可以直接通过 `array.length` 获取数组的元素数量。毕竟这个写法比 `array["length"]` 简介多了。
 
 {{id methods}}
 
@@ -189,8 +111,7 @@ advance, so to find the length of an array, you typically write
 
 {{index [function, "as property"], method, string}}
 
-Both string and array values contain, in addition to the `length`
-property, a number of properties that hold function values.
+除了 `length`属性外，字符串和数组还有其他属性。
 
 ```
 let doh = "Doh";
@@ -202,25 +123,17 @@ console.log(doh.toUpperCase());
 
 {{index "case conversion", "toUpperCase method", "toLowerCase method"}}
 
-Every string has a `toUpperCase` property. When called, it will return
-a copy of the string in which all letters have been converted to
-uppercase. There is also `toLowerCase`, going the other way.
+每个字符串都有一个 `toUpperCase` 属性。它会返回一个复制的字符串，其每个字母都被转换成大写。同理，也有一个 `toLowerCase` 属性的存在。
 
 {{index "this binding"}}
 
-Interestingly, even though the call to `toUpperCase` does not pass any
-arguments, the function somehow has access to the string `"Doh"`, the
-value whose property we called. How this works is described in
-[Chapter ?](object#obj_methods).
+有趣的是，尽管 `toUpperCase` 没有任何参数，它依旧知道可以调用字符串本身的值 `"Doh"`。这背后的原理会在[第六章](object#obj_methods)揭晓。
 
-Properties that contain functions are generally called _methods_ of
-the value they belong to, as in "`toUpperCase` is a method of a
-string".
+函数属性通常被叫做值的_方法_。比如 `toUpperCase` 是字符串的一个方法。
 
 {{id array_methods}}
 
-This example demonstrates two methods you can use to manipulate
-arrays:
+下例展现了数组的两种方法：
 
 ```
 let sequence = [1, 2, 3];
@@ -236,36 +149,21 @@ console.log(sequence);
 
 {{index collection, array, "push method", "pop method"}}
 
-The `push` method adds values to the end of an array, and the
-`pop` method does the opposite, removing the last value in the array
-and returning it.
+`push`方法在数组的后面添加新值，`pop`方法则全然相反，移除且返回数组最后的值。
 
 {{index ["data structure", stack]}}
 
-These somewhat silly names are the traditional terms for operations on
-a _((stack))_. A stack, in programming, is a data structure that
-allows you to push values into it and pop them out again in the
-opposite order so that the thing that was added last is removed first.
-These are common in programming—you might remember the function ((call
-stack)) from [the previous chapter](functions#stack), which is an
-instance of the same idea.
+这些看似愚蠢的名字是_((堆栈))_的传统操作术语。在编程中，堆栈是一个以后进先出的顺序添加（push）和提取（pop）值的数据结构。这种编程中非常常见。你也许还记得[上一章](functions#stack)提到的((调用栈))，就是一个同原理的实例。
 
 ## Objects
 
 {{index journal, "weresquirrel example", array, record}}
 
-Back to the weresquirrel. A set of daily log entries can be
-represented as an array. But the entries do not consist of just a
-number or a string—each entry needs to store a list of activities and
-a Boolean value that indicates whether Jacques turned into a squirrel
-or not. Ideally, we would like to group these together into a single
-value and then put those grouped values into an array of log entries.
+回到小松鼠的问题上。一组日志可以以数组的形式储存。不过，每篇日志不仅只有数字和字符串，它还包括一系列的活动和一个表示 Jacque 是否变身成小松鼠的布尔值。最好可以把这些数据都组合成一个值，在把这些组合的值统一储存在一个日志数组中。
 
 {{index [syntax, object], [property, definition], [braces, object], "{} (object)"}}
 
-Values of the type _((object))_ are arbitrary collections of
-properties. One way to create an object is by using braces as an
-expression.
+_((对象))_的值是任意属性集。创建对象的一种方法是通过大括号表达式。
 
 ```
 let day1 = {
@@ -283,11 +181,7 @@ console.log(day1.wolf);
 
 {{index [quoting, "of object properties"], "colon character"}}
 
-Inside the braces, there is a list of properties separated by commas.
-Each property has a name followed by a colon and a value. When an
-object is written over multiple lines, indenting it like in the
-example helps with readability. Properties whose names aren't valid
-binding names or valid numbers have to be quoted.
+在大括号中，有一系列被逗号分开的属性。每个属性都有一个名字，后面跟着一个分号和一个值。为了更好的阅读，一个对象通常会写多行，且有缩进，就如上例所示。如果属性的名字不是有效的变量名或数字，则必须用引号围绕。
 
 ```
 let descriptions = {
@@ -298,37 +192,23 @@ let descriptions = {
 
 {{index [braces, object]}}
 
-This means that braces have _two_ meanings in JavaScript. At
-the start of a ((statement)), they start a ((block)) of statements. In
-any other position, they describe an object. Fortunately, it is rarely
-useful to start a statement with an object in braces, so the
-ambiguity between these two is not much of a problem.
+因此大括号在 JavaScript 中有 _2_ 种意思。在((语句))的开头，它们用来表示一段((语句块))。另一方面，它们用来表示对象。不过混淆两者的问题不大，因为很少以对象开始一段语句块。
 
 {{index undefined}}
 
-Reading a property that doesn't exist will give you the value
-`undefined`.
+调用一个不存在的属性会得到 `undefined`。
 
 {{index [property, assignment], mutability, "= operator"}}
 
-It is possible to assign a value to a property expression with the `=`
-operator. This will replace the property's value if it already existed
-or create a new property on the object if it didn't.
+可以通过 `=` 给属性一个新的值。如果该属性存在的话，就会改写这个原有的值。否则会创建一个新的属性。
 
 {{index "tentacle (analogy)", [property, "model of"], [binding, "model of"]}}
 
-To briefly return to our tentacle model of ((binding))s—property
-bindings are similar. They _grasp_ values, but other bindings and
-properties might be holding onto those same values. You may think of
-objects as octopuses with any number of tentacles, each of which has a
-name tattooed on it.
+回顾绑定变量的触角模型，属性绑定有着相同的原理。它们_抓住_值，但是其他的变量和属性可以抓去相同的值。你可以把对象当成一个有无数触角的八抓鱼，每个触角都印有一个名字。
 
 {{index "delete operator", [property, deletion]}}
 
-The `delete` operator cuts off a tentacle from such an octopus. It is
-a unary operator that, when applied to an object property,
-will remove the named property from the object. This is not a common
-thing to do, but it is possible.
+`delete`运算符可以砍掉该八抓鱼的触角。这是一个一元运算符。当用在一个对象属性上时，该属性就会从该对象中移除。不过这不是一个常用的运算符。
 
 ```
 let anObject = {left: 1, right: 2};
@@ -345,26 +225,18 @@ console.log("right" in anObject);
 
 {{index "in operator", [property, "testing for"], object}}
 
-The binary `in` operator, when applied to a string and an object,
-tells you whether that object has a property with that name. The difference
-between setting a property to `undefined` and actually deleting it is
-that, in the first case, the object still _has_ the property (it just
-doesn't have a very interesting value), whereas in the second case the
-property is no longer present and `in` will return `false`.
+`in`二元运算符，当用在一个字符串和一个对象上时，会告诉你这个对象是否有以该字符串命名的属性。把一个属性定义为 `undefined` 和直接删除该属性的区别在于，`undefined` 属性依旧存在于该对象中（只是没有任何值），而删除后的对象中找不到这个属性（所以 `in` 会返回 `false`）。
 
 {{index "Object.keys function"}}
 
-To find out what properties an object has, you can use the
-`Object.keys` function. You give it an object, and it returns an array
-of strings—the object's property names.
+可以通过 `Object.keys` 函数来知道一个对象中有什么属性。它需要一个对象参数，会返回一个以该对象属性名组成的字符串数组。
 
 ```
 console.log(Object.keys({x: 0, y: 0, z: 2}));
 // → ["x", "y", "z"]
 ```
 
-There's an `Object.assign` function that copies all properties from
-one object into another.
+还有一个 `Object.assign` 函数会将一个对象的所有属性复制到另一个对象中。
 
 ```
 let objectA = {a: 1, b: 2};
@@ -375,14 +247,11 @@ console.log(objectA);
 
 {{index array, collection}}
 
-Arrays, then, are just a kind of object specialized for storing
-sequences of things. If you evaluate `typeof []`, it produces
-`"object"`. You can see them as long, flat octopuses with all their
-tentacles in a neat row, labeled with numbers.
+数组其实就是一个储存一组物件的对象。如果你评估 `typeof []`，你会得到 `"object"`。你可以把数组想像成一个长而平的八抓鱼，它所有的触角都有序的，按数字排在一起。
 
 {{index journal, "weresquirrel example"}}
 
-We will represent the journal that Jacques keeps as an array of objects.
+我们用一个对象数组来储存 Jacque 的日志。
 
 ```{test: wrap}
 let journal = [
@@ -401,30 +270,17 @@ let journal = [
 
 ## Mutability
 
-We will get to actual programming _real_ soon now. First there's one
-more piece of theory to understand.
+我们很快就会开始真正的编程了。不过那之前，还有一个需要理解的理论。
 
 {{index mutability, "side effect", number, string, Boolean, [object, mutability]}}
 
-We saw that object values can be modified. The types of values
-discussed in earlier chapters, such as numbers, strings, and Booleans,
-are all _((immutable))_—it is impossible to change values of those
-types. You can combine them and derive new values from them, but when
-you take a specific string value, that value will always remain the
-same. The text inside it cannot be changed. If you have a string that
-contains `"cat"`, it is not possible for other code to change a
-character in your string to make it spell `"rat"`.
+我们已知对象的值是可以被改写的。前面章节中介绍的值，比如数字、字符串你、布尔值，都是_((不变))_的：这些类型的值是不可以被改写的。你可以将他们组合起来从而得到新的值，但当你定义一个字符串的值时，它将永远存有该值。如果你有一个值为 `"cat"` 的字符串，其他代码将无法改变该字符串的任意字母，让它变成 `"rat"`。
 
-Objects work differently. You _can_ change their properties,
-causing a single object value to have different content at different times.
+对象则完全不同。你_可以_改变它们的属性，使一个对象的值在不同时期有所不同。
 
 {{index [object, identity], identity, [memory, organization], mutability}}
 
-When we have two numbers, 120 and 120, we can consider them precisely
-the same number, whether or not they refer to the same physical bits.
-With objects, there is a difference between having two references to
-the same object and having two different objects that contain the same
-properties. Consider the following code:
+当我们有两个数字时，120 和 120，我们认为它们完全相等，不管它们是否共享同一个内存空间。对对象而言，两个参照点指向同一个对象或两个不同的对象是有区别的。如下：
 
 ```
 let object1 = {value: 10};
@@ -445,20 +301,11 @@ console.log(object3.value);
 
 {{index "tentacle (analogy)", [binding, "model of"]}}
 
-The `object1` and `object2` bindings grasp the _same_ object, which is
-why changing `object1` also changes the value of `object2`. They are
-said to have the same _identity_. The binding `object3` points to a
-different object, which initially contains the same properties as
-`object1` but lives a separate life.
+因为 `object1` 和 `objects2` 绑定同一个对象，所以当 `object1` 被改变时，`object2` 也被改变了。它们拥有相同的_身份_。`object3` 被绑定在另一个对象上，尽管它们起始的值相同，但是它们却有不同的结局。
 
 {{index "const keyword", "let keyword", [binding, "as state"]}}
 
-Bindings can also be changeable or constant, but this is separate from
-the way their values behave. Even though number values don't change,
-you can use a `let` binding to keep track of a changing number by
-changing the value the binding points at. Similarly, though a `const`
-binding to an object can itself not be changed and will continue to
-point at the same object, the _contents_ of that object might change.
+变量可以是常数也可以被改变，这和它们本身的值的属性无关。尽管数字值不可改变，你依旧可以用 `let` 记录一个数字变量，只要改变它的绑定就好。同理，尽管 `const` 定义的对象本身不可以被改变（绑定其他值），但是它的内容可以被改变。
 
 ```{test: no}
 const score = {visitors: 0, home: 0};
@@ -470,20 +317,13 @@ score = {visitors: 1, home: 1};
 
 {{index "== operator", [comparison, "of objects"], "deep comparison"}}
 
-When you compare objects with JavaScript's `==` operator, it compares
-by identity: it will produce `true` only if both objects are precisely
-the same value. Comparing different objects will return `false`, even
-if they have identical properties. There is no "deep" comparison
-operation built into JavaScript, which compares objects by contents,
-but it is possible to write it yourself (which is one of the
-[exercises](data#exercise_deep_compare) at the end of this chapter).
+在 JavaScript 中，当你用 `==` 来对比对象时，它对比的是该对象的身份：如果两个对象的值相等，就会返回 `true`。对比不同的对象会得到 `false`，尽管它们的属性相同。在 JavaScript 中没有所谓的“深入”对比，就是对比对象的内容。但你可以自己写一个（本章末的一个[习题](data#exercise_deep_compare)）。
 
 ## The lycanthrope's log
 
 {{index "weresquirrel example", lycanthropy, "addEntry function"}}
 
-So, Jacques starts up his JavaScript interpreter and sets up the
-environment he needs to keep his ((journal)).
+Jacque 开启了他的 JavaScript 编译器，并搭建了所需记录他((日志))的环境。
 
 ```{includeCode: true}
 let journal = [];
@@ -495,15 +335,9 @@ function addEntry(events, squirrel) {
 
 {{index [braces, object], "{} (object)", [property, definition]}}
 
-Note that the object added to the journal looks a little odd. Instead
-of declaring properties like `events: events`, it just gives a
-property name. This is shorthand that means the same thing—if a
-property name in brace notation isn't followed by a value, its
-value is taken from the binding with the same name.
+注意加入日志的对象看似有些奇怪。它只有一个属性名，而不是定义一个类似 `events: events` 的属性。这是一个简介的写法，如果属性的名字绑定的是一个同名的变量，而不是一个定义的值，该属性的值会从和属性同名的变量中提取。
 
-So then, every evening at 10 p.m.—or sometimes the next morning, after
-climbing down from the top shelf of his bookcase—Jacques records the
-day.
+此后，每晚 10点，偶尔隔天早上，当 Jacque 从他的书架上下来后，Jacque 会记录过去的一天。
 
 ```
 addEntry(["work", "touched tree", "pizza", "running",
@@ -514,37 +348,21 @@ addEntry(["weekend", "cycling", "break", "peanuts",
           "beer"], true);
 ```
 
-Once he has enough data points, he intends to use statistics to find
-out which of these events may be related to the squirrelifications.
+当他记录足够多的数据后，他打算通过统计学找寻可能促使他变身的活动。
 
 {{index correlation}}
 
-_Correlation_ is a measure of ((dependence)) between statistical
-variables. A statistical variable is not quite the same as a
-programming variable. In statistics you typically have a set of
-_measurements_, and each variable is measured for every measurement.
-Correlation between variables is usually expressed as a value that
-ranges from -1 to 1. Zero correlation means the variables are not
-related. A correlation of one indicates that the two are perfectly
-related—if you know one, you also know the other. Negative one also
-means that the variables are perfectly related but that they are
-opposites—when one is true, the other is false.
+_相关性_用来测量统计变量间的依赖性。一个统计变量和编程中的变量不完全相等。在统计学中，通常会有一组测量，而每个测量的变量都会被记录下来。变量中的相关性通常以 -1 到 1 中的一个数字表示。0 的相关性表示这些变量没有关联。1 的相关性表示这些变量完全相关：你知道一个，就会知道其他。-1 的相关性表示这些变量以相反的关系相连：如果其中一个是真的，另一个则是假的。
 
 {{index "phi coefficient"}}
 
-To compute the measure of correlation between two Boolean variables,
-we can use the _phi coefficient_ (_ϕ_). This is a formula whose input
-is a ((frequency table)) containing the number of times the different
-combinations of the variables were observed. The output of the formula
-is a number between -1 and 1 that describes the correlation.
+计算两个布尔值的相关度量，我们可以用 _phi 系数_（_ϕ_）。这是一个公式，它的输入是一个含有观察到的不同组合的变量的((频率表))。它的输入是一个 -1 到 1 的数字，形容这个相关性。
 
-We could take the event of eating ((pizza)) and put that in a
-frequency table like this, where each number indicates the amount of
-times that combination occurred in our measurements:
+我们可以将吃((pizza))放入这个频率表中，每个数字都代表该组合在测量中发生的次数：
 
 {{figure {url: "img/pizza-squirrel.svg", alt: "Eating pizza versus turning into a squirrel", width: "7cm"}}}
 
-If we call that table _n_, we can compute _ϕ_ using the following formula:
+如果这个频率表是 _n_ 的话，我们可以通过下面的公式得出 _ϕ_：
 
 {{if html
 
@@ -569,55 +387,27 @@ if}}
 
 if}}
 
-(If at this point you're putting the book down to focus on a terrible
-flashback to 10th grade math class—hold on! I do not intend to torture
-you with endless pages of cryptic notation—it's just this one formula for
-now. And even with this one, all we do is turn it into JavaScript.)
+（此时你放下书本，开始回忆起高一的数学。等等！我不想给你一堆隐喻。这只是一个公式。而且我们只需要把这个公式转换成 JavaScript。）
 
-The notation [_n_~01~]{if html}[[$n_{01}$]{latex}]{if tex} indicates
-the number of measurements where the first variable (squirrelness) is
-false (0) and the second variable (pizza) is true (1). In the pizza
-table, [_n_~01~]{if html}[[$n_{01}$]{latex}]{if tex} is 9.
+符合 [_n_~01~]{if html}[[$n_{01}$]{latex}]{if tex} 表示测量次数。第一次变量（变松鼠）是假的（0），第二次变量（pizza）是真的（1）。在 pizza 表格中，[_n_~01~]{if html}[[$n_{01}$]{latex}]{if tex} 是 9.
 
-The value [_n_~1•~]{if html}[[$n_{1\bullet}$]{latex}]{if tex} refers
-to the sum of all measurements where the first variable is true, which
-is 5 in the example table. Likewise, [_n_~•0~]{if
-html}[[$n_{\bullet0}$]{latex}]{if tex} refers to the sum of the
-measurements where the second variable is false.
+值 [_n_~1•~]{if html}[[$n_{1\bullet}$]{latex}]{if tex} 表示第一个变量为真的情况下的测量总和。在 pizza 表格中，这个和是 5。同理，[_n_~•0~]{if html}[[$n_{\bullet0}$]{latex}]{if tex} 表示第二个变量为假的测量综合。
 
 {{index correlation, "phi coefficient"}}
 
-So for the pizza table, the part above the division line (the
-dividend) would be 1×76−4×9 = 40, and the part below it (the
-divisor) would be the square root of 5×85×10×80, or [√340000]{if
-html}[[$\sqrt{340000}$]{latex}]{if tex}. This comes out to _ϕ_ ≈
-0.069, which is tiny. Eating ((pizza)) does not appear to have
-influence on the transformations.
+所以该 pizza 表格中，分数线上面的部分（分子）是 1×76−4×9 = 40，而下面的部分（分母）是 5×85×10×80 的平方根，或者[√340000]{if html}[[$\sqrt{340000}$]{latex}]{if tex}。得到的结果是 _ϕ_ ≈ 0.069，非常不可能。所以吃((pizza))和变身无关。
 
 ## Computing correlation
 
 {{index [array, "as table"], [nesting, "of arrays"]}}
 
-We can represent a two-by-two ((table)) in JavaScript with a
-four-element array (`[76, 9, 4, 1]`). We could also use other
-representations, such as an array containing two two-element arrays
-(`[[76, 9], [4, 1]]`) or an object with property names like `"11"` and
-`"01"`, but the flat array is simple and makes the expressions that
-access the table pleasantly short. We'll interpret the indices to the
-array as two-((bit)) ((binary number))s, where the leftmost (most
-significant) digit refers to the squirrel variable and the rightmost
-(least significant) digit refers to the event variable. For example,
-the binary number `10` refers to the case where Jacques did turn into
-a squirrel, but the event (say, "pizza") didn't occur. This happened
-four times. And since binary `10` is 2 in decimal notation, we will
-store this number at index 2 of the array.
+在 JavaScript 中，我们可以用一个四个元素的数组（`[76, 9, 4, 1]`）来表示一个 2x2 的((表格))。我们也可以用其他方式，比如一个包含两个元素数组的数组（`[[76, 9], [4, 1]]`）或者一个属性为`"11"`，`"01"`的对象。不过第一个数组更加简洁明了。我们把数组的索引定义为两位的二进制，最左边（最有效）的数字表示松鼠变量，最右边（最不有效）的数字表示事件变量。比如二进制`10`表示 Jacque 变成了松鼠，但是他并没有做这个事件（如吃 pizza）。这总共发生了4次。因为二进制`10`是十进制中的 2，我们把这个数字（4）存放在数组索引2的位置上。
 
 {{index "phi coefficient", "phi function"}}
 
 {{id phi_function}}
 
-This is the function that computes the _ϕ_ coefficient from such an
-array:
+下面的函数计算上述数组中的 _ϕ_ 系数：
 
 ```{includeCode: strip_log, test: clip}
 function phi(table) {
@@ -634,28 +424,15 @@ console.log(phi([76, 9, 4, 1]));
 
 {{index "square root", "Math.sqrt function"}}
 
-This is a direct translation of the _ϕ_ formula into JavaScript.
-`Math.sqrt` is the square root function, as provided by the `Math`
-object in a standard JavaScript environment. We have to add two fields
-from the table to get fields like [n~1•~]{if
-html}[[$n_{1\bullet}$]{latex}]{if tex} because the sums of rows or
-columns are not stored directly in our data structure.
+这是把 _ϕ_ 公式直译转换成 JavaScript。`Math.sqrt` 是平方根函数，由 JavaScript 中的 `Math`对象提供。我们需要把表格中的两个数据相加，从而得到 [n~1•~]{if html}[[$n_{1\bullet}$]{latex}]{if tex} 因为我们的数据结构并没有直接储存行和列的和
 
 {{index "JOURNAL data set"}}
 
-Jacques kept his journal for three months. The resulting ((data set))
-is available in the [coding
-sandbox](https://eloquentjavascript.net/code#4) for this chapter[
-([_https://eloquentjavascript.net/code#4_](https://eloquentjavascript.net/code#4))]{if
-book}, where it is stored in the `JOURNAL` binding and in a
-downloadable
-[file](https://eloquentjavascript.net/code/journal.js).
+Jacque 记录了三个月的日志。最后的((数据集))在本章[([_https://eloquentjavascript.net/code#4_](https://eloquentjavascript.net/code#4))]{if book}的[代码沙盒](https://eloquentjavascript.net/code#4)中一个叫 `JOURNAL` 的变量里。你可以下载这个[文件](https://eloquentjavascript.net/code/journal.js)。
 
 {{index "tableFor function"}}
 
-To extract a two-by-two ((table)) for a specific event from the
-journal, we must loop over all the entries and tally how many times
-the event occurs in relation to squirrel transformations.
+在日志里，从一个 2x2的((表格))中提取一个指定的活动，我们必须循环所有的数据，统计和变身松鼠相关的事件发生的次数。
 
 ```{includeCode: strip_log}
 function tableFor(event, journal) {
@@ -675,22 +452,13 @@ console.log(tableFor("pizza", JOURNAL));
 
 {{index [array, searching], "includes method"}}
 
-Arrays have an `includes` method that checks whether a given value
-exists in the array. The function uses that to determine whether the
-event name it is interested in is part of the event list for a given
-day.
+数组有一个 `includes`方法，可以检查一个值是否存在于该数组中。这个函数用此方法来确保某个事件在指定的一天内发生过。
 
 {{index [array, indexing]}}
 
-The body of the loop in `tableFor` figures out which box in the table
-each journal entry falls into by checking whether the entry contains
-the specific event it's interested in and whether the event happens
-alongside a squirrel incident. The loop then adds one to the correct
-box in the table.
+`tableFor` 中的循环通过检验事件和变身松鼠的关系来计算出每个日志数据应该属于表格的哪一栏中。该循环在表格中正确的那栏里加一。
 
-We now have the tools we need to compute individual ((correlation))s.
-The only step remaining is to find a correlation for every type of
-event that was recorded and see whether anything stands out.
+我们现在可以计算出个体相关性了。如今只剩下找到每个事件的相关性，好检查有没有可疑事件。
 
 {{id for_of_loop}}
 
@@ -698,21 +466,18 @@ event that was recorded and see whether anything stands out.
 
 {{index "for loop", loop, [array, iteration]}}
 
-In the `tableFor` function, there's a loop like this:
+在 `tableFor` 函数中，有以下循环：
 
 ```
 for (let i = 0; i < JOURNAL.length; i++) {
   let entry = JOURNAL[i];
-  // Do something with entry
+  // 对该 entry 做些什么
 }
 ```
 
-This kind of loop is common in classical JavaScript—going over arrays
-one element at a time is something that comes up a lot, and to do that
-you'd run a counter over the length of the array and pick out each
-element in turn.
+这种循环在传统对 JavaScript 中很常见：一个元素一个元素的走完真个数组。为此，你需要一个计数器，从0到数组的长度，之后依次读取每个元素。
 
-There is a simpler way to write such loops in modern JavaScript.
+在新的 JavaScript 中，有个更简短的循环方法：
 
 ```
 for (let entry of JOURNAL) {
@@ -722,11 +487,7 @@ for (let entry of JOURNAL) {
 
 {{index "for/of loop"}}
 
-When a `for` loop looks like this, with the word `of` after a variable
-definition, it will loop over the elements of the value given after
-`of`. This works not only for arrays but also for strings and some
-other data structures. We'll discuss _how_ it works in [Chapter
-?](object).
+类似上面的这种用一个在变量定义后根一个 `of` 词的 `for` 循环，它会把 `of` 后的值从头到尾走一遍。这个方法不仅适用于数组，同时也适用于字符串和其他一些数据结构。我们在[第六章](object)中会深入探讨其原理。
 
 {{id analysis}}
 
@@ -734,9 +495,7 @@ other data structures. We'll discuss _how_ it works in [Chapter
 
 {{index journal, "weresquirrel example", "journalEvents function"}}
 
-We need to compute a correlation for every type of event that occurs
-in the data set. To do that, we first need to _find_ every type of
-event.
+我们需要计算每一个事件的相关性。首先，我们需要_找到_所有类型的事件。
 
 {{index "includes method", "push method"}}
 
@@ -757,11 +516,9 @@ console.log(journalEvents(JOURNAL));
 // → ["carrot", "exercise", "weekend", "bread", …]
 ```
 
-By going over all the events and adding those that aren't already in
-there to the `events` array, the function collects every type of
-event.
+上面的函数走过所有的事件，把任何新的事件都添加到 `events`数组中，从而得到所有类型的事件。
 
-Using that, we can see all the ((correlation))s.
+通过这个数组，我们可以得出所有的相关性。
 
 ```{test: no}
 for (let event of journalEvents(JOURNAL)) {
@@ -775,10 +532,7 @@ for (let event of journalEvents(JOURNAL)) {
 // and so on...
 ```
 
-Most correlations seem to lie close to zero. Eating carrots, bread, or
-pudding apparently does not trigger squirrel-lycanthropy. It _does_
-seem to occur somewhat more often on weekends. Let's filter the
-results to show only correlations greater than 0.1 or less than -0.1.
+大部分的相关性都接近于 0。吃胡萝卜、面包、布丁很明显和变身松鼠没什么关联。此外周末变身的次数相对频繁。我们过滤掉一些结果，只看大于 0.1 或者小于 -0.1的相关性。
 
 ```{test: no, startCode: true}
 for (let event of journalEvents(JOURNAL)) {
@@ -796,12 +550,9 @@ for (let event of journalEvents(JOURNAL)) {
 // → peanuts:        0.5902679812
 ```
 
-Aha! There are two factors with a ((correlation)) that's clearly stronger
-than the others. Eating ((peanuts)) has a strong positive effect on
-the chance of turning into a squirrel, whereas brushing his teeth has
-a significant negative effect.
+这里有两个明显比其他((相关性))强的事件。吃((花生))和变身松鼠有一个强正相关性，而刷牙则是一个强负相关性。
 
-Interesting. Let's try something.
+有意思。让我们试试其他：
 
 ```
 for (let entry of JOURNAL) {
@@ -814,40 +565,25 @@ console.log(phi(tableFor("peanut teeth", JOURNAL)));
 // → 1
 ```
 
-That's a strong result. The phenomenon occurs precisely when Jacques
-eats ((peanuts)) and fails to brush his teeth. If only he weren't such
-a slob about dental hygiene, he'd have never even noticed his
-affliction.
+这是一个肯定的结果。在 Jacque 吃花生后不刷牙的情况下，他肯定会变成松鼠。如果他不是如此不重视他个人的口腔卫生的话，他也不会发现他这隐藏的痛苦。
 
-Knowing this, Jacques stops eating peanuts altogether and finds that
-his transformations don't come back.
+发现这点后，Jacque 再也不吃花生了。从此他也再也没变身过。
 
 {{index "weresquirrel example"}}
 
-For a few years, things go great for Jacques. But at some point he
-loses his job. Because he lives in a nasty country where having no job
-means having no medical services, he is forced to take employment with
-a ((circus)) where he performs as _The Incredible Squirrelman_,
-stuffing his mouth with peanut butter before every show.
+以后的几年里，Jacque 的日子过的一帆风顺。直到有一天，他失业了。因为他国家的问题，没有工作就意味着没有医疗。他被迫和一家((马戏团))签约，在里面表演_不可思议的松鼠人_。为此，他每次出演前都要吃好多花生。
 
-One day, fed up with this pitiful existence, Jacques fails to change
-back into his human form, hops through a crack in the circus tent, and
-vanishes into the forest. He is never seen again.
+有一天，他厌倦了这种可怜的生活，Jacque 再也没有变回人。他跳出了马戏团，消失在了森林里。
 
 ## Further arrayology
 
 {{index [array, methods], [method, array]}}
 
-Before finishing the chapter, I want to introduce you to a few more
-object-related concepts. I'll start by introducing some generally
-useful array methods.
+在本章结束前，还有几个和对象相关的知识点。我们先来看看一些对数组有帮助的方法。
 
 {{index "push method", "pop method", "shift method", "unshift method"}}
 
-We saw `push` and `pop`, which add and remove elements at the
-end of an array, [earlier](data#array_methods) in this
-chapter. The corresponding methods for adding and removing things at
-the start of an array are called `unshift` and `shift`.
+我们[前面](data#array_methods)已经见过 `push` 和 `pop` 了，分别添加和移除数组结尾的元素。同理，在数组前添加或移除元素的方法叫做 `unshift` 和 `shift`。
 
 ```
 let todoList = [];
@@ -864,19 +600,11 @@ function rememberUrgently(task) {
 
 {{index "task management example"}}
 
-That program manages a queue of tasks. You add tasks to the end of the
-queue by calling `remember("groceries")`, and when you're ready to do
-something, you call `getTask()` to get (and remove) the front item
-from the queue. The `rememberUrgently` function also adds a task but
-adds it to the front instead of the back of the queue.
+上面的程序管理一个队列的任务。你通过调用 `remember("买菜")` 把任务添加到队列的后面。在你准备做某件事时，通过调用 `getTask()` 从队列的前面得到（并移除）任务。函数 `rememberUrgently` 可以把任务添加到队列的前面。
 
 {{index [array, searching], "indexOf method", "lastIndexOf method"}}
 
-To search for a specific value, arrays provide an `indexOf` method. The method
-searches through the array from the start to the end and returns the
-index at which the requested value was found—or -1 if it wasn't found.
-To search from the end instead of the start, there's a similar method
-called `lastIndexOf`.
+数组还有一个 `indexOf` 方法，可以找寻一个指定的值。这个方法会从头到尾走一遍数组，之后返回指定值的第一个索引，或者 -1 如果该值不存在的话。如果需要从尾到头找寻一个元素的话，用 `lastIndexOf` 方法。
 
 ```
 console.log([1, 2, 3, 2, 1].indexOf(2));
@@ -885,14 +613,11 @@ console.log([1, 2, 3, 2, 1].lastIndexOf(2));
 // → 3
 ```
 
-Both `indexOf` and `lastIndexOf` take an optional second argument that
-indicates where to start searching.
+`indexOf` 和 `lastIndexOf` 也可以有一个选择性参数，指定起始的索引值。
 
 {{index "slice method", [array, indexing]}}
 
-Another fundamental array method is `slice`, which takes start and end
-indices and returns an array that has only the elements between them.
-The start index is inclusive, the end index exclusive.
+还有一个重要的数组方法是 `slice`，它的参数是起始和结束两个索引，并返回一个包含所以从起始到结束索引元素的数组。该数组包括起始元素，但不包括结束元素。
 
 ```
 console.log([0, 1, 2, 3, 4].slice(2, 4));
@@ -903,18 +628,13 @@ console.log([0, 1, 2, 3, 4].slice(2));
 
 {{index [string, indexing]}}
 
-When the end index is not given, `slice` will take all of the elements
-after the start index. You can also omit the start index to copy the
-entire array.
+如果结束索引不存在的话，`slice` 会返回所有起始索引后面的元素。如果起始索引也不存在的话，则返回一个复制的原数组。
 
 {{index concatenation, "concat method"}}
 
-The `concat` method can be used to glue arrays together to create a
-new array, similar to what the `+` operator does for strings.
+`concat`方法可以用来合并多个数组，类似于字符串中的 `+` 运算符。
 
-The following example shows both `concat` and `slice` in action. It takes
-an array and an index, and it returns a new array that is a copy of
-the original array with the element at the given index removed.
+下面的例题运用了 `concat` 和 `slice`。它的参数是一个数组和一个索引，返回一个新的数组，是复制原数组后移除索引的值。
 
 ```
 function remove(array, index) {
@@ -925,15 +645,13 @@ console.log(remove(["a", "b", "c", "d", "e"], 2));
 // → ["a", "b", "d", "e"]
 ```
 
-If you pass `concat` an argument that is not an array, that value will
-be added to the new array as if it were a one-element array.
+你如果给 `concat` 一个非数组的参数，它会以一个元素数组的形式添加到新的数组里。
 
 ## Strings and their properties
 
 {{index [string, properties]}}
 
-We can read properties like `length` and `toUpperCase` from string
-values. But if you try to add a new property, it doesn't stick.
+我们可以读取字符串中的 `length` 和 `toUpperCase` 属性。但是你却无法给其添加新的属性。
 
 ```
 let kim = "Kim";
@@ -942,16 +660,11 @@ console.log(kim.age);
 // → undefined
 ```
 
-Values of type string, number, and Boolean are not objects, and though
-the language doesn't complain if you try to set new properties on
-them, it doesn't actually store those properties. As mentioned earlier,
-such values are immutable and cannot be changed.
+字符串、数字、和布尔的值并不是对象，尽管 JavaScript 允许你给它们定义新的属性。但是这些属性并不会被储存。正如上面提到过的，这些值是不可以更改的。
 
 {{index [string, methods], "slice method", "indexOf method", [string, searching]}}
 
-But these types do have built-in properties. Every string value has a
-number of methods. Some very useful ones are `slice` and `indexOf`,
-which resemble the array methods of the same name.
+但是这些类型的确有内置的属性。每个字符串都有一系列的方法。一些常用的包括 `slice` 和 `indexOf`，和数组中的同名方法相同。
 
 ```
 console.log("coconuts".slice(4, 7));
@@ -960,9 +673,7 @@ console.log("coconut".indexOf("u"));
 // → 5
 ```
 
-One difference is that a string's `indexOf` can search for a string
-containing more than one character, whereas the corresponding array
-method looks only for a single element.
+需要注意的是，字符串中的 `indexOf` 可以查询多个字符串，但是数组的只能查找一个元素。
 
 ```
 console.log("one two three".indexOf("ee"));
@@ -971,17 +682,14 @@ console.log("one two three".indexOf("ee"));
 
 {{index [whitespace, trimming], "trim method"}}
 
-The `trim` method removes whitespace (spaces, newlines, tabs, and
-similar characters) from the start and end of a string.
+`trim` 方法移除字符串开头和结尾的所有空格（包括空格、换行符、tab等）。
 
 ```
 console.log("  okay \n ".trim());
 // → okay
 ```
 
-The `zeroPad` function from the [previous chapter](functions) also
-exists as a method. It is called `padStart` and takes the desired
-length and padding character as arguments.
+[上一章](functions)中的 `zeroPad` 函数也是字符串的方法之一。它的名字是 `padStart`，它的参数是添加的长度和字符。
 
 ```
 console.log(String(6).padStart(3, "0"));
@@ -990,8 +698,7 @@ console.log(String(6).padStart(3, "0"));
 
 {{id split}}
 
-You can split a string on every occurrence of another string with
-`split` and join it again with `join`.
+你可以通过 `split` 把字符串分开，也可以通过 `join` 把它们重新连起来。
 
 ```
 let sentence = "Secretarybirds specialize in stomping";
@@ -1004,9 +711,7 @@ console.log(words.join(". "));
 
 {{index "repeat method"}}
 
-A string can be repeated with the `repeat` method, which creates a new
-string containing multiple copies of the original string, glued
-together.
+字符串可以通过 `repeat` 方法而自我重复，从而得到一个新的字符串。
 
 ```
 console.log("LA".repeat(3));
@@ -1015,10 +720,7 @@ console.log("LA".repeat(3));
 
 {{index ["length property", "for string"], [string, indexing]}}
 
-We have already seen the string type's `length` property. Accessing
-the individual characters in a string looks like accessing array
-elements (with a caveat that we'll discuss in [Chapter
-?](higher_order#code_units)).
+我们已经见过字符串的 `length`属性了。读取字符串中的一个字符和读取数组中的元素很像。（除了一点，我们会在[下一章](higher_order#code_units))中探讨）
 
 ```
 let string = "abc";
