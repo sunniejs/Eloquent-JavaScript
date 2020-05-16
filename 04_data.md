@@ -736,14 +736,11 @@ console.log(string[1]);
 
 {{index "Math.max function"}}
 
-It can be useful for a function to accept any number of ((argument))s.
-For example, `Math.max` computes the maximum of _all_ the arguments it
-is given.
+有时我们需要一个函数拥有任意数的((参数))。比如，`Math.max` 返回_所有_参数的最大值。
 
 {{index "period character", "max example", spread}}
 
-To write such a function, you put three dots before the function's
-last ((parameter)), like this:
+我们只需在最后一个((参数))前放三个点，就可达到此效果：
 
 ```{includeCode: strip_log}
 function max(...numbers) {
@@ -757,15 +754,11 @@ console.log(max(4, 1, 9, -2));
 // → 9
 ```
 
-When such a function is called, the _((rest parameter))_ is bound to
-an array containing all further arguments. If there are other
-parameters before it, their values aren't part of that array. When, as
-in `max`, it is the only parameter, it will hold all arguments.
+在调用此函数时，_((剩余参数))_被绑定到一个包含所有其他参数的数组中。任何在此前的参数都不被包括在内。因此上例中的 `max` 只有一个参数，所以它包括了所有的参数。
 
 {{index [function, application]}}
 
-You can use a similar three-dot notation to _call_ a function with an
-array of arguments.
+以此类推，你可以用同样的三个点和数组组合去调用一个函数：
 
 ```
 let numbers = [5, 1, 7];
@@ -773,14 +766,11 @@ console.log(max(...numbers));
 // → 7
 ```
 
-This "((spread))s" out the array into the function call, passing its
-elements as separate arguments. It is possible to include an array
-like that along with other arguments, as in `max(9, ...numbers, 2)`.
+这会把数组的值作为参数，逐一“((扩散))”到被调用的函数中。你也可以把它和其他参数混合使用，比如 `max(9, ...numbers, 2)`。
 
 {{index [array, "of rest arguments"], "square brackets"}}
 
-Square bracket array notation similarly allows the triple-dot operator
-to spread another array into the new array.
+中括号的数组表达也支持三点运算符，将其值融入到新的数组中。
 
 ```
 let words = ["never", "fully"];
@@ -792,45 +782,25 @@ console.log(["will", ...words, "understand"]);
 
 {{index "Math object", "Math.min function", "Math.max function", "Math.sqrt function", minimum, maximum, "square root"}}
 
-As we've seen, `Math` is a grab bag of number-related utility
-functions, such as `Math.max` (maximum), `Math.min` (minimum), and
-`Math.sqrt` (square root).
+已知 `Math` 是一组数字相关的百宝袋，用于许多实用的函数。比如 `Math.max`（最大值）、`Math.min`（最小值）、以及`Math.sqrt`（平方根）。
 
 {{index namespace, [object, property]}}
 
 {{id namespace_pollution}}
 
-The `Math` object is used as a container to group a bunch of related
-functionality. There is only one `Math` object, and it is almost never
-useful as a value. Rather, it provides a _namespace_ so that all these
-functions and values do not have to be global bindings.
+`Math` 对象是一个包含许多相关函数的容器。JavaScript 只有一个 `Math` 对象，而且几乎不会被直接用作一个值。通常，它提供一个_命名空间_，好避免这些函数和值被全局绑定。
 
 {{index [binding, naming]}}
 
-Having too many global bindings "pollutes" the namespace. The more
-names have been taken, the more likely you are to accidentally
-overwrite the value of some existing binding. For example, it's not
-unlikely to want to name something `max` in one of your programs.
-Since JavaScript's built-in `max` function is tucked safely inside the
-`Math` object, we don't have to worry about overwriting it.
+过多的全局绑定会“污染”命名空间。当你定义越多的名字，越容易无意间改写这些名字的值。比如，你很可能在一个程序中命名一个 `max` 变量。好在 JavaScript 自带的 `max` 函数被包裹在 `Math` 对象中，我们定义 `max` 时，不需要担心它被改写。
 
 {{index "let keyword", "const keyword"}}
 
-Many languages will stop you, or at least warn you, when you are
-defining a binding with a name that is already taken. JavaScript does
-this for bindings you declared with `let` or `const`
-but—perversely—not for standard bindings nor for bindings declared
-with `var` or `function`.
+很多语言，在你试图改写内建的名字时，会提醒甚至阻止你。JavaScript 只有在你用 `let` 或者 `const` 定义变量会如此。但对于传统的 `var` 和 `function` 却不会。
 
 {{index "Math.cos function", "Math.sin function", "Math.tan function", "Math.acos function", "Math.asin function", "Math.atan function", "Math.PI constant", cosine, sine, tangent, "PI constant", pi}}
 
-Back to the `Math` object. If you need to do ((trigonometry)), `Math`
-can help. It contains `cos` (cosine), `sin` (sine), and `tan`
-(tangent), as well as their inverse functions, `acos`, `asin`, and
-`atan`, respectively. The number π (pi)—or at least the closest
-approximation that fits in a JavaScript number—is available as
-`Math.PI`. There is an old programming tradition of writing the names
-of ((constant)) values in all caps.
+回到 `Math` 对象。它也可以用来计算((三角函数))，包括了 `cos` (cosine), `sin` (sine), 和 `tan` (tangent)，以及和它们对应的反函数 `acos`, `asin`, 和 `atan`。此外，`Math.PI` 承载着 JavaSript 接受范围内的圆周率 π 的最近小数点。传统的编程习惯用全大写字母命名常数。
 
 ```{test: no}
 function randomPointOnCircle(radius) {
@@ -842,15 +812,11 @@ console.log(randomPointOnCircle(2));
 // → {x: 0.3667, y: 1.966}
 ```
 
-If sines and cosines are not something you are familiar with, don't
-worry. When they are used in this book, in [Chapter ?](dom#sin_cos),
-I'll explain them.
+你如果对三角函数不了解，也不需担心。我会在本书的[第十四章](dom#sin_cos)讲解它们。
 
 {{index "Math.random function", "random number"}}
 
-The previous example used `Math.random`. This is a function that
-returns a new pseudorandom number between zero (inclusive) and one
-(exclusive) every time you call it.
+上面的例子用到 `Math.random`。这是一个返回零至一（包含）内的伪随机函数。
 
 ```{test: no}
 console.log(Math.random());
@@ -863,43 +829,28 @@ console.log(Math.random());
 
 {{index "pseudorandom number", "random number"}}
 
-Though computers are deterministic machines—they always react the same
-way if given the same input—it is possible to have them produce
-numbers that appear random. To do that, the machine keeps some hidden
-value, and whenever you ask for a new random number, it performs
-complicated computations on this hidden value to create a new value.
-It stores a new value and returns some number derived from it. That
-way, it can produce ever new, hard-to-predict numbers in a way that
-_seems_ random.
+虽然电脑是确定性机器（一样输入，结果永远一致），但我们依旧可以得到一些看似随机的数字。为此，电脑储存一些隐藏值，当你需要一个新的随机数字时，它会根据这个隐藏值做一系列复制计算得到一个新的值。它把这个新值保存起来，再返回一个从中衍生的数字。如此，它可以一直返回一个难以猜测且_看似_随机的数字。
 
 {{index rounding, "Math.floor function"}}
 
-If we want a whole random number instead of a fractional one, we can
-use `Math.floor` (which rounds down to the nearest whole number) on
-the result of `Math.random`.
+如果我们想要一个随机的整数，而不是分数的话，我们可以对 `Math.random` 返回的值用 `Math.floor`（向下取整）。
 
 ```{test: no}
 console.log(Math.floor(Math.random() * 10));
 // → 2
 ```
 
-Multiplying the random number by 10 gives us a number greater than or
-equal to 0 and below 10. Since `Math.floor` rounds down, this
-expression will produce, with equal chance, any number from 0 through
-9.
+将随机的值乘以 10 会得到一个大于等于 0 且小于 10 的数。因为 `Math.floor` 向下取整，这个表达式会以相同概率返回 0 至 9 中的任意整数。
 
 {{index "Math.ceil function", "Math.round function", "Math.abs function", "absolute value"}}
 
-There are also the functions `Math.ceil` (for "ceiling", which rounds
-up to a whole number), `Math.round` (to the nearest whole number), and
-`Math.abs`, which takes the absolute value of a number, meaning it
-negates negative values but leaves positive ones as they are.
+类似的，也有 `Math.ceil`（向上取整）、`Math.round`（四舍五入最近整数）、和 `Math.abs`（绝对值）函数。
 
 ## Destructuring
 
 {{index "phi function"}}
 
-Let's go back to the `phi` function for a moment.
+回顾 `phi` 函数。
 
 ```{test: wrap}
 function phi(table) {
@@ -913,10 +864,7 @@ function phi(table) {
 
 {{index "destructuring binding", parameter}}
 
-One of the reasons this function is awkward to read is that we have a
-binding pointing at our array, but we'd much prefer to have bindings
-for the _elements_ of the array, that is, `let n00 = table[0]` and so on.
-Fortunately, there is a succinct way to do this in JavaScript.
+这个函数难读的原因之一是一个指向数组的变量。我们更希望直接绑定数组中的_元素_。也就是说，`let n00 = table[0]`，以此类推。好在，在 JavaScript 中有个更为简洁的方式。
 
 ```
 function phi([n00, n01, n10, n11]) {
@@ -928,15 +876,11 @@ function phi([n00, n01, n10, n11]) {
 
 {{index "let keyword", "var keyword", "const keyword", [binding, destructuring]}}
 
-This also works for bindings created with `let`, `var`, or
-`const`. If you know the value you are binding is an array, you can
-use ((square brackets)) to "look inside" of the value, binding its
-contents.
+此方法适用于 `let`，`var`，或 `const` 创建的变量。如果已知要绑定数组元素，你可以直接用((中括号))“查看”数组的值，并绑定其元素。
 
 {{index [object, property], [braces, object]}}
 
-A similar trick works for objects, using braces instead of square
-brackets.
+类似的方法也适用于对象，只需把中括号改为大括号。
 
 ```
 let {name} = {name: "Faraji", age: 23};
@@ -946,48 +890,27 @@ console.log(name);
 
 {{index null, undefined}}
 
-Note that if you try to destructure `null` or `undefined`, you get an
-error, much as you would if you directly try to access a property
-of those values.
+注意：如果试图解构 `null` 或 `undefined`，你会得到错误。正如你直接从它们中提取一个属性。
 
 ## JSON
 
 {{index [array, representation], [object, representation], "data format", [memory, organization]}}
 
-Because properties only grasp their value, rather than contain it,
-objects and arrays are stored in the computer's memory as
-sequences of bits holding the _((address))es_—the place in memory—of
-their contents. So an array with another array inside of it consists
-of (at least) one memory region for the inner array, and another for
-the outer array, containing (among other things) a binary number that
-represents the position of the inner array.
+因为属性本身不包含任何值，对象和数组是以位序列的方式存在电脑内存中，这些位序列包含其内容_((地址))_（内存中的位置）。所以一个包含数组的数组（至少）有一个属于内部数组的内存区域和一个外部数组的内存区域，以及一个代表内部数组地址的二进制。
 
-If you want to save data in a file for later or send it to another
-computer over the network, you have to somehow convert these tangles
-of memory addresses to a description that can be stored or sent. You
-_could_ send over your entire computer memory along with the address
-of the value you're interested in, I suppose, but that doesn't seem
-like the best approach.
+你如果想保存一个文件或者通过网络转发到另一个电脑上，你需要将其从原有的内存地址转换成可被储存或转发的叙述。你_可以_转发包括目标在内的全部电脑内存，但这显然不是最佳方案。
 
 {{indexsee "JavaScript Object Notation", JSON}}
 
 {{index serialization, "World Wide Web"}}
 
-What we can do is _serialize_ the data. That means it is converted
-into a flat description. A popular serialization format is called
-_((JSON))_ (pronounced "Jason"), which stands for JavaScript Object
-Notation. It is widely used as a data storage and communication format
-on the Web, even in languages other than JavaScript.
+我们可以_序列化_该数据。也就是将其转换成一个平面叙述。_((JSON))_（读作 Jason）是一个流行的序列化格式，是 JavaScript Object Notation 的缩写。作为一个网络数据储存和通讯格式，它被广泛运用，包括 JavaScript 以外的语言。
 
 {{index [array, notation], [object, creation], [quoting, "in JSON"], comment}}
 
-JSON looks similar to JavaScript's way of writing arrays and objects,
-with a few restrictions. All property names have to be surrounded by
-double quotes, and only simple data expressions are allowed—no
-function calls, bindings, or anything that involves actual
-computation. Comments are not allowed in JSON.
+JSON 的写作方式类似于 JavaScript 中的数组和对象，但有些限制。所有的属性名字必须在双引号内，而且只接受简单的数据表达式。也就是说函数、变量、或者任何需要运算的值都不可以。此外，注释也不支持。
 
-A journal entry might look like this when represented as JSON data:
+一篇日志在 JSON 中如下所示：
 
 ```{lang: "application/json"}
 {
@@ -998,10 +921,7 @@ A journal entry might look like this when represented as JSON data:
 
 {{index "JSON.stringify function", "JSON.parse function", serialization, deserialization, parsing}}
 
-JavaScript gives us the functions `JSON.stringify` and `JSON.parse` to
-convert data to and from this format. The first takes a JavaScript
-value and returns a JSON-encoded string. The second takes such a
-string and converts it to the value it encodes.
+JavaScript 提供了 `JSON.stringify` 和 `JSON.parse` 函数，用来转换数据。第一个将一个 JavaScript 变量转换成 JSON，而第二个则将 JSON 转换成 JavaScript 值。
 
 ```
 let string = JSON.stringify({squirrel: false,
@@ -1014,25 +934,13 @@ console.log(JSON.parse(string).events);
 
 ## Summary
 
-Objects and arrays (which are a specific kind of object) provide ways
-to group several values into a single value. Conceptually, this allows
-us to put a bunch of related things in a bag and run around with the
-bag, instead of wrapping our arms around all of the individual things
-and trying to hold on to them separately.
+对象和数组（一个特殊的对象）提供多种不同将多个值组合在一起的方式。打个比方，与其带着一堆东西出门，我们可以将其放入一个书包中，并背着书包出门。
 
-Most values in JavaScript have properties, the exceptions being `null`
-and `undefined`. Properties are accessed using `value.prop` or
-`value["prop"]`. Objects tend to use names for their properties
-and store more or less a fixed set of them. Arrays, on the other hand,
-usually contain varying amounts of conceptually identical values and
-use numbers (starting from 0) as the names of their properties.
+除了 `null` 和 `undefined` 外的 JavaScript 的值都有属性。属性可以通过 `value.prop` 或者 `value["prop"]` 调用。对象的属性通常是名字，并或多或少的储存一组固定的属性。数组的属性则是数字（从0开始），且其数量不定。
 
-There _are_ some named properties in arrays, such as `length` and a
-number of methods. Methods are functions that live in properties and
-(usually) act on the value they are a property of.
+数组中有_个别_名字属性，比如 `length` 和些方法。方法其实就是居住在属性中的函数，通常根据其对象的值运行。
 
-You can iterate over arrays using a special kind of `for` loop—`for
-(let element of array)`.
+你可以通过一种特殊的 `for` 循环遍历数组：`for (let element of arry)`。
 
 ## Exercises
 
@@ -1040,8 +948,7 @@ You can iterate over arrays using a special kind of `for` loop—`for
 
 {{index "summing (exercise)"}}
 
-The [introduction](intro) of this book alluded to the following as a
-nice way to compute the sum of a range of numbers:
+本书的[介绍](intro)中暗示过一个简洁的计算一系列数字的和的方法：
 
 ```{test: no}
 console.log(sum(range(1, 10)));
@@ -1049,28 +956,18 @@ console.log(sum(range(1, 10)));
 
 {{index "range function", "sum function"}}
 
-Write a `range` function that takes two arguments, `start` and `end`,
-and returns an array containing all the numbers from `start` up to
-(and including) `end`.
+写一个 `range` 函数，它有两个参数，`start` 和 `end`，并返回一个包含所有从 `start` 到 `end` 的数字（包括）的数组。
 
-Next, write a `sum` function that takes an array of numbers and
-returns the sum of these numbers. Run the example program and see
-whether it does indeed return 55.
+在写一个 `sum` 函数，它介绍一个数字数组参数，并返回这些数字的和。测试上面的例题，确保它的确返回 55。
 
 {{index "optional argument"}}
 
-As a bonus assignment, modify your `range` function to take an
-optional third argument that indicates the "step" value used when
-building the array. If no step is given, the elements go up by
-increments of one, corresponding to the old behavior. The function
-call `range(1, 10, 2)` should return `[1, 3, 5, 7, 9]`. Make sure it
-also works with negative step values so that `range(5, 2, -1)`
-produces `[5, 4, 3, 2]`.
+附加题，改写 `range` 函数，使其接受可选的第三个参数，代表“步数”。如果没有步数，数组中的元素如原先般逐一增加。以 `range(1, 10, 2)` 调用该函数将得到 `[1, 3, 5, 7, 9]`。确保负的步数依旧工作。比如，`range(5, 2, -1)` 应返回 `[5, 4, 3, 2]`。
 
 {{if interactive
 
 ```{test: no}
-// Your code here.
+// 你的代码
 
 console.log(range(1, 10));
 // → [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -1086,33 +983,21 @@ if}}
 
 {{index "summing (exercise)", [array, creation], "square brackets"}}
 
-Building up an array is most easily done by first initializing a
-binding to `[]` (a fresh, empty array) and repeatedly calling its
-`push` method to add a value. Don't forget to return the array at the
-end of the function.
+创建一个数组可先给 `[]`（一新建的空数组）绑定一个变量。再反复调用其 `push` 方法添加值。不要忘记在函数的结尾返回该数组。
 
 {{index [array, indexing], comparison}}
 
-Since the end boundary is inclusive, you'll need to use the `<=`
-operator rather than `<` to check for the end of your loop.
+因为包括了末端边界，我们需要用 `<=` 运算符，而不是 `<`，检验循环的结束条件。
 
 {{index "arguments object"}}
 
-The step parameter can be an optional parameter that defaults (using
-the `=` operator) to 1.
+步数可以是一个默认为1的参数（用 `=` 运算符）。
 
 {{index "range function", "for loop"}}
 
-Having `range` understand negative step values is probably best done
-by writing two separate loops—one for counting up and one for counting
-down—because the comparison that checks whether the loop is finished
-needs to be `>=` rather than `<=` when counting downward.
+让 `range` 接受负步数的最好方法是写两个不同的循环：一个往上数，一个往下数。因为向下数的结束条件是 `>=` 而不是 `<=`。
 
-It might also be worthwhile to use a different default step, namely,
--1, when the end of the range is smaller than the start. That way,
-`range(5, 2)` returns something meaningful, rather than getting stuck
-in an ((infinite loop)). It is possible to refer to previous
-parameters in the default value of a parameter.
+或许考虑当结尾的数字小于起始数字时，用一个不同的默认参数，比如 -1。这样，`range(5, 2)` 可以返回一个有意义的数组，而不是陷入((无限循环))中。在定义默认参数是，可参考前面的参数。
 
 hint}}
 
@@ -1120,25 +1005,16 @@ hint}}
 
 {{index "reversing (exercise)", "reverse method", [array, methods]}}
 
-Arrays have a `reverse` method that changes the array by inverting
-the order in which its elements appear. For this exercise, write two
-functions, `reverseArray` and `reverseArrayInPlace`. The first,
-`reverseArray`, takes an array as argument and produces a _new_ array
-that has the same elements in the inverse order. The second,
-`reverseArrayInPlace`, does what the `reverse` method does: it
-_modifies_ the array given as argument by reversing its elements.
-Neither may use the standard `reverse` method.
+数组有一个 `reverse` 方法，改变原数组，倒序其元素。写两个函数，`reverseArray` 和 `reverseArrayInPlace`。第一个函数 `reverseArray` 有一个数组参数，并返回一个_新的_数组，其元素是原数组的倒序。第二个函数 `reverseArrayInPlace` 类似 `reverse` 方法：它通过倒序其元素而_改变_原数组。两个函数皆不可用内置的 `reverse` 方法。
 
 {{index efficiency, "pure function", "side effect"}}
 
-Thinking back to the notes about side effects and pure functions in
-the [previous chapter](functions#pure), which variant do you expect to
-be useful in more situations? Which one runs faster?
+回顾[上一章](functions#pure)中讨论过的副作用和纯函数。大部分情况下，你认为哪个更有用？哪个更快？
 
 {{if interactive
 
 ```{test: no}
-// Your code here.
+// 你的代码
 
 console.log(reverseArray(["A", "B", "C"]));
 // → ["C", "B", "A"];
@@ -1154,29 +1030,13 @@ if}}
 
 {{index "reversing (exercise)"}}
 
-There are two obvious ways to implement `reverseArray`. The first is
-to simply go over the input array from front to back and use the
-`unshift` method on the new array to insert each element at its start.
-The second is to loop over the input array backwards and use the `push`
-method. Iterating over an array backwards requires a (somewhat awkward)
-`for` specification, like `(let i = array.length - 1; i >= 0; i--)`.
+有两个明显的编写 `reverseArray` 的方法。第一个是从头到尾遍历数组，通过 `unshift` 方法将元素添加到新的数组中。第二个是通过 `push` 方法，从尾到头遍历数组。第二种方法需要一个略微奇怪的 `for`：`(let i = array.length - 1; i >= 0; i--)`。
 
 {{index "slice method"}}
 
-Reversing the array in place is harder. You have to be careful not to
-overwrite elements that you will later need. Using `reverseArray` or
-otherwise copying the whole array (`array.slice(0)` is a good way to
-copy an array) works but is cheating.
+反转原数组略微复杂。注意不要改写以后将用到的元素。用 `reverseArray` 或者复制原元素（比如 `array.slice(0)`）虽然工作，但属作弊行为。
 
-The trick is to _swap_ the first and last elements, then the second
-and second-to-last, and so on. You can do this by looping over half
-the length of the array (use `Math.floor` to round down—you don't need
-to touch the middle element in an array with an odd number of
-elements) and swapping the element at position `i` with the one at
-position `array.length - 1 - i`. You can use a local binding to
-briefly hold on to one of the elements, overwrite that one with its
-mirror image, and then put the value from the local binding in the
-place where the mirror image used to be.
+其秘诀是_交换_第一个和最后一个元素，之后在交换第二个和倒数第二个元素，以此类推。你可以循环一半的数组（用 `Math.floor` 向下取整，你不需要管奇数元素中的中间值），将在 `i` 位置上的元素和在 `array.length - 1 - i` 位置上的元素交换。你可以通过本地变量临时绑定其中一个元素，改写该元素后，在把本地变量中的值放入另一个元素里。
 
 hint}}
 
@@ -1186,11 +1046,7 @@ hint}}
 
 {{index ["data structure", list], "list (exercise)", "linked list", array, collection}}
 
-Objects, as generic blobs of values, can be used to build all sorts of
-data structures. A common data structure is the _list_ (not to be
-confused with array). A list is a nested set of objects, with the
-first object holding a reference to the second, the second to the
-third, and so on.
+对象，作为一个通用的变量组合，可以用来组建各种不同的数据结构。一个常见的数据结构是_链表_（不要和数组混淆）。一个链表是一个对象嵌套集，第一个对象含有第二个对象的参考，第二个含有第三个，依此类推。
 
 ```{includeCode: true}
 let list = {
@@ -1205,36 +1061,24 @@ let list = {
 };
 ```
 
-The resulting objects form a chain, like this:
+最后得到的对象好比一个链子：
 
 {{figure {url: "img/linked-list.svg", alt: "A linked list",width: "8cm"}}}
 
 {{index "structure sharing", [memory, structure sharing]}}
 
-A nice thing about lists is that they can share parts of their
-structure. For example, if I create two new values `{value: 0, rest:
-list}` and `{value: -1, rest: list}` (with `list` referring to the
-binding defined earlier), they are both independent lists, but they
-share the structure that makes up their last three elements. The
-original list is also still a valid three-element list.
+链表的一个好处是它们可以共享部分结构。比如，我如果创建两个新值 `{value: 0, rest: list}` 和 `{value: -1, rest: list}`（`list` 代表前面定义的变量），它们虽然是两个独立的链表，但它们最后的三个元素共享同一个链表。原先的链表也是一个有效的三元素链表。
 
-Write a function `arrayToList` that builds up a list structure like
-the one shown when given `[1, 2, 3]` as argument. Also write a
-`listToArray` function that produces an array from a list. Then add a
-helper function `prepend`, which takes an element and a list and
-creates a new list that adds the element to the front of the input
-list, and `nth`, which takes a list and a number and returns the
-element at the given position in the list (with zero referring to the
-first element) or `undefined` when there is no such element.
+写一个 `arrayToList` 函数，当提供数组 `[1, 2, 3]` 作为参数时，返回如上所示的链表。另外在写一个 `listToArray` 函数，将参数中的链表转变成数组并返回。之后写一个辅助函数 `prepend`，其参数为一个元素和一个链表，并创建一个以元素为首，原链表随后的新链表。以及 `nth`，其参数为一个链表和一个数字，并返回链表中在该数字位置的元素（0 表示第一个元素）或者 `undefined` 如果该元素不存在。
 
 {{index recursion}}
 
-If you haven't already, also write a recursive version of `nth`.
+试着用递归法写 `nth`。
 
 {{if interactive
 
 ```{test: no}
-// Your code here.
+// 你的代码
 
 console.log(arrayToList([10, 20]));
 // → {value: 10, rest: {value: 20, rest: null}}
@@ -1252,36 +1096,21 @@ if}}
 
 {{index "list (exercise)", "linked list"}}
 
-Building up a list is easier when done back to front. So `arrayToList`
-could iterate over the array backwards (see the previous exercise) and, for
-each element, add an object to the list. You can use a local binding
-to hold the part of the list that was built so far and use an
-assignment like `list = {value: X, rest: list}` to add an element.
+从后往前创建链表更为容易。所以 `arrayToList` 应该从尾向头循环数组（参考上一个习题）。对每个元素，添加一个对象到链表上。你可以利用本地变量储存当前链表，并用类似 `list = {value: X, rest: list}` 的等式添加元素。
 
 {{index "for loop"}}
 
-To run over a list (in `listToArray` and `nth`), a `for` loop
-specification like this can be used:
+循环一个链表（比如 `listToArray` 和 `nth`），一个 `for` 循环规范可为：
 
 ```
 for (let node = list; node; node = node.rest) {}
 ```
 
-Can you see how that works? Every iteration of the loop, `node` points
-to the current sublist, and the body can read its `value` property to
-get the current element. At the end of an iteration, `node` moves to
-the next sublist. When that is null, we have reached the end of the
-list, and the loop is finished.
+你知道原理么？每次迭代，`node` 都会指向当前的子链表，而表达块中可读取其 `value` 属性得到当前元素。迭代结束时，`node` 指向下一个子链表。当它成 `null` 时，我们就到达链表的末端，该循环也就结束了。
 
 {{index recursion}}
 
-The recursive version of `nth` will, similarly, look at an ever
-smaller part of the "tail" of the list and at the same time count down
-the index until it reaches zero, at which point it can return the
-`value` property of the node it is looking at. To get the zeroth
-element of a list, you simply take the `value` property of its head
-node. To get element _N_ + 1, you take the *N*th element of the list
-that's in this list's `rest` property.
+`nth` 的递归法会检验一个更小的链表“尾巴”，与此同时倒数索引直至其为0时，返回当前元素的 `value` 属性。对于第零个链表元素，你只需返回其链表第一元素的 `value` 属性。对于第 _N_ + 1 个元素，你返回 `rest` 属性中的第 *N* 个链表元素。
 
 hint}}
 
@@ -1291,32 +1120,22 @@ hint}}
 
 {{index "deep comparison (exercise)", [comparison, deep], "deep comparison", "== operator"}}
 
-The `==` operator compares objects by identity. But sometimes you'd
-prefer to compare the values of their actual properties.
+`==` 运算符通过身份对比对象。但有些时候，我们需要对比它们属性中的值。
 
-Write a function `deepEqual` that takes two values and returns true
-only if they are the same value or are objects with the same
-properties, where the values of the properties are equal when compared
-with a recursive call to `deepEqual`.
+写一个 `deepEqual` 函数，有两个参数，并返回 `true` 如果他们的值，或者对象的属性相等。也就是说，如果通过递归法调用 `deepEqual`，其属性的值也相等。
 
 {{index null, "=== operator", "typeof operator"}}
 
-To find out whether values should be compared directly (use the `===`
-operator for that) or have their properties compared, you can use the
-`typeof` operator. If it produces `"object"` for both values, you
-should do a deep comparison. But you have to take one silly exception
-into account: because of a historical accident, `typeof null` also
-produces `"object"`.
+找出是否应该直接对比值（用 `===` 运算符）或者对比它们的属性，你可以用 `typeof` 运算符。如果两个参数的结果都是 `"object"`，你应该用深入对比。但有一个愚蠢的例外：因为一个历史事故，`typeof null` 也返回 `"object"`。
 
 {{index "Object.keys function"}}
 
-The `Object.keys` function will be useful when you need to go over the
-properties of objects to compare them.
+`Object.keys` 函数可帮助你遍历其对象的属性，从而进行比较。
 
 {{if interactive
 
 ```{test: no}
-// Your code here.
+// 你的代码
 
 let obj = {here: {is: "an"}, object: 2};
 console.log(deepEqual(obj, obj));
@@ -1333,28 +1152,14 @@ if}}
 
 {{index "deep comparison (exercise)", [comparison, deep], "typeof operator", "=== operator"}}
 
-Your test for whether you are dealing with a real object will look
-something like `typeof x == "object" && x != null`. Be careful to
-compare properties only when _both_ arguments are objects. In all
-other cases you can just immediately return the result of applying
-`===`.
+你可以通过 `typeof x == "object" && x != null` 来检测你是否在处理一个真正的对象。注意只有在两个参数_都_为对象时，才进行属性比较。其他情况下，可直接返回 `===` 的结果。
 
 {{index "Object.keys function"}}
 
-Use `Object.keys` to go over the properties. You need to test whether
-both objects have the same set of property names and whether those
-properties have identical values. One way to do that is to ensure that
-both objects have the same number of properties (the lengths of the
-property lists are the same). And then, when looping over one of the
-object's properties to compare them, always first make sure
-the other actually has a property by that name. If they have the same
-number of properties and all properties in one also exist in the
-other, they have the same set of property names.
+利用 `Object.keys` 去遍历其属性。你需要检验两个对象的属性一致，且属性的值也一致。一个方法是检验两个对象有相同数量的属性（属性数组的长度相等）。之后在遍历其中一个属性数组时，确保另一个对象有其属性后，对它们进行比较。如果它们的属性数量相等，而且其中一个对象的所有属性都在另一个对象中，它们拥有同样的属性。
 
 {{index "return value"}}
 
-Returning the correct value from the function is best done by
-immediately returning false when a mismatch is found and returning
-true at the end of the function.
+返回正确值的最佳方法是在遇到不想等的情况时，立刻返回 `false`。这样在函数的结尾可直接返回 `true`。
 
 hint}}
