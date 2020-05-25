@@ -6,11 +6,7 @@
 
 {{quote {author: "Master Yuan-Ma", title: "The Book of Programming", chapter: true}
 
-Tzu-li and Tzu-ssu were boasting about the size of their latest
-programs. 'Two-hundred thousand lines,' said Tzu-li, 'not counting
-comments!' Tzu-ssu responded, 'Pssh, mine is almost a *million* lines
-already.' Master Yuan-Ma said, 'My best program has five hundred
-lines.' Hearing this, Tzu-li and Tzu-ssu were enlightened.
+李子和苏子正吹嘘他们最新程序的大小。“20万行”，李子说，“不包括注释！”苏子回答到，“切，我的已有大约百万行了”。师傅马原说，“我最好的程序有 500行字。”听到这个，李子和苏子豁然开朗。
 
 quote}}
 
@@ -20,10 +16,7 @@ if}}
 
 {{index "Hoare, C.A.R."}}
 
-There are two ways of constructing a software design: One way is to
-make it so simple that there are obviously no deficiencies, and the
-other way is to make it so complicated that there are no obvious
-deficiencies.
+构建软件设计有两种方法：一种是让程序非常简洁、一目了然，却仍找不到任何明显的瑕疵。另一种是让程序及其复杂，所以找不到任何明显的瑕疵。
 
 quote}}
 
@@ -31,17 +24,11 @@ quote}}
 
 {{index "program size"}}
 
-A large program is a costly program, and not just because of the time
-it takes to build. Size almost always involves ((complexity)), and
-complexity confuses programmers. Confused programmers, in turn,
-introduce mistakes (_((bug))s_) into programs. A large program then
-provides a lot of space for these bugs to hide, making them hard to
-find.
+一个大程序是非常昂贵的，而且不只因为其所花费的开发时间。程序的大小和((复杂度))密切相关，然而复杂度只会迷惑程序员。于是被迷惑的程序员写出错误（_((bug))s_）的代码。所以一个大程序是一个给 bugs 提供了足够隐藏空间的平台，让它们难以被找到。
 
 {{index "summing example"}}
 
-Let's briefly go back to the final two example programs in the
-introduction. The first is self-contained and six lines long.
+让我们回顾下开导篇的两个例题程序。第一个是个6行的独立程序。
 
 ```
 let total = 0, count = 1;
@@ -52,96 +39,67 @@ while (count <= 10) {
 console.log(total);
 ```
 
-The second relies on two external functions and is one line long.
+第二个需要两个额外的函数，但本身只有一行。
 
 ```
 console.log(sum(range(1, 10)));
 ```
 
-Which one is more likely to contain a bug?
+哪个程序更容易出错？
 
 {{index "program size"}}
 
-If we count the size of the definitions of `sum` and `range`, the
-second program is also big—even bigger than the first. But still, I'd
-argue that it is more likely to be correct.
+如果我们算上 `sum` 和 `range` 的大小，那么第二个程序也很大——甚至比第一个还大。尽管如此，我依旧相信第一个程序更容易出错。
 
 {{index [abstraction, "with higher-order functions"], "domain-specific language"}}
 
-It is more likely to be correct because the solution is expressed in a
-((vocabulary)) that corresponds to the problem being solved. Summing a
-range of numbers isn't about loops and counters. It is about ranges
-and sums.
+第二个程序更大可能正确是因为它的答案是以符合原题的((单词))的形式表达的。一个范围内的（range）数字的和（sum）其实和循环、计步器无关。它完全是关于范围（range）以及和（sum）的。
 
-The definitions of this vocabulary (the functions `sum` and `range`)
-will still involve loops, counters, and other incidental details. But
-because they are expressing simpler concepts than the program as a
-whole, they are easier to get right.
+尽管这个单词的定义（`sum` 和 `range` 函数）依旧需要循环、计步器、和其他附加细节。但因为它们以更简单的形式，而不是整体，展现出来，所以更容易正确。
 
 ## Abstraction
 
-In the context of programming, these kinds of vocabularies are usually
-called _((abstraction))s_. Abstractions hide details and give us the
-ability to talk about problems at a higher (or more abstract) level.
+在编程的世界，这些单词通常被叫做_((抽象化))_。抽象化把细节隐藏起来，使我们可以在更高层面（更抽象化的）探讨问题。
 
 {{index "recipe analogy", "pea soup"}}
 
-As an analogy, compare these two recipes for pea soup. The first one
-goes like this:
+打个比方，对比下面两个豌豆汤的食谱。第一个如下：
 
 {{quote
 
-Put 1 cup of dried peas per person into a container. Add water until
-the peas are well covered. Leave the peas in water for at least 12
-hours. Take the peas out of the water and put them in a cooking pan.
-Add 4 cups of water per person. Cover the pan and keep the peas
-simmering for two hours. Take half an onion per person. Cut it into
-pieces with a knife. Add it to the peas. Take a stalk of celery per
-person. Cut it into pieces with a knife. Add it to the peas. Take a
-carrot per person. Cut it into pieces. With a knife! Add it to the
-peas. Cook for 10 more minutes.
+每人一杯干豌豆放入容器中。加水没至豌豆，泡至少12小时。从水中取出豌豆，放入锅中。每人四杯水加入锅中。盖上锅盖，炖2小时。每人半个洋葱。用刀切块，加入豆中。每人一个芹菜茎，切块，加入豆中。每人一个胡萝卜，用刀切块，加入豆中。再煮10分钟。
 
 quote}}
 
-And this is the second recipe:
+第二个食谱如下：
 
 {{quote
 
-Per person: 1 cup dried split peas, half a chopped onion, a stalk of
-celery, and a carrot.
+每人：一杯干豌豆，半个切块的圆葱，一个芹菜茎，一个胡萝卜。
 
-Soak peas for 12 hours. Simmer for 2 hours in 4 cups of water
-(per person). Chop and add vegetables. Cook for 10 more minutes.
+豌豆浸泡12小时。在4杯水（每人）中炖2小时。加入切块的蔬菜。在煮10分钟。
 
 quote}}
 
 {{index vocabulary}}
 
-The second is shorter and easier to interpret. But you do need to
-understand a few more cooking-related words such as _soak_, _simmer_, _chop_,
-and, I guess, _vegetable_.
+第二个更简短易懂。但你需要理解一些做饭相关的单词：_浸泡_，_炖_，_切块_，以及_蔬菜_。
 
-When programming, we can't rely on all the words we need to be waiting
-for us in the dictionary. Thus, we might fall into the pattern of the
-first recipe—work out the precise steps the computer has to perform,
-one by one, blind to the higher-level concepts that they express.
+编程时，我们不能依赖所有所需单词都在我们的字典中。因此，我们可能会陷入第一个菜谱——把电脑需要运行的每一步逐次写下，再混入它们代表的高层概念中。
 
 {{index abstraction}}
 
-It is a useful skill, in programming, to notice when you are working
-at too low a level of abstraction.
+编程中，发现你何时徘徊在低层抽象化中的技巧很有用。
 
 ## Abstracting repetition
 
 {{index [array, iteration]}}
 
-Plain functions, as we've seen them so far, are a good way to build
-abstractions. But sometimes they fall short.
+我们上面看到的纯函数是一种不错的抽象化方法。然而它们不是万能的。
 
 {{index "for loop"}}
 
-It is common for a program to do something a given number of times.
-You can write a `for` ((loop)) for that, like this:
+一个程序经常重复着做一件事情若干次。比如我们熟知的 `for`((循环))：
 
 ```
 for (let i = 0; i < 10; i++) {
@@ -149,8 +107,7 @@ for (let i = 0; i < 10; i++) {
 }
 ```
 
-Can we abstract "doing something _N_ times" as a function? Well, it's
-easy to write a function that calls `console.log` _N_ times.
+那我们可以将“做一件事情 _N_ 次”抽象成一个函数么？如果仅是一个重复 _N_ 次的 `console.log` 的话，是轻而易举的：
 
 ```
 function repeatLog(n) {
@@ -164,9 +121,7 @@ function repeatLog(n) {
 
 {{indexsee "higher-order function", "function, higher-order"}}
 
-But what if we want to do something other than logging the numbers?
-Since "doing something" can be represented as a function and functions
-are just values, we can pass our action as a function value.
+但如果我们想打印其他非数字的东西呢？“做件事”可以用函数表示，而函数也是值，所以我们可以将想做的事情当成函数值。
 
 ```{includeCode: "top_lines: 5"}
 function repeat(n, action) {
@@ -181,8 +136,7 @@ repeat(3, console.log);
 // → 2
 ```
 
-We don't have to pass a predefined function to `repeat`. Often, it
-is easier to create a function value on the spot instead.
+我们不需要给 `repeat` 提供一个已定义的函数。通常，当场创建一个函数值更简单。
 
 ```
 let labels = [];
@@ -195,30 +149,17 @@ console.log(labels);
 
 {{index "loop body", [braces, body], [parentheses, arguments]}}
 
-This is structured a little like a `for` loop—it first describes the
-kind of loop and then provides a body. However, the body is now written
-as a function value, which is wrapped in the parentheses of the
-call to `repeat`. This is why it has to be closed with the closing
-brace _and_ closing parenthesis. In cases like this example, where the
-body is a single small expression, you could also omit the
-braces and write the loop on a single line.
+这个的结构类似于 `for` 循环——先定义循环的类别，在提供块。不过，这里的块是调用 `repeat` 的括号包围住的函数值。所以它需要两个右括号（分别为 `}` 和 `)`）。这种以一句简介的表达式为块的函数也可以去掉大括号，简化为一行。
 
 ## Higher-order functions
 
 {{index [function, "higher-order"], [function, "as value"]}}
 
-Functions that operate on other functions, either by taking them as
-arguments or by returning them, are called _higher-order functions_.
-Since we have already seen that functions are regular values, there is
-nothing particularly remarkable about the fact that such functions
-exist. The term comes from ((mathematics)), where the distinction
-between functions and other values is taken more seriously.
+在其他函数上运行的函数，不论是作为参数还是返回的值，又叫_高阶函数_。函数实际上就是普通的值，因此高阶函数的存在并无令人诧异之处。它的命名来自对函数和其他值间的区别更为重视的((数学))。
 
 {{index abstraction}}
 
-Higher-order functions allow us to abstract over _actions_, not just
-values. They come in several forms. For example, we can have
-functions that create new functions.
+高阶函数使我们不仅可以抽象化值，还可以抽象化_操作_。它们有几种形式。比如，我们可以用函数创建新的函数。
 
 ```
 function greaterThan(n) {
@@ -229,7 +170,7 @@ console.log(greaterThan10(11));
 // → true
 ```
 
-And we can have functions that change other functions.
+我们也可以用函数改变其他函数。
 
 ```
 function noisy(f) {
@@ -245,8 +186,7 @@ noisy(Math.min)(3, 2, 1);
 // → called with [3, 2, 1] , returned 1
 ```
 
-We can even write functions that provide new types of ((control
-flow)).
+我们甚至可以用函数提供新的((控制流))。
 
 ```
 function unless(test, then) {
@@ -264,8 +204,7 @@ repeat(3, n => {
 
 {{index [array, methods], [array, iteration], "forEach method"}}
 
-There is a built-in array method, `forEach`, that provides something
-like a `for`/`of` loop as a higher-order function.
+有一个内置的数组方法 `forEach` 提供类似 `for`/`of` 循环的高阶函数。
 
 ```
 ["A", "B"].forEach(l => console.log(l));
@@ -275,31 +214,17 @@ like a `for`/`of` loop as a higher-order function.
 
 ## Script data set
 
-One area where higher-order functions shine is data processing. To process data, we'll need some actual data. This chapter will
-use a ((data set)) about scripts—((writing system))s such as Latin,
-Cyrillic, or Arabic.
+高阶函数大放异彩的领域之一是数据处理。首先我们需要一些数据。本章会用一个关于文字的((数据集))——比如拉丁文、西里尔文、或者阿拉伯文。
 
-Remember ((Unicode)) from [Chapter ?](values#unicode), the system that
-assigns a number to each character in written language? Most of these
-characters are associated with a specific script. The standard
-contains 140 different scripts—81 are still in use today, and 59
-are historic.
+[第一章](values#unicode)中我们讲过((Unicode))，一个为每个字符分配一个数字的系统。大部分的字符都和一个特定的文字有关。标准的包括 140个不同文字，其中 81个今天仍在使用，59个已成为历史。
 
-Though I can fluently read only Latin characters, I appreciate the
-fact that people are writing texts in at least 80 other writing
-systems, many of which I wouldn't even recognize. For example, here's
-a sample of ((Tamil)) handwriting:
+尽管我经常只读拉丁文字，我依旧感激其他80余个仍被世人使用的文字，尽管大部分我根本无法识别。比如，下面是用((泰米尔语))手写的一段文字：
 
 {{figure {url: "img/tamil.png", alt: "Tamil handwriting"}}}
 
 {{index "SCRIPTS data set"}}
 
-The example ((data set)) contains some pieces of information about the
-140 scripts defined in Unicode. It is available in the [coding
-sandbox](https://eloquentjavascript.net/code#5) for this chapter[
-([_https://eloquentjavascript.net/code#5_](https://eloquentjavascript.net/code#5))]{if
-book} as the `SCRIPTS` binding. The binding contains an array of
-objects, each of which describes a script.
+例题中的((数据集))包括了一些关于 Unicode 中定义的 140个文字。可以在本章[([_https://eloquentjavascript.net/code#5_](https://eloquentjavascript.net/code#5))]{if book} [沙盒](https://eloquentjavascript.net/code#5)中的 `SCRIPTS` 变量中找到。该变量是一个对象数组，每个对象描述了一个文字。
 
 
 ```{lang: "application/json"}
@@ -313,28 +238,17 @@ objects, each of which describes a script.
 }
 ```
 
-Such an object tells us the name of the script, the Unicode ranges
-assigned to it, the direction in which it is written, the
-(approximate) origin time, whether it is still in use, and a link to
-more information. The direction may be `"ltr"` for left to right, `"rtl"`
-for right to left (the way Arabic and Hebrew text are written), or
-`"ttb"` for top to bottom (as with Mongolian writing).
+这种对象告诉我们这个文字的名字，对应的 Unicdoe 范围，书写的方向，（大体）出现时间，如今是否仍在使用中，以及一个可以获取更多信息的链接。书写方向可以是 `"ltr"`，即从左到右；`"rtl"`，从右到左（比如阿拉伯文或希伯来文）；或`"ttb"`，从上到下（如蒙古文）。
 
 {{index "slice method"}}
 
-The `ranges` property contains an array of Unicode character
-((range))s, each of which is a two-element array containing a lower bound
-and an upper bound. Any character codes within these ranges are assigned
-to the script. The lower ((bound)) is inclusive (code 994 is a Coptic
-character), and the upper bound is non-inclusive (code 1008 isn't).
+`ranges`属性是一个 Unicode 范围的数组，其中每个都是一个二元素的数组，分别代表下界和上界。每个在这个范围内的字符码都属于该文字。该范围包括下((界))（994 是一个科普特字母），但不包括上界（1008 不是）。
 
 ## Filtering arrays
 
 {{index [array, methods], [array, filtering], "filter method", [function, "higher-order"], "predicate function"}}
 
-To find the scripts in the data set that are still in use, the
-following function might be helpful. It filters out the elements in an
-array that don't pass a test.
+下面的函数可帮助你找寻数据集中仍在使用的文字。它会过滤掉那些不符合要求的数组元素。
 
 ```
 function filter(array, test) {
@@ -353,20 +267,13 @@ console.log(filter(SCRIPTS, script => script.living));
 
 {{index [function, "as value"], [function, application]}}
 
-The function uses the argument named `test`, a function value, to fill
-a "gap" in the computation—the process of deciding which elements to
-collect.
+该元素用一个名为 `test` 的参数，是一个函数值，来完成计算中的空白——决定保留哪个元素的过程。
 
 {{index "filter method", "pure function", "side effect"}}
 
-Note how the `filter` function, rather than deleting elements from the
-existing array, builds up a new array with only the elements that pass
-the test. This function is _pure_. It does not modify the array it is
-given.
+请注意 `filter` 函数，与其从原数组中删除元素，它会创建一个新的数组储存原数组中符合要求的元素。因此它是一个_纯_函数。它不会更改参数。
 
-Like `forEach`, `filter` is a ((standard)) array method. The example
-defined the function only to show what it does internally.
-From now on, we'll use it like this instead:
+`forEach` 和 `filter` 都是((标准))数组方法。上面的例子中将它们的实际定义写了出来。从现在起，我们会以下面的方法调用它们：
 
 ```
 console.log(SCRIPTS.filter(s => s.direction == "ttb"));
@@ -379,16 +286,11 @@ console.log(SCRIPTS.filter(s => s.direction == "ttb"));
 
 {{index [array, methods], "map method"}}
 
-Say we have an array of objects representing scripts, produced by
-filtering the `SCRIPTS` array somehow. But we want an array of names,
-which is easier to inspect.
+假设我们有一个从 `SCRIPTS` 变量中过滤出来的文字对象的数组。但为了方便，我们只想要一个名字数组。
 
 {{index [function, "higher-order"]}}
 
-The `map` method transforms an array by applying a function to all of
-its elements and building a new array from the returned values. The
-new array will have the same length as the input array, but its
-content will have been _mapped_ to a new form by the function.
+`map` 方法可以对所有元素调用同一个函数，并返回一个新的数组。返回的新数组和原数组的长度相同，但其内容是被函数所_映射过_的新值。
 
 ```
 function map(array, transform) {
@@ -404,31 +306,21 @@ console.log(map(rtlScripts, s => s.name));
 // → ["Adlam", "Arabic", "Imperial Aramaic", …]
 ```
 
-Like `forEach` and `filter`, `map` is a standard array method.
+同 `forEach` 以及 `filter` 一样，`map` 也是一个标准的数组方法。
 
 ## Summarizing with reduce
 
 {{index [array, methods], "summing example", "reduce method"}}
 
-Another common thing to do with arrays is to compute a single value
-from them. Our recurring example, summing a collection of numbers, is
-an instance of this. Another example is finding the script with
-the most characters.
+另一个常用的数组操作是将它们变成一个值。我们的老朋友，一个数字集的和，就是一个例子。另一个例子是找到字符最多的文字。
 
 {{indexsee "fold", "reduce method"}}
 
 {{index [function, "higher-order"], "reduce method"}}
 
-The higher-order operation that represents this pattern is called
-_reduce_ (sometimes also called _fold_). It builds a value by
-repeatedly taking a single element from the array and combining it
-with the current value. When summing numbers, you'd start with the
-number zero and, for each element, add that to the sum.
+表示这种高级操作的函数叫 _缩减_（有些时候也叫 _fold_）。它通过反复从数组中提取一个元素，并将其于现有的值结和，从而得到一个新值。在计算数字和时，我们从第一个数字开始，逐一添加数字至和。
 
-The parameters to `reduce` are, apart from the array, a combining
-function and a start value. This function is a little less
-straightforward than `filter` and `map`, so take a close look at
-it:
+`reduce` 的参数包括，除了数组外，一个组合函数和一个起始值。这个函数比 `filter` 和 `map` 略微复杂，让我们细看一下：
 
 ```
 function reduce(array, combine, start) {
@@ -445,11 +337,7 @@ console.log(reduce([1, 2, 3, 4], (a, b) => a + b, 0));
 
 {{index "reduce method", "SCRIPTS data set"}}
 
-The standard array method `reduce`, which of course corresponds to
-this function, has an added convenience. If your array contains at
-least one element, you are allowed to leave off the `start` argument.
-The method will take the first element of the array as its start value
-and start reducing at the second element.
+上面就是标准的数组方法 `reduce`，它有一个附赠的便利。如果你的数组包含至少一个元素，你就可以不提供 `start` 参数。这个方法会将数组中的一个元素作为它的起始值，并从第二个元素开始缩减。
 
 ```
 console.log([1, 2, 3, 4].reduce((a, b) => a + b));
@@ -458,8 +346,7 @@ console.log([1, 2, 3, 4].reduce((a, b) => a + b));
 
 {{index maximum, "characterCount function"}}
 
-To use `reduce` (twice) to find the script with the most characters,
-we can write something like this:
+我们可以用下面的方法，使用 `reduce`（两次）来找寻最多字符的文字：
 
 ```
 function characterCount(script) {
@@ -474,28 +361,15 @@ console.log(SCRIPTS.reduce((a, b) => {
 // → {name: "Han", …}
 ```
 
-The `characterCount` function reduces the ranges assigned to a script
-by summing their sizes. Note the use of destructuring in the parameter
-list of the reducer function. The second call to `reduce` then uses
-this to find the largest script by repeatedly comparing two scripts
-and returning the larger one.
+函数 `characterCount` 负责通过缩减范围计算出每个文字的字符总和。注意改缩减函数的参数中解构赋值的使用。第二个 `reduce` 调用则通过反复比较两个文字的字符总和来找寻字符数量最多的文字。最后返回最大的那个。
 
-The Han script has more than 89,000 characters assigned to it in the
-Unicode standard, making it by far the biggest writing system in the
-data set. Han is a script (sometimes) used for Chinese, Japanese, and
-Korean text. Those languages share a lot of characters, though they
-tend to write them differently. The (U.S.-based) Unicode Consortium
-decided to treat them as a single writing system to save
-character codes. This is called _Han unification_ and still makes some
-people very angry.
+在 Unicode 中，汉字有超过 89000 个文字，所以它是该数据集中拥有最多字符的文字。汉字是个（有时）用于中文、日文、和韩文的文字。这些语言分享很多字符，尽管它们的书写方式不一样。（位于美国的）Unicode 集团决定将它们归纳于同一个书写系统，从而节省字符码。这个叫做_汉字统一_，尽管很多人对此很不满意。
 
 ## Composability
 
 {{index loop, maximum}}
 
-Consider how we would have written the previous example (finding the
-biggest script) without higher-order functions. The code is not that
-much worse.
+试想一下，在没有高阶函数的情况下，我们如何编写上面的例题（找寻最大的文字）。其代码其实没有那么夸张：
 
 ```{test: no}
 let biggest = null;
@@ -509,16 +383,13 @@ console.log(biggest);
 // → {name: "Han", …}
 ```
 
-There are a few more bindings, and the program is four lines
-longer. But it is still very readable.
+尽管我们需要更多的变量，且该程序也多了四行。但总体而言还是简洁明了的。
 
 {{index "average function", composability, [function, "higher-order"], "filter method", "map method", "reduce method"}}
 
 {{id average_function}}
 
-Higher-order functions start to shine when you need to _compose_
-operations. As an example, let's write code that finds the average
-year of origin for living and dead scripts in the data set.
+高阶函数在你需要_编写_操作时大放异彩。比如，让我们写一个找寻数据集中仍在使用的和停止使用的文字的平均起源年份。
 
 ```
 function average(array) {
@@ -533,14 +404,9 @@ console.log(Math.round(average(
 // → 204
 ```
 
-So the dead scripts in Unicode are, on average, older than the living
-ones. This is not a terribly meaningful or surprising statistic. But I
-hope you'll agree that the code used to compute it isn't hard to read.
-You can see it as a pipeline: we start with all scripts, filter out
-the living (or dead) ones, take the years from those, average them,
-and round the result.
+平均来讲，已停止使用的文字的寿命比仍在使用的文字寿命要长。当然这并不是一个有意义或令人惊讶的数据。但我希望你也认同上面的运算代码并不复杂。你可以把它想象成一个传递途径：我们从所有文字开始，过滤掉正在使用（或者已停止使用）的，记录这些文字的年份，算它们的平均数，四舍五入最后的结果。
 
-You could definitely also write this computation as one big ((loop)).
+你当然也可以把它写成一个庞大的((循环))。
 
 ```
 let total = 0, count = 0;
@@ -554,30 +420,19 @@ console.log(Math.round(total / count));
 // → 1165
 ```
 
-But it is harder to see what was being computed and how. And because
-intermediate results aren't represented as coherent values, it'd be a
-lot more work to extract something like `average` into a separate
-function.
+但这个相对而言较难看出它在做什么。而且因为中间的结果并不是连贯的值，反而需要更多工作将 `average` 提取到独立的函数中。
 
 {{index efficiency, [array, creation]}}
 
-In terms of what the computer is actually doing, these two approaches
-are also quite different. The first will build up new arrays when
-running `filter` and `map`, whereas the second computes only some
-numbers, doing less work. You can usually afford the readable
-approach, but if you're processing huge arrays, and doing so many
-times, the less abstract style might be worth the extra speed.
+至于电脑的实际运行情况而言，这两个方法也截然不同。第一个会在运行 `filter` 和 `map` 时创建新的数组，而第二个则减少工作量只会计算一些数字。通常我们可以选择简而易懂的方法，但如果反复处理大量数组，那么第二种方法的效率更高。
 
 ## Strings and character codes
 
 {{index "SCRIPTS data set"}}
 
-One use of the data set would be figuring out what script a piece of
-text is using. Let's go through a program that does this.
+该数据集的一个用途是判断一篇文章用了什么文字。让我们一起谱写该程序。
 
-Remember that each script has an array of character code ranges
-associated with it. So given a character code, we could use a function
-like this to find the corresponding script (if any):
+还记得每个文字都有个字符码范围的数组么？所以已知一个字符码，我们可以通过下面的函数找到它所对应的文字（如果存在的话）：
 
 {{index "some method", "predicate function", [array, methods]}}
 
@@ -597,72 +452,42 @@ console.log(characterScript(121));
 // → {name: "Latin", …}
 ```
 
-The `some` method is another higher-order function. It takes a test
-function and tells you whether that function returns true for any of the
-elements in the array.
+`some` 方法也是一个高阶函数。它的参数是一个判断函数，并告诉你数组中的哪个元素符合该函数的判断条件。
 
 {{id code_units}}
 
-But how do we get the character codes in a string?
+但我们如何从字符串中得到字符码？
 
-In [Chapter ?](values) I mentioned that JavaScript ((string))s are
-encoded as a sequence of 16-bit numbers. These are called _((code
-unit))s_. A ((Unicode)) ((character)) code was initially supposed to
-fit within such a unit (which gives you a little over 65,000
-characters). When it became clear that wasn't going to be enough, many
-people balked at the need to use more memory per character. To address
-these concerns, ((UTF-16)), the format used by JavaScript strings, was
-invented. It describes most common characters using a single 16-bit
-code unit but uses a pair of two such units for others.
+在[第一章](values)中，我说过 JavaScript 的((字符串))是一个16位数字序列。它们叫做_((码单位))_。一个 ((Unicode)) ((字符))码单位最开始应该在这个单位中（差不多 65000 个字符）。当事实证明这些字符远不够用时，有些人在是否需要对每个字符使用额外内存中犹豫不决。为了解决这些问题，发明了 ((UTF-16))，JavaScript 字符串的格式。它使用单个 16位码单位描述最常见的字符，但用一对码单位描述其他字符。
 
 {{index error}}
 
-UTF-16 is generally considered a bad idea today. It seems almost
-intentionally designed to invite mistakes. It's easy to write programs
-that pretend code units and characters are the same thing. And if your
-language doesn't use two-unit characters, that will appear to work
-just fine. But as soon as someone tries to use such a program with
-some less common ((Chinese characters)), it breaks. Fortunately, with
-the advent of ((emoji)), everybody has started using two-unit
-characters, and the burden of dealing with such problems is more
-fairly distributed.
+如今普遍认为 UTF-16 是个坏主意。它几乎是故意为引起错误而设计的。我们很容易写一个代码将一个码单位等同于一个字符。如果遇到一个不使用一对码单位的文字，这个程序不会遇到任何问题。一旦将其用于双码单位的((汉字))中，它将不会工作。好在，随着((表情符合))的诞生，所有人都开始使用双码单位，因此处理此类问题的负担较为平摊了。
 
 {{index [string, length], [string, indexing], "charCodeAt method"}}
 
-Unfortunately, obvious operations on JavaScript strings, such as
-getting their length through the `length` property and accessing their
-content using square brackets, deal only with code units.
+不幸的是，JavaScript 字符串的普遍操作，比如通过 `length` 属性得到它们的长度，或者通过中括号得到它们的内容，只对单码单位有效。
 
 ```{test: no}
-// Two emoji characters, horse and shoe
+// 两个表情符合：马和鞋
 let horseShoe = "🐴👟";
 console.log(horseShoe.length);
 // → 4
 console.log(horseShoe[0]);
-// → (Invalid half-character)
+// → (无效的半字符)
 console.log(horseShoe.charCodeAt(0));
-// → 55357 (Code of the half-character)
+// → 55357 (这个半字符所对应的字符码)
 console.log(horseShoe.codePointAt(0));
-// → 128052 (Actual code for horse emoji)
+// → 128052 (马的表情符号实际对应的字符码)
 ```
 
 {{index "codePointAt method"}}
 
-JavaScript's `charCodeAt` method gives you a code unit, not a full
-character code. The `codePointAt` method, added later, does give a
-full Unicode character. So we could use that to get characters from a
-string. But the argument passed to `codePointAt` is still an index
-into the sequence of code units. So to run over all characters in a
-string, we'd still need to deal with the question of whether a
-character takes up one or two code units.
+JavaScript 的 `charCodeAt` 方法返回一个码单位，而不是一个完整的字符码。而后加入的 `codePointAt` 方法则返回一个完整的 Unicode 字符。所以我们可以通过它读取字符串中的字符。但 `codePointAt` 的参数依旧是一个码单位序列的索引。因此我们依旧需要解决一个字符是单码还是双码的问题，才能逐一读取单个字符。
 
 {{index "for/of loop", character}}
 
-In the [previous chapter](data#for_of_loop), I mentioned that a
-`for`/`of` loop can also be used on strings. Like `codePointAt`, this
-type of loop was introduced at a time where people were acutely aware
-of the problems with UTF-16. When you use it to loop over a string, it
-gives you real characters, not code units.
+[上一章](data#for_of_loop)中，我说过 `for`/`of` 循环可以用于字符串。类似 `codePointAt`，这类循环也是在大家发现 UTF-16 的问题后添加的。因此用它遍历一个字符串，它会读取真正的字符，而不是单个的码单位。
 
 ```
 let roseDragon = "🌹🐉";
@@ -673,17 +498,13 @@ for (let char of roseDragon) {
 // → 🐉
 ```
 
-If you have a character (which will be a string of one or two code
-units), you can use `codePointAt(0)` to get its code.
+如果你有一个字符（一个单码或双码的字符串），你可以通过 `codePointAt(0)` 得到其对于的编码。
 
 ## Recognizing text
 
 {{index "SCRIPTS data set", "countBy function", [array, counting]}}
 
-We have a `characterScript` function and a way to correctly loop over
-characters. The next step is to count the characters that belong
-to each script. The following counting abstraction will be useful
-there:
+我们有一个 `characterScript` 函数和一个可以正确读取字符的方法。下一步就是统计出现在每个文字中的字符了。下面的抽象化的统计函数会帮助到你：
 
 ```{includeCode: strip_log}
 function countBy(items, groupName) {
@@ -704,23 +525,15 @@ console.log(countBy([1, 2, 3, 4, 5], n => n > 2));
 // → [{name: false, count: 2}, {name: true, count: 3}]
 ```
 
-The `countBy` function expects a collection (anything that we can loop
-over with `for`/`of`) and a function that computes a group name for a
-given element. It returns an array of
-objects, each of which names a group and tells you the number of
-elements that were found in that group.
+`countBy` 函数的参数是一个集（任何可以被 `for`/`of` 遍历的数据结构）和一个为给定元素计算组名的函数。它返回一个对象数组，每个都有一个组名和该组中存在的元素数量。
 
 {{index "findIndex method", "indexOf method"}}
 
-It uses another array method—`findIndex`. This method is somewhat like
-`indexOf`, but instead of looking for a specific value, it finds the
-first value for which the given function returns true. Like `indexOf`,
-it returns -1 when no such element is found.
+它调用另一个数组方法：`findIndex`。该方法类似 `indexOf`，但与其找一个特定的值，它找第一个符合给定函数要求的值。和 `indexOf` 一样，如果该元素不存在，它会返回 -1。
 
 {{index "textScripts function", "Chinese characters"}}
 
-Using `countBy`, we can write the function that tells us which scripts
-are used in a piece of text.
+通过 `countBy`，我们可以编写一个告诉我们哪个文字出现在一篇文章中的函数。
 
 ```{includeCode: strip_log, startCode: true}
 function textScripts(text) {
@@ -743,36 +556,17 @@ console.log(textScripts('英国的狗说"woof", 俄罗斯的狗说"тяв"'));
 
 {{index "characterScript function", "filter method"}}
 
-The function first counts the characters by name, using
-`characterScript` to assign them a name and falling back to the
-string `"none"` for characters that aren't part of any script. The
-`filter` call drops the entry for `"none"` from the resulting array
-since we aren't interested in those characters.
+该函数首先用 `characterScript` 给每个字符一个名字或者 `"none"` 如果它不属于任何文字，在根据其名字进行统计。通过 `filter` 排除所以名为 `"none"` 的文字，因为我们对这些字符没兴趣。
 
 {{index "reduce method", "map method", "join method", [array, methods]}}
 
-To be able to compute ((percentage))s, we first need the total number
-of characters that belong to a script, which we can compute with
-`reduce`. If no such characters are found, the function returns a
-specific string. Otherwise, it transforms the counting entries into
-readable strings with `map` and then combines them with `join`.
+为了计算((百分比))，我们首先需要通过 `reduce` 计算出一个文字中所有字符的数量。如果这个字符不存在，该函数返回一个特殊的字符串。否则，它通过 `map` 将统计的结果变成可读的字符串，在通过 `join` 将他们组合在一起。
 
 ## Summary
 
-Being able to pass function values to other functions is a deeply
-useful aspect of JavaScript. It allows us to write functions that
-model computations with "gaps" in them. The code that calls these
-functions can fill in the gaps by providing function values.
+将函数值传递给其他函数是 JavaScript 中非常重要的存在。它允许我们编写带有“空隙”的计算模型。而这些空隙则由调用该函数的代码提供。
 
-Arrays provide a number of useful higher-order methods. You can use
-`forEach` to loop over the elements in an array. The `filter` method
-returns a new array containing only the elements that pass the
-((predicate function)). Transforming an array by putting each element
-through a function is done with `map`. You can use `reduce` to combine
-all the elements in an array into a single value. The `some` method
-tests whether any element matches a given predicate function. And
-`findIndex` finds the position of the first element that matches a
-predicate.
+数组提供许多高阶方法。你可以用 `forEach` 遍历一个数组中的元素。`filter` 方法返回一个只包括符合((判断函数))的新数组。你可以通过 `map` 改变一个数组中的每个元素。也可以用 `reduce` 将数组中所有元素结合成一个值。而 `some` 则测试该数组中有没有符合判断函数条件的元素。最后，`findIndex` 会找到第一个符合判断条件的元素的索引。
 
 ## Exercises
 
@@ -780,15 +574,13 @@ predicate.
 
 {{index "flattening (exercise)", "reduce method", "concat method", [array, flattening]}}
 
-Use the `reduce` method in combination with the `concat` method to
-"flatten" an array of arrays into a single array that has all the
-elements of the original arrays.
+结合 `reduce` 和 `concat` 将一个嵌套数组“展平”成一个含有所有元素的单个数组。
 
 {{if interactive
 
 ```{test: no}
 let arrays = [[1, 2, 3], [4, 5], [6]];
-// Your code here.
+// 你的代码
 // → [1, 2, 3, 4, 5, 6]
 ```
 if}}
@@ -797,21 +589,14 @@ if}}
 
 {{index "your own loop (example)", "for loop"}}
 
-Write a higher-order function `loop` that provides something like a
-`for` loop statement. It takes a value, a test function, an update
-function, and a body function. Each iteration, it first runs the test
-function on the current loop value and stops if that returns false.
-Then it calls the body function, giving it the current value. 
-Finally, it calls the update function to create a new value and
-starts from the beginning.
+写一个类似 `for` 的高阶函数 `loop`。它的参数包括一个值，一个判断函数，一个更新函数，和一个块函数。每次迭代，它首先对现有值运行判断函数，并停止如果其结果是 false。之后，它会调用块函数，提供现有值。最后它调用更新函数去创建一个新的值，并重新来过。
 
-When defining the function, you can use a regular loop to do the
-actual looping.
+在定义该函数时，你可以利用一个正常的循环来进行遍历。
 
 {{if interactive
 
 ```{test: no}
-// Your code here.
+// 你的代码
 
 loop(3, n => n > 0, n => n - 1, console.log);
 // → 3
@@ -825,20 +610,15 @@ if}}
 
 {{index "predicate function", "everything (exercise)", "every method", "some method", [array, methods], "&& operator", "|| operator"}}
 
-Analogous to the `some` method, arrays also have an `every` method.
-This one returns true when the given function returns true for _every_
-element in the array. In a way, `some` is a version of the `||`
-operator that acts on arrays, and `every` is like the `&&` operator.
+类似 `some` 方法，数组也有一个 `every` 方法。该方法返回 true。该函数只有在数组中_所有_元素都符合判断是才会返回 true。换句话说，`some` 类似于数组中的 `||`，而 `every` 则是 `&&`。
 
-Implement `every` as a function that takes an array and a predicate
-function as parameters. Write two versions, one using a loop and one
-using the `some` method.
+设计一个 `every` 函数，参数为一个数组和一个判断函数。写两个版本，第一个用循环，第二个用 `some` 方法。
 
 {{if interactive
 
 ```{test: no}
 function every(array, test) {
-  // Your code here.
+  // 你的代码
 }
 
 console.log(every([1, 3, 5], n => n < 10));
@@ -855,18 +635,9 @@ if}}
 
 {{index "everything (exercise)", "short-circuit evaluation", "return keyword"}}
 
-Like the `&&` operator, the `every` method can stop evaluating further
-elements as soon as it has found one that doesn't match. So the
-loop-based version can jump out of the loop—with `break` or
-`return`—as soon as it runs into an element for which the predicate
-function returns false. If the loop runs to its end without finding
-such an element, we know that all elements matched and we should
-return true.
+类似 `&&`，`every` 可以在遇到第一个不符合要求的元素时就停止运行。所以循环的方法，可以在发现不符合判断条件的元素的第一时间用 `break` 或者 `return` 跳出循环。如果遍历的每一个元素后，依旧没有找到不符合要求的。那么我们可以返回 `true`。
 
-To build `every` on top of `some`, we can apply _((De Morgan's
-laws))_, which state that `a && b` equals `!(!a || !b)`. This can be
-generalized to arrays, where all elements in the array match if there
-is no element in the array that does not match.
+在 `some` 的基础上编写 `every`，我们可以利用_((德摩根定律))_：`a && b` 等于 `!(!a || !b)`。这个可以推广到数组：数组中所有元素都符合要求，如果没有元素不符合要求。
 
 hint}}
 
@@ -874,23 +645,17 @@ hint}}
 
 {{index "SCRIPTS data set", "direction (writing)", "groupBy function", "dominant direction (exercise)"}}
 
-Write a function that computes the dominant writing direction in a
-string of text. Remember that each script object has a `direction`
-property that can be `"ltr"` (left to right), `"rtl"` (right to left),
-or `"ttb"` (top to bottom).
+写一个程序计算一篇文字中的主要书写方向。每个文字对象有一个 `direction` 属性，它的值只能是 `"ltr"`（从左到右）、`"rtl"`（从右到左）、和 `"ttb"`（从上到下）。
 
 {{index "characterScript function", "countBy function"}}
 
-The dominant direction is the direction of a majority of the
-characters that have a script associated with them. The
-`characterScript` and `countBy` functions defined earlier in the
-chapter are probably useful here.
+主要书写方向是有文章中大部分字符的方向所决定的。前面提到的 `characterScript` 和 `countBy` 可以帮助你。
 
 {{if interactive
 
 ```{test: no}
 function dominantDirection(text) {
-  // Your code here.
+  // 你的代码
 }
 
 console.log(dominantDirection("Hello!"));
@@ -904,16 +669,10 @@ if}}
 
 {{index "dominant direction (exercise)", "textScripts function", "filter method", "characterScript function"}}
 
-Your solution might look a lot like the first half of the
-`textScripts` example. You again have to count characters by a
-criterion based on `characterScript` and then filter out the part of
-the result that refers to uninteresting (script-less) characters.
+你的答案应该和 `textScript` 的前半部相似。你依旧需要利用 `characterScript` 统计文章中出现的字符，在过滤掉没有兴趣的（不符合任何文字的）字符。
 
 {{index "reduce method"}}
 
-Finding the direction with the highest character count can be done
-with `reduce`. If it's not clear how, refer to the example
-earlier in the chapter, where `reduce` was used to find the script
-with the most characters.
+可以通过 `reduce` 找寻最多字符的书写方法。可以参考本章的例题，看看我们是如何利用 `reduce` 找寻最多字符的文字的。
 
 hint}}
