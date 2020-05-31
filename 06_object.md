@@ -4,9 +4,7 @@
 
 {{quote {author: "Barbara Liskov", title: "Programming with Abstract Data Types", chapter: true}
 
-An abstract data type is realized by writing a special kind of program
-[…] which defines the type in terms of the operations which can be
-performed on it.
+编写一种特殊的程序会得到一个抽象数据类型[……]根据可对其进行的操作而定义的类型。
 
 quote}}
 
@@ -14,61 +12,34 @@ quote}}
 
 {{figure {url: "img/chapter_picture_6.jpg", alt: "Picture of a rabbit with its proto-rabbit", chapter: framed}}}
 
-[Chapter ?](data) introduced JavaScript's objects. In programming
-culture, we have a thing called _((object-oriented programming))_, a
-set of techniques that use objects (and related concepts) as the
-central principle of program organization.
+[第四章](data)介绍了 JavaScript 中的对象。编程世界中，有一个_((面向对象程序设计))_的存在，一组利用对象（和其相关理念）为核心的的编程典范。
 
-Though no one really agrees on its precise definition, object-oriented
-programming has shaped the design of many programming languages,
-including JavaScript. This chapter will describe the way these ideas
-can be applied in JavaScript.
+尽管大家无法对其具体定义达成共识，面向对象程序设计依旧影响了许多编程语言，包括 JavaScript，的设计理念。本章将探讨在 JavaScript 中如何运用这些理念。
 
 ## Encapsulation
 
 {{index encapsulation, isolation, modularity}}
 
-The core idea in object-oriented programming is to divide programs
-into smaller pieces and make each piece responsible for managing its
-own state.
+面向对象程序设计的核心理念是将程序分解成许多小程序，每个小程序负责管理自己的状态。
 
-This way, some knowledge about the way a piece of the program works
-can be kept _local_ to that piece. Someone working on the rest of the
-program does not have to remember or even be aware of that knowledge.
-Whenever these local details change, only the code directly around it
-needs to be updated.
+如此一来，一些每个子程序可以本地储存其具体的细节。其他子程序完全不需要知道这些内容的存在。因此每当这些细节有所更改的时候，只有其相关的子程序需被更改。
 
 {{id interface}}
 {{index [interface, object]}}
 
-Different pieces of such a program interact with each other through
-_interfaces_, limited sets of functions or bindings that provide
-useful functionality at a more abstract level, hiding their precise
-implementation.
+不同的子程序通过_接口_于彼此沟通。接口是一组有限的，更抽象却有用的函数和变量，从而隐藏了其具体的细节。
 
 {{index "public properties", "private properties", "access control", [method, interface]}}
 
-Such program pieces are modeled using ((object))s. Their interface
-consists of a specific set of methods and properties. Properties
-that are part of the interface are called _public_. The others, which
-outside code should not be touching, are called _private_.
+这类的子程序运用了((对象))的模型。他们的接口包含了一组具体的方法和属性。接口中包含的属性为_公共_。反之，外界代码无法接触的属性则是_专用_。
 
 {{index "underscore character"}}
 
-Many languages provide a way to distinguish public and private
-properties and prevent outside code from accessing the private
-ones altogether. JavaScript, once again taking the minimalist
-approach, does not—not yet at least. There is work underway to add
-this to the language.
+许多语言提供区分公共和专用属性的方法，并防止一切外界代码调用专属属性的可能性。JavaScript，因为其极简理念，没有（目前为止）这个区分。此工作目前仍在进行中。
 
-Even though the language doesn't have this distinction built in,
-JavaScript programmers _are_ successfully using this idea. Typically,
-the available interface is described in documentation or comments. It
-is also common to put an underscore (`_`) character at the start of
-property names to indicate that those properties are private.
+尽管 JavaScript 没有内置的区分，程序员们_仍_成功的运用了该理念。一般来讲，公共接口在注释和文档中有记载。此外，大家习惯在专用属相的名字前加一个下划线（`_`）。
 
-Separating interface from implementation is a great idea. It is
-usually called _((encapsulation))_.
+将接口与其细节分开是件好事。通常又作_((封装))_。
 
 {{id obj_methods}}
 
@@ -76,65 +47,51 @@ usually called _((encapsulation))_.
 
 {{index "rabbit example", method, [property, access]}}
 
-Methods are nothing more than properties that hold function values.
-This is a simple method:
+方法其实就是带有函数值的属性。下面就是一个简单的方法：
 
 ```
 let rabbit = {};
 rabbit.speak = function(line) {
-  console.log(`The rabbit says '${line}'`);
+  console.log(`兔子说 '${line}'`);
 };
 
-rabbit.speak("I'm alive.");
-// → The rabbit says 'I'm alive.'
+rabbit.speak("我活着。");
+// → 兔子说 '我活着。'
 ```
 
 {{index "this binding", "method call"}}
 
-Usually a method needs to do something with the object it was called
-on. When a function is called as a method—looked up as a property and
-immediately called, as in `object.method()`—the binding called `this`
-in its body automatically points at the object that it was called on.
+通常一个方法需要对调用它的对象做些什么。当一个函数以方法的形式（通过属性查找调用，比如 `object.method()`）被调用时，变量 `this` 会在其块语句中指向调用它的对象。
 
 ```{includeCode: "top_lines:6", test: join}
 function speak(line) {
-  console.log(`The ${this.type} rabbit says '${line}'`);
+  console.log(`${this.type}兔子说 '${line}'`);
 }
-let whiteRabbit = {type: "white", speak};
-let hungryRabbit = {type: "hungry", speak};
+let whiteRabbit = {type: "白", speak};
+let hungryRabbit = {type: "饿", speak};
 
-whiteRabbit.speak("Oh my ears and whiskers, " +
-                  "how late it's getting!");
-// → The white rabbit says 'Oh my ears and whiskers, how
-//   late it's getting!'
-hungryRabbit.speak("I could use a carrot right now.");
-// → The hungry rabbit says 'I could use a carrot right now.'
+whiteRabbit.speak("我的耳朵和胡须" + "现在已经很晚了！");
+// → 白兔子说 '我的耳朵和胡须 现在已经很晚了！'
+hungryRabbit.speak("我现在需要些胡萝卜");
+// → 饿兔子说 '我现在需要些胡萝卜'
 ```
 
 {{id call_method}}
 
 {{index "call method"}}
 
-You can think of `this` as an extra ((parameter)) that is passed in a
-different way. If you want to pass it explicitly, you can use a
-function's `call` method, which takes the `this` value as its first
-argument and treats further arguments as normal parameters.
+你可以把 `this` 想象成一个以不同形式递交进来的额外的((参数))。你如果想明确的递交进来，你需要调用函数的 `call` 方法。该方法的第一个参数就是 `this`，所有其他参数都会被当作普通的参数。
 
 ```
 speak.call(hungryRabbit, "Burp!");
-// → The hungry rabbit says 'Burp!'
+// → 饿兔子说 'Burp!'
 ```
 
-Since each function has its own `this` binding, whose value depends on
-the way it is called, you cannot refer to the `this` of the wrapping
-scope in a regular function defined with the `function` keyword.
+因为每个函数都有自己的 `this` 变量，其值完全取决于该函数的调用方式，因此你不可以在由关键词 `function` 定义的正常函数的作用域内使用 `this`。
 
 {{index "this binding", "arrow function"}}
 
-Arrow functions are different—they do not bind their own `this` but
-can see the `this` binding of the scope around them. Thus, you can do
-something like the following code, which references `this` from inside
-a local function:
+箭头函数是不一样的——它们绑定的不是属于它们自己的 `this`，而是它们所在作用域内的 `this`。所以下面的代码，在本地函数中使用 `this`，是被允许的：
 
 ```
 function normalize() {
@@ -146,8 +103,7 @@ normalize.call({coords: [0, 2, 3], length: 5});
 
 {{index "map method"}}
 
-If I had written the argument to `map` using the `function` keyword,
-the code wouldn't work.
+我如果在 `map` 的参数中用了 `function` 关键词，那么这个代码将不工作。
 
 {{id prototypes}}
 
@@ -155,7 +111,7 @@ the code wouldn't work.
 
 {{index "toString method"}}
 
-Watch closely.
+注意看。
 
 ```
 let empty = {};
@@ -167,23 +123,15 @@ console.log(empty.toString());
 
 {{index magic}}
 
-I pulled a property out of an empty object. Magic!
+我从一个空对象中得到了一个属性。简直就是魔术！
 
 {{index [property, inheritance], [object, property]}}
 
-Well, not really. I have simply been withholding information about the
-way JavaScript objects work. In addition to their set of properties,
-most objects also have a _((prototype))_. A prototype is another
-object that is used as a fallback source of properties. When an object
-gets a request for a property that it does not have, its prototype
-will be searched for the property, then the prototype's prototype, and
-so on.
+其实不然。我只是隐藏了一些有关 JavaScript 对象的运作信息。除了它们自身的属性外，大部分对象还有一个_((原型))_。原型是另一个作为备用的对象。当调用一个对象的不存在的属性时，JavaScript 会在它的原型中查找同一属性，之后是原型的原型，以此类推。
 
 {{index "Object prototype"}}
 
-So who is the ((prototype)) of that empty object? It is the great
-ancestral prototype, the entity behind almost all objects,
-`Object.prototype`.
+那么，一个空对象的((原型))是什么呢？它是伟大的祖先原型，几乎是所有对象的先祖，`Object.prototype`。
 
 ```
 console.log(Object.getPrototypeOf({}) ==
@@ -195,22 +143,15 @@ console.log(Object.getPrototypeOf(Object.prototype));
 
 {{index "getPrototypeOf function"}}
 
-As you guess, `Object.getPrototypeOf` returns the prototype of an
-object.
+如你所猜想的，`Object.getPrototypeOf` 返回一个对象的原型。
 
 {{index "toString method"}}
 
-The prototype relations of JavaScript objects form a ((tree))-shaped
-structure, and at the root of this structure sits `Object.prototype`.
-It provides a few methods that show up in all objects, such as
-`toString`, which converts an object to a string representation.
+JavaScript 对象的原型关系是一个((树))型结构，它的根节点就是 `Object.prototype`。它提供了几个所有对象都有方法，比如 `toString`，会把对象转换成一个字符串。
 
 {{index inheritance, "Function prototype", "Array prototype", "Object prototype"}}
 
-Many objects don't directly have `Object.prototype` as their
-((prototype)) but instead have another object that provides a different set of
-default properties. Functions derive from `Function.prototype`, and
-arrays derive from `Array.prototype`.
+许多对象的直接原型都不是 `Object.prototype`，而是另一个提供了不同默认属性的对象。函数来自于 `Function.prototype`，而数组来自于 `Array.prototype`。
 
 ```
 console.log(Object.getPrototypeOf(Math.max) ==
@@ -223,37 +164,29 @@ console.log(Object.getPrototypeOf([]) ==
 
 {{index "Object prototype"}}
 
-Such a prototype object will itself have a prototype, often
-`Object.prototype`, so that it still indirectly provides methods like
-`toString`.
+此类原型对象本身也有一个原型，通常是 `Object.prototype`，所以它间接的提供了类似 `toString` 等方法。
 
 {{index "rabbit example", "Object.create function"}}
 
-You can use `Object.create` to create an object with a specific
-((prototype)).
+你可以通过 `Object.create` 创建一个有指定((原型))的对象。
 
 ```
 let protoRabbit = {
   speak(line) {
-    console.log(`The ${this.type} rabbit says '${line}'`);
+    console.log(`${this.type}兔子说 '${line}'`);
   }
 };
 let killerRabbit = Object.create(protoRabbit);
-killerRabbit.type = "killer";
+killerRabbit.type = "杀手";
 killerRabbit.speak("SKREEEE!");
-// → The killer rabbit says 'SKREEEE!'
+// → 杀手兔子说 'SKREEEE!'
 ```
 
 {{index "shared property"}}
 
-A property like `speak(line)` in an object expression is a shorthand way
-of defining a method. It creates a property called `speak` and gives
-it a function as its value.
+对象中类似 `speak(line)` 的属性表达式是定义方法的一种便捷方式。它创建了一个名为 `speak` 的属性，并给予其一个函数作为值。
 
-The "proto" rabbit acts as a container for the properties that are
-shared by all rabbits. An individual rabbit object, like the killer
-rabbit, contains properties that apply only to itself—in this case its
-type—and derives shared properties from its prototype.
+"proto" 兔子类似一个装有所有兔子共同属性的容器。一个独立的兔子对象，比如杀手兔子，装有只对它有效的属性，比如上面例子中的 `type`，并从它的原型中衍生共享属性。
 
 {{id classes}}
 
@@ -261,26 +194,15 @@ type—and derives shared properties from its prototype.
 
 {{index "object-oriented programming"}}
 
-JavaScript's ((prototype)) system can be interpreted as a somewhat
-informal take on an object-oriented concept called _((class))es_. A
-class defines the shape of a type of object—what methods and
-properties it has. Such an object is called an _((instance))_ of the
-class.
+JavaScript 的((原型))体系可以被不严谨的理解为面向对象程序设计中的_((类))_。一个类定义了对象类型的形状——它拥有什么方法和属性。该对象则是这个类的一个_((实例))_。
 
 {{index [property, inheritance]}}
 
-Prototypes are useful for defining properties for which all instances
-of a class share the same value, such as ((method))s. Properties that
-differ per instance, such as our rabbits' `type` property, need to
-be stored directly in the objects themselves.
+原型对定义类的所有实例的共享属性值很有用，比如((方法))。每个实例的不同属性，比如兔子的 `type`，需要在每个对象中储存。
 
 {{id constructors}}
 
-So to create an instance of a given class, you have to make
-an object that derives from the proper prototype, but you _also_ have
-to make sure it, itself, has the properties that instances of this
-class are supposed to have. This is what a _((constructor))_ function
-does.
+创建一个类的实例，你需要建一个衍生于该原型的对象，但你_也_需要确认该对象本身有此类实例应有的所有属性。这就是_((构造器))_函数的作用。
 
 ```
 function makeRabbit(type) {
@@ -292,16 +214,11 @@ function makeRabbit(type) {
 
 {{index "new operator", "this binding", "return keyword", [object, creation]}}
 
-JavaScript provides a way to make defining this type of function
-easier. If you put the keyword `new` in front of a function call, the
-function is treated as a constructor. This means that an object with
-the right prototype is automatically created, bound to `this` in the
-function, and returned at the end of the function.
+JavaScript 提供了一个简介的定义这类函数的方法。你如果在调用函数前加关键词 `new`，这个函数就会被当作构造器。这意味着一个拥有正确原型的对象被自动创建了，在函数中绑定 `this`，并在该函数的最后返回。
 
 {{index "prototype property"}}
 
-The prototype object used when constructing objects is found by taking
-the `prototype` property of the constructor function.
+创建对象时用的原型是通过构造器的 `prototype` 属性得到的。
 
 {{index "rabbit example"}}
 
@@ -310,34 +227,23 @@ function Rabbit(type) {
   this.type = type;
 }
 Rabbit.prototype.speak = function(line) {
-  console.log(`The ${this.type} rabbit says '${line}'`);
+  console.log(`${this.type}兔子说 '${line}'`);
 };
 
-let weirdRabbit = new Rabbit("weird");
+let weirdRabbit = new Rabbit("奇怪");
 ```
 
 {{index constructor}}
 
-Constructors (all functions, in fact) automatically get a property
-named `prototype`, which by default holds a plain, empty object that
-derives from `Object.prototype`. You can overwrite it with a new
-object if you want. Or you can add properties to the existing object,
-as the example does.
+构造器（实际上是所有函数）自动拥有属性 `prototype`，默认为一个从 `Object.prototype` 衍生出来的空对象。你可以用一个新对象覆盖它。或者对现有的对象添加属性，如上例。
 
 {{index capitalization}}
 
-By convention, the names of constructors are capitalized so that they
-can easily be distinguished from other functions.
+按照惯例，构造器的名字的首写字母需要大写，以便和其他函数区分开来。
 
 {{index "prototype property", "getPrototypeOf function"}}
 
-It is important to understand the distinction between the way a
-prototype is associated with a constructor (through its `prototype`
-property) and the way objects _have_ a prototype (which can be found
-with `Object.getPrototypeOf`). The actual prototype of a constructor
-is `Function.prototype` since constructors are functions. Its
-`prototype` _property_ holds the prototype used for instances created
-through it.
+了原型和构造器（通过其 `prototype` 属性）以及原型和对象（通过 `Object.getPrototypeOf`）间的关联非常重要。构造器的真正的原型是 `Function.prototype`，因为构造器本身就是函数。它的 `prototype`_属性_则是其实例所拥有的原型。
 
 ```
 console.log(Object.getPrototypeOf(Rabbit) ==
@@ -350,10 +256,7 @@ console.log(Object.getPrototypeOf(weirdRabbit) ==
 
 ## Class notation
 
-So JavaScript ((class))es are ((constructor)) functions with a
-((prototype)) property. That is how they work, and until 2015, that
-was how you had to write them. These days, we have a less awkward
-notation.
+JavaScript 的((类))是一个有((原型))属性的((构造器))。在 2015年前，它们是这么运行的，你也必须如此写。现如今，我们有个更简洁的写法。
 
 ```{includeCode: true}
 class Rabbit {
@@ -361,38 +264,23 @@ class Rabbit {
     this.type = type;
   }
   speak(line) {
-    console.log(`The ${this.type} rabbit says '${line}'`);
+    console.log(`${this.type}兔子说 '${line}'`);
   }
 }
 
-let killerRabbit = new Rabbit("killer");
-let blackRabbit = new Rabbit("black");
+let killerRabbit = new Rabbit("杀手");
+let blackRabbit = new Rabbit("黑");
 ```
 
 {{index "rabbit example", [braces, class]}}
 
-The `class` keyword starts a ((class declaration)), which allows us to
-define a constructor and a set of methods all in a single place. Any
-number of methods may be written inside the declaration's braces.
-The one named `constructor` is treated specially. It
-provides the actual constructor function, which will be bound to the
-name `Rabbit`. The others are packaged into that constructor's
-prototype. Thus, the earlier class declaration is equivalent to the
-constructor definition from the previous section. It just looks nicer.
+关键词 `class` 开始一个((类声明))，允许我们同时定义一个构造器和一组方法。在该声明块中，可拥有任意数字的方法。名为 `constructor` 的会被特殊对待。它其实就是构造器，这里绑定到 `Rabbit` 上。其他的都被打包在该构造器的原型中。所以，上面的类声明和前面所看到的构造器定义是一样的。只是好看了许多。
 
 {{index ["class declaration", properties]}}
 
-Class declarations currently allow only _methods_—properties that hold
-functions—to be added to the ((prototype)). This can be somewhat
-inconvenient when you want to save a non-function value in there.
-The next version of the language will probably improve this. For now, you
-can create such properties by directly manipulating the
-prototype after you've defined the class.
+类声明目前只支持添加_方法_——值为函数的属性——到((原型))中。你如果想存一个非函数的值会极为不便。下个版本的 JavaScript 也许会对此有所改进。现在，你可以在定义类后，通过直接改写原型的方法创建此类属性。
 
-Like `function`, `class` can be used both in statements and in
-expressions. When used as an expression, it doesn't define a
-binding but just produces the constructor as a value. You are allowed
-to omit the class name in a class expression.
+同 `function` 一样，`class` 也可以在语句和表达式中使用。用于表达式时，它并不会定义一个变量，而是创建一个构造器作为值。你可以在类表达式中省略该类的名字。
 
 ```
 let object = new class { getWord() { return "hello"; } };
@@ -404,46 +292,34 @@ console.log(object.getWord());
 
 {{index "shared property", overriding, [property, inheritance]}}
 
-When you add a property to an object, whether it is present in the
-prototype or not, the property is added to the object _itself_.
-If there was already a property with
-the same name in the prototype, this property will no longer affect
-the object, as it is now hidden behind the object's own property.
+当你给一个对象添加属性时，无论该属性是否存在于原型中，该属性都会被添加到该对象_自身_。如果原型中已有同名属性存在，这个属性将会被因此在对象自身属性的背后，因此不会对该对象有任何影响。
 
 ```
-Rabbit.prototype.teeth = "small";
+Rabbit.prototype.teeth = "小";
 console.log(killerRabbit.teeth);
-// → small
-killerRabbit.teeth = "long, sharp, and bloody";
+// → 小
+killerRabbit.teeth = "长，尖，且血淋淋的";
 console.log(killerRabbit.teeth);
-// → long, sharp, and bloody
+// → 长，尖，且血淋淋的
 console.log(blackRabbit.teeth);
-// → small
+// → 小
 console.log(Rabbit.prototype.teeth);
-// → small
+// → 小
 ```
 
 {{index [prototype, diagram]}}
 
-The following diagram sketches the situation after this code has run.
-The `Rabbit` and `Object` ((prototype))s lie behind `killerRabbit` as
-a kind of backdrop, where properties that are not found in the object
-itself can be looked up.
+下图描绘了代码运行后的情况。`Rabbit` 和 `Object` ((原型))类似背景般在 `killerRabbit` 的后面。只有在对象本身查无属性时，才会找它们查询。
 
 {{figure {url: "img/rabbits.svg", alt: "Rabbit object prototype schema",width: "8cm"}}}
 
 {{index "shared property"}}
 
-Overriding properties that exist in a prototype can be a useful thing
-to do. As the rabbit teeth example shows, overriding can be used to express
-exceptional properties in instances of a more generic class of
-objects, while letting the nonexceptional objects take a
-standard value from their prototype.
+覆盖原型中的属性会很有用。如兔子牙齿的例子所示，覆盖可以用来表达通用类的实例中优异的属性的同时，如那些普通的对象保持原型中的标准值。
 
 {{index "toString method", "Array prototype", "Function prototype"}}
 
-Overriding is also used to give the standard function and array prototypes a
-different `toString` method than the basic object prototype.
+覆盖也使标准函数和数组原型用于和普通对象原型不同的 `toString`。
 
 ```
 console.log(Array.prototype.toString ==
@@ -455,12 +331,7 @@ console.log([1, 2].toString());
 
 {{index "toString method", "join method", "call method"}}
 
-Calling `toString` on an array gives a result similar to calling
-`.join(",")` on it—it puts commas between the values in the array.
-Directly calling `Object.prototype.toString` with an array produces a
-different string. That function doesn't know about arrays, so it
-simply puts the word _object_ and the name of the type between square
-brackets.
+对数组调用 `toString` 得到的结果类似对其调用 `.join(",")`——它在数组的值中放入逗号。直接给一个数组调用 `Object.prototype.toString` 会得到一个不同的字符串。这个函数不认识数组，所以它直接返回一个中括号，包含了 _object_ 和该类型的名字。
 
 ```
 console.log(Object.prototype.toString.call([1, 2]));
