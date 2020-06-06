@@ -342,16 +342,11 @@ console.log(Object.prototype.toString.call([1, 2]));
 
 {{index "map method"}}
 
-We saw the word _map_ used in the [previous chapter](higher_order#map)
-for an operation that transforms a data structure by applying a
-function to its elements. Confusing as it is, in programming the same
-word is also used for a related but rather different thing.
+[上一章](higher_order#map)中我们见到 _map_ 如何对一个数据结构中的每个元素的函数调动而改变其本身。然而编程中，同一个单词也用来形容一个相关却非常不同的东西。
 
 {{index "map (data structure)", "ages example", ["data structure", map]}}
 
-A _map_ (noun) is a data structure that associates values (the keys)
-with other values. For example, you might want to map names to ages.
-It is possible to use objects for this.
+_map_（名词）是一个可以把值（键）和其他值关联起来的数据结构。比如，你也许想把名字和年龄挂钩。这当然可以通过对象来完成。
 
 ```
 let ages = {
@@ -360,28 +355,21 @@ let ages = {
   Júlia: 62
 };
 
-console.log(`Júlia is ${ages["Júlia"]}`);
-// → Júlia is 62
-console.log("Is Jack's age known?", "Jack" in ages);
-// → Is Jack's age known? false
-console.log("Is toString's age known?", "toString" in ages);
-// → Is toString's age known? true
+console.log(`Júlia ${ages["Júlia"]}岁`);
+// → Júlia 62岁
+console.log("已知 Jack 的年龄么？", "Jack" in ages);
+// → 已知 Jack 的年龄么？ false
+console.log("已知 toString 的年龄么？", "toString" in ages);
+// → 已知 toString 的年龄么？ true
 ```
 
 {{index "Object.prototype", "toString method"}}
 
-Here, the object's property names are the people's names, and the
-property values are their ages. But we certainly didn't list anybody named
-toString in our map. Yet, because plain objects derive from
-`Object.prototype`, it looks like the property is there.
+这里，map 的属性的名字就是人名，而属性的值就是他们的年龄。可是我们的对象中并没有名为 toString 的人。但是因为对象衍生自 `Object.prototype`，所以该属性显示存在。
 
 {{index "Object.create function", prototype}}
 
-As such, using plain objects as maps is dangerous. There are several
-possible ways to avoid this problem. First, it is possible to create
-objects with _no_ prototype. If you pass `null` to `Object.create`,
-the resulting object will not derive from `Object.prototype` and can
-safely be used as a map.
+因此用纯对象作为 map 是很危险的。这里当然有几种避免该问题的方法。首先，可以创建一个_没有_原型的对象。你如果把 `null` 作为参数递给 `Object.create`，产生的对象将不会衍生自 `Object.prototype`，也就可以安全的当作 map 使用。
 
 ```
 console.log("toString" in Object.create(null));
@@ -390,15 +378,11 @@ console.log("toString" in Object.create(null));
 
 {{index [property, naming]}}
 
-Object property names must be strings. If you need a map whose
-keys can't easily be converted to strings—such as objects—you cannot
-use an object as your map.
+对象属性名字必须是字符串。如果你需要一个键并不能轻易被转换成字符串的 map，比如对象，你就不能用对象代替 map。
 
 {{index "Map class"}}
 
-Fortunately, JavaScript comes with a class called `Map` that is
-written for this exact purpose. It stores a mapping and allows any
-type of keys.
+幸运的是，JavaScript 有一个名为 `Map` 的类，就是为此设计的。它储存一个映射，并允许任何类型的键。
 
 ```
 let ages = new Map();
@@ -406,29 +390,21 @@ ages.set("Boris", 39);
 ages.set("Liang", 22);
 ages.set("Júlia", 62);
 
-console.log(`Júlia is ${ages.get("Júlia")}`);
+console.log(`Júlia ${ages.get("Júlia")}岁`);
 // → Júlia is 62
-console.log("Is Jack's age known?", ages.has("Jack"));
-// → Is Jack's age known? false
+console.log("已知 Jack 的年龄么？", ages.has("Jack"));
+// → 已知 Jack 的年龄么？ false
 console.log(ages.has("toString"));
 // → false
 ```
 
 {{index [interface, object], "set method", "get method", "has method", encapsulation}}
 
-The methods `set`, `get`, and `has` are part of the interface of the
-`Map` object. Writing a data structure that can quickly update and
-search a large set of values isn't easy, but we don't have to worry
-about that. Someone else did it for us, and we can go through this
-simple interface to use their work.
+方法 `set`，`get`，和 `has` 是 `Map` 对象接口的一部分。写一个可以快速更新和搜索一大组值的数据结构并不简单，但这不是我们需要关心的。有人已经帮我们完成了，因此我们只需要通过这几个简单的接口来借助他们的劳动成果。
 
 {{index "hasOwnProperty method", "in operator"}}
 
-If you do have a plain object that you need to treat as a map for some
-reason, it is useful to know that `Object.keys` returns only an
-object's _own_ keys, not those in the prototype. As an alternative to
-the `in` operator, you can use the `hasOwnProperty` method, which
-ignores the object's prototype.
+如果，因为某些原因，你需要把一个纯对象做 map 使用，可以通过 `Object.keys` 得到仅限该对象_本身_的键，而不是原型中的。或者可以通过 `in` 运算符；还有 `hasOwnProperty` 方法也会忽略掉对象原型。
 
 ```
 console.log({x: 1}.hasOwnProperty("x"));
@@ -441,62 +417,36 @@ console.log({x: 1}.hasOwnProperty("toString"));
 
 {{index "toString method", "String function", polymorphism, overriding, "object-oriented programming"}}
 
-When you call the `String` function (which converts a value to a
-string) on an object, it will call the `toString` method on that
-object to try to create a meaningful string from it. I mentioned that
-some of the standard prototypes define their own version of `toString`
-so they can create a string that contains more useful information than
-`"[object Object]"`. You can also do that yourself.
+当你对一个对象调用 `String` 函数（将一个值转变成字符串）时，它会在该对象上调用 `toString` 方法，试图创建一个有意义的字符串。前面讲过，有些标准的原型会定义他们自己的 `toString`，好让他们创建一个比 `"[object object]"` 更有意义的字符串。你也可以如此。
 
 ```{includeCode: "top_lines: 3"}
 Rabbit.prototype.toString = function() {
-  return `a ${this.type} rabbit`;
+  return `一个 ${this.type} 兔子`;
 };
 
 console.log(String(blackRabbit));
-// → a black rabbit
+// → 一个 black 兔子
 ```
 
 {{index "object-oriented programming", [interface, object]}}
 
-This is a simple instance of a powerful idea. When a piece of code is
-written to work with objects that have a certain interface—in this
-case, a `toString` method—any kind of object that happens to support
-this interface can be plugged into the code, and it will just work.
+这是一个伟大想法中的简单的实例。当编写一段代码和某些接口的对象运行时，比如这里所指的 `toString` 方法，任何支持该接口的对象都会拥有这段代码，而且会自然而然的工作。
 
-This technique is called _polymorphism_. Polymorphic code can work
-with values of different shapes, as long as they support the interface
-it expects.
+这就是_多态性_。多态的代码可兼容不同类型的值，只要这些值支持该接口。
 
 {{index "for/of loop", "iterator interface"}}
 
-I mentioned in [Chapter ?](data#for_of_loop) that a `for`/`of` loop
-can loop over several kinds of data structures. This is another case
-of polymorphism—such loops expect the data structure to expose a
-specific interface, which arrays and strings do. And we can also add
-this interface to your own objects! But before we can do that, we need
-to know what symbols are.
+在[第四章](data#for_of_loop)，我说过一个 `for`/`of` 可循环几个不同的数据类型。这又是一个多态性的例子，这类循环要求数据结构暴露某种具体的接口，而数组和字符串正符合要求。我们也可以将这个接口加入到你自己的对象中！但首先，我们需要知道符号（symbol）是什么。
 
 ## Symbols
 
-It is possible for multiple interfaces to use the same property name
-for different things. For example, I could define an interface in which
-the `toString` method is supposed to convert the object into a piece
-of yarn. It would not be possible for an object to conform to both
-that interface and the standard use of `toString`.
+多个接口可以用同一个属性名代表不同的东西。比如，我可以定义一个接口 `toString` 把一个对象转换成一根毛线。一个对象不可能同时完成上面的接口和标准的 `toString`。
 
-That would be a bad idea, and this problem isn't that common. Most
-JavaScript programmers simply don't think about it. But the language
-designers, whose _job_ it is to think about this stuff, have provided
-us with a solution anyway.
+这个想法很糟糕，好在这个问题不是那么常见。大部分 JavaScript 程序员完全不会这么想。但语言设计者，他们的工作就是思考这类问题，为我们提供了一个办法。
 
 {{index "Symbol function", [property, naming]}}
 
-When I claimed that property names are strings, that wasn't entirely
-accurate. They usually are, but they can also be _((symbol))s_.
-Symbols are values created with the `Symbol` function. Unlike strings,
-newly created symbols are unique—you cannot create the same symbol
-twice.
+我前面说属性名是字符串，这其实并不完全准确。他们通常是字符串，但也可以是_((符号))_。符号是由 `Symbol` 函数创建的值。不同于字符串，新创建的符号是独一无二的 —— 你无法创建相同名字的值。
 
 ```
 let sym = Symbol("name");
@@ -507,14 +457,9 @@ console.log(blackRabbit[sym]);
 // → 55
 ```
 
-The string you pass to `Symbol` is included when you convert it to a
-string and can make it easier to recognize a symbol when, for
-example, showing it in the console. But it has no meaning beyond
-that—multiple symbols may have the same name.
+当你将递交给 `Symbol` 的字符串转换成的字符串，它会被包括在内，而且在控制台中显示该符号时，也可更轻松的识别它。但除此之外，它没有其他意义 —— 多个符号可以拥有同一个名字。
 
-Being both unique and usable as property names makes symbols suitable
-for defining interfaces that can peacefully live alongside other
-properties, no matter what their names are.
+因为独一无二且实用的属性名使符号成为定义接口名的不二人选，他们可以和其他属性和平相处。
 
 ```{includeCode: "top_lines: 1"}
 const toStringSymbol = Symbol("toString");
@@ -530,11 +475,7 @@ console.log([1, 2][toStringSymbol]());
 
 {{index [property, naming]}}
 
-It is possible to include symbol properties in object expressions and
-classes by using ((square bracket))s around the property name.
-That causes the property name to be evaluated, much like the square
-bracket property access notation, which allows us to refer to a
-binding that holds the symbol.
+通过((方括号))，我们可以在对象表达式和类中包括符号属性。类似于方括访问属性的，该方法会评估属性名，因此允许我们用一个变量来指符号。
 
 ```
 let stringObject = {
@@ -548,25 +489,15 @@ console.log(stringObject[toStringSymbol]());
 
 {{index "iterable interface", "Symbol.iterator symbol", "for/of loop"}}
 
-The object given to a `for`/`of` loop is expected to be _iterable_.
-This means it has a method named with the `Symbol.iterator`
-symbol (a symbol value defined by the language, stored as a property
-of the `Symbol` function).
+给 `for`/`of` 的对象应该是_可迭代_的。所以它有一个名为 `Symbol.iterator` 的符号（被语言定义的符号值，储存 `Symbol` 函数的属性）。
 
 {{index "iterator interface", "next method"}}
 
-When called, that method should return an object that provides a
-second interface, _iterator_. This is the actual thing that iterates.
-It has a `next` method that returns the next result. That result
-should be an object with a `value` property that provides the next value,
-if there is one, and a `done` property, which should be true when there
-are no more results and false otherwise.
+被调用时，该方法应返回一个提供第二接口，_iterator_，的对象。这才是真正迭代的东西。它有一个 `next` 方法返回下一个值。该值理应是一个有 `value` 属性的对象，提供下一个值，如果存在的话，或者 `done` 属性，在没有更多值时时 `true`，否则是 `false`。
 
-Note that the `next`, `value`, and `done` property names are plain
-strings, not symbols. Only `Symbol.iterator`, which is likely to be
-added to a _lot_ of different objects, is an actual symbol.
+注意 `next`，`value`，和 `done` 属性名是纯字符串，而不是符号。只有 `Symbole.iterator`，很可能被添加到_许多_不同的对象上，是一个符号。
 
-We can directly use this interface ourselves.
+我们可以直接用这个接口。
 
 ```
 let okIterator = "OK"[Symbol.iterator]();
@@ -582,8 +513,7 @@ console.log(okIterator.next());
 
 {{id matrix}}
 
-Let's implement an iterable data structure. We'll build a _matrix_
-class, acting as a two-dimensional array.
+让我们写一个迭代的数据结构。我们将创建一个 _matrix_ 类，代表一个二维数组。
 
 ```{includeCode: true}
 class Matrix {
@@ -608,19 +538,11 @@ class Matrix {
 }
 ```
 
-The class stores its content in a single array of _width_ × _height_
-elements. The elements are stored row by row, so, for example, the third
-element in the fifth row is (using zero-based indexing) stored at
-position 4 × _width_ + 2.
+这个类通过一个有 _width_ x _height_ 元素的数组来储存它的内容。这些元素是一行行储存的，比如，第五行的第三个元素（以零开始的索引）被存放在了 4 x _width + 2 的位置上。
 
-The constructor function takes a width, a height, and an optional
-`element` function that will be used to fill in the initial values.
-There are `get` and `set` methods to retrieve and update elements in
-the matrix.
+构造器需要一个宽、一个高、和一个可选 `element` 函数用来填充原始值。可以通过 `get` 和 `set` 方法来获取和更新矩阵中的元素。
 
-When looping over a matrix, you are usually interested in the position
-of the elements as well as the elements themselves, so we'll have our
-iterator produce objects with `x`, `y`, and `value` properties.
+在迭代一个矩阵时，我们通常对元素的位置和元素本身都有兴趣。所以我们的迭代器返回一个有 `x`，`y` 和 `value` 属性的对象。
 
 {{index "MatrixIterator class"}}
 
@@ -648,18 +570,9 @@ class MatrixIterator {
 }
 ```
 
-The class tracks the progress of iterating over a matrix in its `x`
-and `y` properties. The `next` method starts by checking whether the
-bottom of the matrix has been reached. If it hasn't, it _first_
-creates the object holding the current value and _then_ updates its
-position, moving to the next row if necessary.
+这个类通过它的 `x` 和 `y` 属性记录着在矩阵上迭代的进度。`next` 方法开始先检测如果以达到矩阵的底部。如果没有，它_先_创建一个对象储存当前的值，_再_更新它的位置，如果有需要的话移动到下一个行。
 
-Let's set up the `Matrix` class to be iterable. Throughout this book,
-I'll occasionally use after-the-fact prototype manipulation to add
-methods to classes so that the individual pieces of code remain small
-and self-contained. In a regular program, where there is no need to
-split the code into small pieces, you'd declare these methods directly
-in the class instead.
+我们现在让 `Matrix` 类可迭代。本书中，我偶尔会用事后原型处理给类添加方法，以便独立的代码可以保持小巧。在正常的程序中，并没有把代码分成更小块的必要，你可以直接在类中定义这些方法。
 
 ```{includeCode: true}
 Matrix.prototype[Symbol.iterator] = function() {
@@ -669,7 +582,7 @@ Matrix.prototype[Symbol.iterator] = function() {
 
 {{index "for/of loop"}}
 
-We can now loop over a matrix with `for`/`of`.
+我们现在可以通过 `for`/`of` 迭代一个矩阵。
 
 ```
 let matrix = new Matrix(2, 2, (x, y) => `value ${x},${y}`);
