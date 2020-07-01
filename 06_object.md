@@ -599,16 +599,9 @@ for (let {x, y, value} of matrix) {
 
 {{index [interface, object], [property, definition], "Map class"}}
 
-Interfaces often consist mostly of methods, but it is also okay to
-include properties that hold non-function values. For example, `Map`
-objects have a `size` property that tells you how many keys are stored
-in them.
+接口通常有许多方法组成，但也可以包括一些不是函数值的属性。比如，`Map` 对象有一个名为 `size` 的属性，会告诉你总共有多少键储存在里面。
 
-It is not even necessary for such an object to compute and store such
-a property directly in the instance. Even properties that are accessed
-directly may hide a method call. Such methods are called
-_((getter))s_, and they are defined by writing `get` in front of the
-method name in an object expression or class declaration.
+此类对象并不需要直接计算和储存一个属性在其实例中。即使直接被访问的属性也可能有隐藏的方法。此类方法也叫做 _((getter))_，并通过在对象表达式或类声明的方法名前加 `get` 而创建的。
 
 ```{test: no}
 let varyingSize = {
@@ -625,9 +618,7 @@ console.log(varyingSize.size);
 
 {{index "temperature example"}}
 
-Whenever someone reads from this object's `size` property, the
-associated method is called. You can do a similar thing when a
-property is written to, using a _((setter))_.
+当人们读取该对象的 `size` 属性时，相对于的方法就会被调用。同理，_((setter))_ 可以用来记录一个属性。
 
 ```{test: no, startCode: true}
 class Temperature {
@@ -654,47 +645,27 @@ console.log(temp.celsius);
 // → 30
 ```
 
-The `Temperature` class allows you to read and write the temperature
-in either degrees ((Celsius)) or degrees ((Fahrenheit)), but
-internally it stores only Celsius and automatically converts to
-and from Celsius in the `fahrenheit` getter and setter.
+这个 `Temperature` 类允许你读取一个温度的((华氏度))或者((摄氏度))，但内部他只存储了摄氏度，并通过 `fahrenheit` getter 和 setter 自动转换温度值。
 
 {{index "static method"}}
 
-Sometimes you want to attach some properties directly to your
-constructor function, rather than to the prototype. Such methods won't
-have access to a class instance but can, for example, be used to
-provide additional ways to create instances.
+有时你想直接把属性附加在构造器上，而不是原型中。此类方法无法读取类实例，但可以用来提供新的创建实例的方法。
 
-Inside a class declaration, methods that have `static` written before
-their name are stored on the constructor. So the `Temperature` class
-allows you to write `Temperature.fromFahrenheit(100)` to create a
-temperature using degrees Fahrenheit.
+在一个类声明中，方法名前带有 `static` 的函数会被存放在构造器上（静态方法）。所以，`Temperature` 类允许你通过 `Temperature.fromFahrenheit(100)` 来创建一个以华氏度为单位的温度。
 
 ## Inheritance
 
 {{index inheritance, "matrix example", "object-oriented programming", "SymmetricMatrix class"}}
 
-Some matrices are known to be _symmetric_. If you mirror a symmetric
-matrix around its top-left-to-bottom-right diagonal, it stays the
-same. In other words, the value stored at _x_,_y_ is always the same
-as that at _y_,_x_.
+有些矩阵是_对称的_。如果你在一个对称的矩阵左上角至右下角处放一面镜子，这个矩阵不会改变。也就是说，储存在 _x_,_y_ 的值永远和储存在 _y_,_x_ 的值相等。
 
-Imagine we need a data structure like `Matrix` but one that enforces
-the fact that the matrix is and remains symmetrical. We could write it
-from scratch, but that would involve repeating some code very similar
-to what we already wrote.
+假设我们需要一个类似 `Matrix` 的数据结构，并强制该矩阵是且保持对称。我们可以从头写起，只是我们会重复一些已经写过的代码而已。
 
 {{index overriding, prototype}}
 
-JavaScript's prototype system makes it possible to create a _new_
-class, much like the old class, but with new definitions for some of
-its properties. The prototype for the new class derives from the old
-prototype but adds a new definition for, say, the `set` method.
+JavaScript 的原型结构让我们可以创建一个_新_的类，和原来的类相似，只不过对各别属性有新的定义。新类原先衍生自原先的类，不过增加了新的定义，比如 `set` 方法。
 
-In object-oriented programming terms, this is called
-_((inheritance))_. The new class inherits properties and behavior from
-the old class.
+在对象面向程序设计中，这叫做_((继承属性)))_。新类从原先的类中继承了属性和性能。
 
 ```{includeCode: "top_lines: 17"}
 class SymmetricMatrix extends Matrix {
@@ -718,51 +689,23 @@ console.log(matrix.get(2, 3));
 // → 3,2
 ```
 
-The use of the word `extends` indicates that this class shouldn't be
-directly based on the default `Object` prototype but on some other class. This
-is called the _((superclass))_. The derived class is the
-_((subclass))_.
+关键词 `extends` 代表该类不是直接衍生自 `Object` 原型，而是其他类。这叫做_((超类))_。被衍生处来的类叫做_((子类))_。
 
-To initialize a `SymmetricMatrix` instance, the constructor calls its
-superclass's constructor through the `super` keyword. This is necessary
-because if this new object is to behave (roughly) like a `Matrix`, it
-is going to need the instance properties that matrices have. 
-To ensure the matrix is symmetrical, the constructor wraps the
-`element` function to swap the coordinates for values below the
-diagonal.
+初始化一个 `SymmetricMatrix` 实例，其构造器通过关键字 `super` 调用它超类的构造器。这步至关重要，因为如果这个新的对象有（大致）类似 `Matrix` 的性能的话，它就需要用到矩阵拥有的实例属性。为了确保矩阵是对称的，这个构造器在 `element` 函数的基础上，交换对角线下的值的坐标。
 
-The `set` method again uses `super` but this time not to call the
-constructor but to call a specific method from the superclass's set of
-methods. We are redefining `set` but do want to use the original
-behavior. Because `this.set` refers to the _new_ `set` method, calling
-that wouldn't work. Inside class methods, `super` provides a way to
-call methods as they were defined in the superclass.
+这个 `set` 方法也用到了 `super`，但这次不是调用构造器，而是调用超类中的一个指定（set）方法。我们尽管重新定义 `set`，却想让它保有原来的性能。鉴于 `this.set` 特指_新_的 `set` 方法，我们没有理由调用它。在类方法中，`super` 可以让我们调用超类中的方法。
 
-Inheritance allows us to build slightly different data types from
-existing data types with relatively little work. It is a fundamental
-part of the object-oriented tradition, alongside encapsulation and
-polymorphism. But while the latter two are now generally regarded as
-wonderful ideas, inheritance is more controversial.
+继承属性允许我们在现有的数据结构基础上，稍微更改而创建略微不同的数据结构。和封装、多态性一样，是面向对象程序中至关重要的一点。只是前两个目前属于好注意，继承属性却饱受争议。
 
 {{index complexity, reuse, "class hierarchy"}}
 
-Whereas ((encapsulation)) and polymorphism can be used to _separate_
-pieces of code from each other, reducing the tangledness of the
-overall program, ((inheritance)) fundamentally ties classes together,
-creating _more_ tangle. When inheriting from a class, you usually have
-to know more about how it works than when simply using it. Inheritance
-can be a useful tool, and I use it now and then in my own programs,
-but it shouldn't be the first tool you reach for, and you probably
-shouldn't actively go looking for opportunities to construct class
-hierarchies (family trees of classes).
+((封装))和多态性可以用来_分解_代码，减少程序中的纠缠，((继承属性))却把类们绑在一起，让他们更加纠缠不清。在继承一个类的时候，你需要了解它如何运行，而不能直接使用它。继承属性可以很有用，我时不时会在我的程序中用到它，但是它不应该是你的第一个选择，而且你不应该主动寻找创建类层次（类的家谱）的机会。
 
 ## The instanceof operator
 
 {{index type, "instanceof operator", constructor, object}}
 
-It is occasionally useful to know whether an object was derived from a
-specific class. For this, JavaScript provides a binary operator called
-`instanceof`.
+有些时候，我们需要知道一个对象是否衍生自一个特定的类。为此，JavaScript 提供了一个二元运算符 `instanceof`。
 
 ```
 console.log(
@@ -778,46 +721,23 @@ console.log([1] instanceof Array);
 
 {{index inheritance}}
 
-The operator will see through inherited types, so a `SymmetricMatrix`
-is an instance of `Matrix`. The operator can also be applied to
-standard constructors like `Array`. Almost every object is an instance
-of `Object`.
+这个运算符会看穿继承的类型，所以一个 `SymmetricMatrix` 是 `Matrix` 的实例。这个运算符也可以运用在标准的构造器中，比如 `Array`。几乎所有对象都是 `Object` 的实例。
 
 ## Summary
 
-So objects do more than just hold their own properties. They have
-prototypes, which are other objects. They'll act as if they have
-properties they don't have as long as their prototype has that
-property. Simple objects have `Object.prototype` as their prototype.
+对象不仅仅保留自己的属性。他们有原型，也就是其他对象。他们会假装他们拥有那些不属于他们的属性，只要他们的原型拥有这些属性就好。简单的对象的原型为 `Object.prototype`。
 
-Constructors, which are functions whose names usually start with a
-capital letter, can be used with the `new` operator to create new
-objects. The new object's prototype will be the object found in the
-`prototype` property of the constructor. You can make good use of this
-by putting the properties that all values of a given type share into
-their prototype. There's a `class` notation that provides a clear way
-to define a constructor and its prototype.
+构造器其实就是一个函数，其名字的首写字母通常大写，可以和 `new` 运算符一起使用来创作新的对象。新的对象的原型是其构造器中的 `prototype` 属性的值。你可以利用这点，把一个指定类型的值的属性放入他们的原型中。有一个 `class` 符号提供了一个清晰的定义一个构造器和其类型的方法。
 
-You can define getters and setters to secretly call methods every time
-an object's property is accessed. Static methods are methods stored in
-a class's constructor, rather than its prototype.
+你可以通过定义 getters 和 setters 在每次读取对象属性时秘密调用方法。静态方法储存在类的构造器中，而不是它的原型中。
 
-The `instanceof` operator can, given an object and a constructor, tell
-you whether that object is an instance of that constructor.
+`instanceof` 运算符可以，提供一个对象和一个构造器，告诉你该对象是不是该构造器的实例。
 
-One useful thing to do with objects is to specify an interface for
-them and tell everybody that they are supposed to talk to your object
-only through that interface. The rest of the details that make up your
-object are now _encapsulated_, hidden behind the interface.
+对象可以用来制定一个接口，并告诉所有人他们只能通过该接口和这个对象进行通话。其他有关该对象的信息都被_封装了_，隐藏在接口的后面。
 
-More than one type may implement the same interface. Code written to
-use an interface automatically knows how to work with any number of
-different objects that provide the interface. This is called
-_polymorphism_.
+一种以上的类型可以实现同一个接口。编写使用接口的代码会自动知道如何和提供接口的任意数量的不同对象协作。这叫做_多态性_。
 
-When implementing multiple classes that differ in only some details,
-it can be helpful to write the new classes as _subclasses_ of an
-existing class, _inheriting_ part of its behavior.
+在编写多个略微不同的类时，在现有的类的基础上，把新的类定义为_子类_，并_继承_其性能也许会有帮助。
 
 ## Exercises
 
@@ -827,25 +747,18 @@ existing class, _inheriting_ part of its behavior.
 
 {{index dimensions, "Vec class", coordinates, "vector (exercise)"}}
 
-Write a ((class)) `Vec` that represents a vector in two-dimensional
-space. It takes `x` and `y` parameters (numbers), which it should save
-to properties of the same name.
+写一个((类)) `Vec` 代表一个 2D 向量。它有 `x` 和 `y` 参数（数字），并储存在同名的属性下。
 
 {{index addition, subtraction}}
 
-Give the `Vec` prototype two methods, `plus` and `minus`, that take
-another vector as a parameter and return a new vector that has the sum
-or difference of the two vectors' (`this` and the parameter) _x_ and
-_y_ values.
+`Vec` 有两个方法属性，`plus` 和 `minum`，其参数是另一个向量，并返回两个向量的和或差（`this` 和参数）作为新的向量的_x_ 和 _y_ 值。
 
-Add a ((getter)) property `length` to the prototype that computes the
-length of the vector—that is, the distance of the point (_x_, _y_) from
-the origin (0, 0).
+在其原型上加一个 ((getter)) 属性 `length` 计算该向量的长度，也就是从点（_x_, _y_）到原点（0, 0）的距离。
 
 {{if interactive
 
 ```{test: no}
-// Your code here.
+// 你的代码
 
 console.log(new Vec(1, 2).plus(new Vec(2, 3)));
 // → Vec{x: 3, y: 5}
@@ -860,19 +773,11 @@ if}}
 
 {{index "vector (exercise)"}}
 
-Look back to the `Rabbit` class example if you're unsure how `class`
-declarations look.
+参考 `Rabbit` 类的例子如果你不确定如何定义 `class`。
 
 {{index Pythagoras, "defineProperty function", "square root", "Math.sqrt function"}}
 
-Adding a getter property to the constructor can be done by putting the
-word `get` before the method name. To compute the distance from (0, 0)
-to (x, y), you can use the Pythagorean theorem, which says that the
-square of the distance we are looking for is equal to the square of
-the x-coordinate plus the square of the y-coordinate. Thus, [√(x^2^ +
-y^2^)]{if html}[[$\sqrt{x^2 + y^2}$]{latex}]{if tex} is the number you
-want, and `Math.sqrt` is the way you compute a square root in
-JavaScript.
+可以通过在方法名前加关键词 `get` 而在构造器上加一个 getter 属性。你可以用勾股定理，距离的平方等于 x 的平方加上 y 的平方，来计算从（0, 0）到（x, y）的距离。所以 [√(x^2^ + y^2^)]{if html}[[$\sqrt{x^2 + y^2}$]{latex}]{if tex} 就是答案。在 JavaScript 中可以通过 `Math.sqrt` 计算一个数的平方根。
 
 hint}}
 
@@ -882,37 +787,25 @@ hint}}
 
 {{id groups}}
 
-The standard JavaScript environment provides another data structure
-called `Set`. Like an instance of `Map`, a set holds a collection of
-values. Unlike `Map`, it does not associate other values with those—it
-just tracks which values are part of the set. A value can be part
-of a set only once—adding it again doesn't have any effect.
+标准的 JavaScript 环境提供另一个数据结构 `Set`。类似 `Map` 的实例，一个组包含一系列值。不同于 `Map`，它不会把这些值和其他值连接起来，它只负责记录什么值在组中。一个值只会在一个组里出现一次，再度添加它并不会有任何影响。
 
 {{index "add method", "delete method", "has method"}}
 
-Write a class called `Group` (since `Set` is already taken). Like
-`Set`, it has `add`, `delete`, and `has` methods. Its constructor
-creates an empty group, `add` adds a value to the group (but only if
-it isn't already a member), `delete` removes its argument from the
-group (if it was a member), and `has` returns a Boolean value
-indicating whether its argument is a member of the group.
+写一个名为 `Group` 的类（因为 `Set` 被用了）。类似 `Set`，它有 `add`，`delete`，和 `has` 方法。它的构造器创建一个空组，`add` 往这个组中加值（如果该值还不在该组中），`delete` 把它的参数从该组中移除（如果该值在该组中），`has` 返回一个布尔值表示这个参数是否在该组中。
 
 {{index "=== operator", "indexOf method"}}
 
-Use the `===` operator, or something equivalent such as `indexOf`, to
-determine whether two values are the same.
+用 `===`运算符，或者类似的函数，比如 `indexOf`，来对比两个值是否相等。
 
 {{index "static method"}}
 
-Give the class a static `from` method that takes an iterable object
-as argument and creates a group that contains all the values produced
-by iterating over it.
+给这个类一个静态方法 `from`，它的参数是一个迭代对象，并创建一个遍历后包含所有值的组。
 
 {{if interactive
 
 ```{test: no}
 class Group {
-  // Your code here.
+  // 你的代码
 }
 
 let group = Group.from([10, 20]);
@@ -932,28 +825,19 @@ if}}
 
 {{index "groups (exercise)", "Group class", "indexOf method", "includes method"}}
 
-The easiest way to do this is to store an array of group members
-in an instance property. The `includes` or `indexOf` methods can be
-used to check whether a given value is in the array.
+最简单的方法是在实例属性中储存一个组成员数组。`includes` 或者 `indexOf` 方法可以用来确认一个值是否在该数组中。
 
 {{index "push method"}}
 
-Your class's ((constructor)) can set the member collection to an empty
-array. When `add` is called, it must check whether the given value is
-in the array or add it, for example with `push`, otherwise.
+你的类的((构造器))可将成员集合设定成一个空数组。当 `add` 被调用时，它必须先确保该值不在数组中再通过 `push` 添加到数组中。
 
 {{index "filter method"}}
 
-Deleting an element from an array, in `delete`, is less
-straightforward, but you can use `filter` to create a new array
-without the value. Don't forget to overwrite the property holding the
-members with the newly filtered version of the array.
+`delete` 从数组中删除一个元素就没有那么简单了。但你可以用 `filter` 创建一个没有该值的新数组。不要忘记把属性中原有数组的值换成新的过滤后的数组值。
 
 {{index "for/of loop", "iterable interface"}}
 
-The `from` method can use a `for`/`of` loop to get the values out of
-the iterable object and call `add` to put them into a newly created
-group.
+`from` 方法可以通过 `for`/`of` 循环拿到迭代对象的值，并调用 `add` 把他们放入一个新建的组中。
 
 hint}}
 
@@ -963,21 +847,16 @@ hint}}
 
 {{id group_iterator}}
 
-Make the `Group` class from the previous exercise iterable. Refer 
-to the section about the iterator interface earlier in the chapter if
-you aren't clear on the exact form of the interface anymore.
+使上题中的 `Group` 可迭代。如果你不是很确定接口的定义，可参考本章中关于迭代接口的部分。
 
-If you used an array to represent the group's members, don't just
-return the iterator created by calling the `Symbol.iterator` method on
-the array. That would work, but it defeats the purpose of this exercise.
+如果你用了一个数组来表示组成员，不要直接返回由 `Symbol.iterator` 方法创造的该数组的迭代器。因为这并不是本题的目的。
 
-It is okay if your iterator behaves strangely when the group is
-modified during iteration.
+不要担心，如果你的迭代器在迭代中更改组值而导致行为异常。
 
 {{if interactive
 
 ```{test: no}
-// Your code here (and the code from the previous exercise)
+// 你的代码（以及上题中的代码）
 
 for (let value of Group.from(["a", "b", "c"])) {
   console.log(value);
@@ -993,35 +872,24 @@ if}}
 
 {{index "groups (exercise)", "Group class", "next method"}}
 
-It is probably worthwhile to define a new class `GroupIterator`.
-Iterator instances should have a property that tracks the current
-position in the group. Every time `next` is called, it checks whether
-it is done and, if not, moves past the current value and returns it.
+可以定义一个新的类 `GroupIterator`。迭代器实例应有跟踪当前位置的属性。每当 `next` 被调用时，它先确认是否已完结，如果没有，到下一个值并返回。
 
-The `Group` class itself gets a method named by `Symbol.iterator`
-that, when called, returns a new instance of the iterator class for
-that group.
+`Group` 类本身有一个名为 `Symbol.iterator` 的方法，被调用时，返回一个新的该类迭代器实例。
 
 hint}}
 
 ### Borrowing a method
 
-Earlier in the chapter I mentioned that an object's `hasOwnProperty`
-can be used as a more robust alternative to the `in` operator when you
-want to ignore the prototype's properties. But what if your map needs
-to include the word `"hasOwnProperty"`? You won't be able to call that
-method anymore because the object's own property hides the method
-value.
+本章中我说过一个对象的 `hasOwnProperty`，在忽略原型的属性时，可以用作比 `in` 运算符更可靠的选择。但如果你的 map 需要一个名为 `"hasOwnProperty"` 的键呢？你将无法在调用这个方法，因为该对象自身的属性覆盖了其方法的值。
 
-Can you think of a way to call `hasOwnProperty` on an object that has
-its own property by that name?
+你能否想到一个可以在有相同属性的对象上调用 `hasOwnProperty` 的方法？
 
 {{if interactive
 
 ```{test: no}
 let map = {one: true, two: true, hasOwnProperty: true};
 
-// Fix this call
+// 修改这个调用
 console.log(map.hasOwnProperty("one"));
 // → true
 ```
@@ -1030,10 +898,8 @@ if}}
 
 {{hint
 
-Remember that methods that exist on plain objects come from
-`Object.prototype`.
+普通对象上存在的方法来自于 `Object.prototype`。
 
-Also remember that you can call a function with a specific `this`
-binding by using its `call` method.
+你可以通过指定的 `this` 变量和它的 `call` 方法调用一个函数。
 
 hint}}
