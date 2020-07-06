@@ -4,8 +4,7 @@
 
 {{quote {author: "Edsger Dijkstra", title: "The Threats to Computing Science", chapter: true}
 
-[...] the question of whether Machines Can Think [...] is about as
-relevant as the question of whether Submarines Can Swim.
+[...] 关于机器能否思考的问题 [...] 和潜水艇能否游泳的问题如出一辙。
 
 quote}}
 
@@ -15,47 +14,35 @@ quote}}
 
 {{index "project chapter", "reading code", "writing code"}}
 
-In "project" chapters, I'll stop pummeling you with new theory for a
-brief moment, and instead we'll work through a program together. Theory
-is necessary to learn to program, but reading and understanding actual
-programs is just as important.
+在“项目”章节中，我不会介绍新的知识点。相反，我们会一起创建一个程序。尽管学习编程需要理论，但阅读理解真正的程序一样重要。
 
-Our project in this chapter is to build an ((automaton)), a little
-program that performs a task in a ((virtual world)). Our automaton
-will be a mail-delivery ((robot)) picking up and dropping off parcels.
+我们本章的目的是创建一个((自动机器))，一个可以在((虚拟世界))执行任务的小程序。我们的自动机器将是一个接送包裹的((机器人))快递员。
 
 ## Meadowfield
 
 {{index "roads array"}}
 
-The village of ((Meadowfield)) isn't very big. It consists of 11
-places with 14 roads between them. It can be described with this
-array of roads:
+((Meadowfield))这个村庄不大。共有 11 个地方，由 14 条路组成。如下面这个道路数组所示：
 
 ```{includeCode: true}
 const roads = [
-  "Alice's House-Bob's House",   "Alice's House-Cabin",
-  "Alice's House-Post Office",   "Bob's House-Town Hall",
-  "Daria's House-Ernie's House", "Daria's House-Town Hall",
-  "Ernie's House-Grete's House", "Grete's House-Farm",
-  "Grete's House-Shop",          "Marketplace-Farm",
-  "Marketplace-Post Office",     "Marketplace-Shop",
-  "Marketplace-Town Hall",       "Shop-Town Hall"
+  "Alice 家 - Bob 家",   "Alice 家 - 小屋",
+  "Alice 家 - 邮局",   "Bob 家 - 市府",
+  "Daria 家 - Ernie 家", "Daria 家 - 市府",
+  "Ernie 家 - Grete 家", "Grete 家 - 农场",
+  "Grete 家 - 商场",          "集市 - 农场",
+  "集市 - 邮局",     "集市 - 商场",
+  "集市 - 市府",       "商场 - 市府"
 ];
 ```
 
 {{figure {url: "img/village2x.png", alt: "The village of Meadowfield"}}}
 
-The network of roads in the village forms a _((graph))_. A graph is a
-collection of points (places in the village) with lines between them
-(roads). This graph will be the world that our robot moves through.
+这个村庄的道路网形成了一个_((图))_。一个图是一个由线（道路）相连的点（村庄中的地点）组成的集。这个图将是我们的机器人可活动的世界。
 
 {{index "roadGraph object"}}
 
-The array of strings isn't very easy to work with. What we're
-interested in is the destinations that we can reach from a given
-place. Let's convert the list of roads to a data structure that, for
-each place, tells us what can be reached from there.
+字符串数组不容易使用。我们感兴趣的是从一个地点能抵达的目的地。所以让我们先把这些道路转换成一个数据结构，以便我们更容易找到所有相连接的地点。
 
 ```{includeCode: true}
 function buildGraph(edges) {
@@ -67,7 +54,7 @@ function buildGraph(edges) {
       graph[from].push(to);
     }
   }
-  for (let [from, to] of edges.map(r => r.split("-"))) {
+  for (let [from, to] of edges.map(r => r.split(" - "))) {
     addEdge(from, to);
     addEdge(to, from);
   }
@@ -77,62 +64,37 @@ function buildGraph(edges) {
 const roadGraph = buildGraph(roads);
 ```
 
-Given an array of edges, `buildGraph` creates a map object that, for
-each node, stores an array of connected nodes.
+已知一组边，`buildGraph` 会创建一个 map 对象，其每个点都是一组与它相连的点。
 
 {{index "split method"}}
 
-It uses the `split` method to go from the road strings, which have the
-form `"Start-End"`, to two-element arrays containing the start and end
-as separate strings.
+它利用 `split` 方法从路线字符串，`"起始地 - 目的地"` 格式，变成两个元素的数组，包含起始地和目的地两个分开的字符串。
 
 ## The task
 
-Our ((robot)) will be moving around the village. There are parcels
-in various places, each addressed to some other place. The robot picks
-up parcels when it comes to them and delivers them when it arrives at
-their destinations.
+我们的((机器人))会在村中行走。在不同的地方会有需要被寄往其他地方的包裹。机器人沿途拿起遇到的包裹，并把他们运送到指定地点。
 
-The automaton must decide, at each point, where to go next. It has
-finished its task when all parcels have been delivered.
+我们的自动机器需要决定，在每个点，它下一个需要去的地方。当所有包裹都寄到后，它的使命也就完成了。
 
 {{index simulation, "virtual world"}}
 
-To be able to simulate this process, we must define a virtual world
-that can describe it. This model tells us where the robot is and where
-the parcels are. When the robot has decided to move somewhere, we need
-to update the model to reflect the new situation.
+为了模拟这个过程，我们需要定义一个能描述这个的虚拟世界。这个模型会告诉我们机器人的地点和所有包裹的位置。当机器人决定移动到其他地方时，我们需要更新该模型来反映新的情况。
 
 {{index [state, in objects]}}
 
-If you're thinking in terms of ((object-oriented programming)), your
-first impulse might be to start defining objects for the various
-elements in the world: a ((class)) for the robot, one for a parcel,
-maybe one for places. These could then hold properties that describe
-their current ((state)), such as the pile of parcels at a location,
-which we could change when updating the world.
+你如果在考虑((面向对象程序设计))，你的第一反应也许是为该世界中的元素定义对象：一个((类))给机器人、给包裹、也许也有地点。可以建些属性存他们当前的((状态))，比如包裹的地点可以随着更新世界而改变。
 
-This is wrong.
+不过这是错误的。
 
-At least, it usually is. The fact that something sounds like an object
-does not automatically mean that it should be an object in your
-program. Reflexively writing classes for every concept in your
-application tends to leave you with a collection of interconnected
-objects that each have their own internal, changing state. Such
-programs are often hard to understand and thus easy to break.
+至少，在通常情况下。一件东西听上去像是一个对象，不代表它应该是一个对象。条件反应的为每一个事物写一个类会让你的程序拥有一堆互联的对象，每个都有自己的可变动状态。这类程序往往难以理解且容易出错。
 
 {{index [state, in objects]}}
 
-Instead, let's condense the village's state down to the minimal
-set of values that define it. There's the robot's current location and
-the collection of undelivered parcels, each of which has a current
-location and a destination address. That's it.
+相反的，我们把这个村庄的状态压缩到最小一组能定义它的值。也就是机器人当前地点和一个尚未邮寄的包裹的集，每个元素都有一个当前地点和目的地。
 
 {{index "VillageState class", "persistent data structure"}}
 
-And while we're at it, let's make it so that we don't _change_ this
-state when the robot moves but rather compute a _new_ state for the
-situation after the move.
+与此同时，我们顺便确保在机器人移动时，我们不_改变_它的状态，却重新计算一个_新_状态描绘新的情况。
 
 ```{includeCode: true}
 class VillageState {
@@ -155,61 +117,38 @@ class VillageState {
 }
 ```
 
-The `move` method is where the action happens. It first checks whether
-there is a road going from the current place to the destination, and
-if not, it returns the old state since this is not a valid move.
+`move` 方法是核心。它先查看是否有一条从当前点到目的地的路，如果没有，它返回原先的状态，因为当前路不通。
 
 {{index "map method", "filter method"}}
 
-Then it creates a new state with the destination as the robot's new
-place. But it also needs to create a new set of parcels—parcels that
-the robot is carrying (that are at the robot's current place) need to
-be moved along to the new place. And parcels that are addressed to the
-new place need to be delivered—that is, they need to be removed from
-the set of undelivered parcels. The call to `map` takes care of the
-moving, and the call to `filter` does the delivering.
+它在创建一个新的状态，其目的地是机器人的新地点。但它也需要创建一个新的包裹集，机器人拥有的需要被寄到新地点的包裹（在机器人当前位置）。以及本就寄往新地点的包裹，这些包裹需要从为寄包裹集中移除。调用的 `map` 负责移动，而随后调用的 `filter` 负责邮寄。
 
-Parcel objects aren't changed when they are moved but re-created. The
-`move` method gives us a new village state but leaves the old one
-entirely intact.
+包裹对象在移动中并没有被改变，他们被重新创建了。`move` 方法给我们一个新的村庄状态，并确保原先的状态完好无损。
 
 ```
 let first = new VillageState(
-  "Post Office",
-  [{place: "Post Office", address: "Alice's House"}]
+  "邮局",
+  [{place: "邮局", address: "Alice 家"}]
 );
-let next = first.move("Alice's House");
+let next = first.move("Alice 家");
 
 console.log(next.place);
-// → Alice's House
+// → Alice 家
 console.log(next.parcels);
 // → []
 console.log(first.place);
-// → Post Office
+// → 邮局
 ```
 
-The move causes the parcel to be delivered, and this is reflected in
-the next state. But the initial state still describes the situation
-where the robot is at the post office and the parcel is undelivered.
+移动促使包裹被寄到，并在下一个状态中反映出来。但起始状态始终显示着机器人在邮局，而且包裹尚未被邮寄。
 
 ## Persistent data
 
 {{index "persistent data structure", mutability, ["data structure", immutable]}}
 
-Data structures that don't change are called _((immutable))_ or
-_persistent_. They behave a lot like strings and numbers in that they
-are who they are and stay that way, rather than containing different
-things at different times.
+不被改变的数据结构叫做_((不可变))_或者_一致性_。它们类似字符串和数字，因为它们始终保持自己，并不会因为时间而改变。
 
-In JavaScript, just about everything _can_ be changed, so working with
-values that are supposed to be persistent requires some restraint.
-There is a function called `Object.freeze` that changes an object so
-that writing to its properties is ignored. You could use that to make
-sure your objects aren't changed, if you want to be careful. Freezing
-does require the computer to do some extra work, and having updates
-ignored is just about as likely to confuse someone as having them do
-the wrong thing. So I usually prefer to just tell people that a given
-object shouldn't be messed with and hope they remember it.
+在 JavaScript 中，几乎所有东西都_能_被改变，所以和一致性数据打交到时，需要一些约束。有一个 `Object.freeze` 函数，会改变一个对象，忽视对其属性的更改。小心起见，你可以用它来确保对象不被改写。这会让电脑额外做些工作，而且无视更新在某种程度上和做错误的事一样让人迷糊。我通常喜欢直接告诉大家一个对象不应该被改变，并希望他们会记住。
 
 ```
 let object = Object.freeze({value: 5});
@@ -218,27 +157,13 @@ console.log(object.value);
 // → 5
 ```
 
-Why am I going out of my way to not change objects when the language
-is obviously expecting me to?
+我为什么要做额外的工作来确保对象不被改变，当语言本身希望我改变其属性？
 
-Because it helps me understand my programs. This is about complexity
-management again. When the objects in my system are fixed, stable
-things, I can consider operations on them in isolation—moving to
-Alice's house from a given start state always produces the same new
-state. When objects change over time, that adds a whole new dimension
-of complexity to this kind of reasoning.
+因为这会帮助我了解我的程序。这又于复杂度管理相关。当程序中的对象为不可变时，我可以单独对其进行操作 —— 从一个起点移到 Alice 家永远会返回相同的新路线。当对象为可变时，路线的不确定性会增加程序的复杂的。
 
-For a small system like the one we are building in this chapter, we
-could handle that bit of extra complexity. But the most important
-limit on what kind of systems we can build is how much we can
-understand. Anything that makes your code easier to understand makes
-it possible to build a more ambitious system.
+对于类似本章的小程序而言，我们可以接受略微的复杂度。但一个程序最重要的限制取决于我们的理解力。任何可以让代码更简单易懂的方法都会让程序更出彩。
 
-Unfortunately, although understanding a system built on persistent data
-structures is easier, _designing_ one, especially when your
-programming language isn't helping, can be a little harder. We'll
-look for opportunities to use persistent data structures in this
-book, but we'll also be using changeable ones.
+可惜的是，虽然理解一个一致性数据结构的程序很容易，但_设计_一个，尤其在编程语言不配合的情况下，并不容易。本书中我们在找寻可以用一致性数据结构的机会的同时，也会用到可变形数据。
 
 ## Simulation
 
