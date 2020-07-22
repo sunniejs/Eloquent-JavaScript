@@ -4,9 +4,7 @@
 
 {{quote {author: "Brian Kernighan and P.J. Plauger", title: "The Elements of Programming Style", chapter: true}
 
-Debugging is twice as hard as writing the code in the first place.
-Therefore, if you write the code as cleverly as possible, you are, by
-definition, not smart enough to debug it.
+调试比写代码难两倍。所以，如果你的代码写的尽可能聪明，那么根据定义，你的聪明才智不够用来调试该代码。
 
 quote}}
 
@@ -14,49 +12,25 @@ quote}}
 
 {{index "Kernighan, Brian", "Plauger, P.J.", debugging, "error handling"}}
 
-Flaws in computer programs are usually called _((bug))s_. It makes
-programmers feel good to imagine them as little things that just
-happen to crawl into our work. In reality, of course, we put them
-there ourselves.
+电脑程序中的错误通常被叫做 _((bug))s_。程序员们喜欢将他们想象成小型生物碰巧爬入我们的成品中。实际上，当然是我们自己把他们放到那的。
 
-If a program is crystallized thought, you can roughly categorize bugs
-into those caused by the thoughts being confused and those caused by
-mistakes introduced while converting a thought to code. The former
-type is generally harder to diagnose and fix than the latter.
+如果一个程序是清晰明确的思路。你大致可以把 bugs 想象成那些让思路模糊的，以及把思路转换成代码中出现的翻译错误。前者通常比后者更难发觉。
 
 ## Language
 
 {{index parsing, analysis}}
 
-Many mistakes could be pointed out to us automatically by the
-computer, if it knew enough about what we're trying to do. But here
-JavaScript's looseness is a hindrance. Its concept of bindings and
-properties is vague enough that it will rarely catch ((typo))s before
-actually running the program. And even then, it allows you to do some
-clearly nonsensical things without complaint, such as computing
-`true * "monkey"`.
+很多错误会被电脑自动指出，如果它知道我们想做什么。可惜 JavaScript 的随意性是个阻碍。它对变量和属性的定义过于含糊不清，以至于它很难在运行前发现((错字))。即使如此，它允许你做一些明显无稽之谈的运算，比如 `true * "monkey"`。
 
 {{index [syntax, error], [property, access]}}
 
-There are some things that JavaScript does complain about. Writing a
-program that does not follow the language's ((grammar)) will
-immediately make the computer complain. Other things, such as calling
-something that's not a function or looking up a property on an
-((undefined)) value, will cause an error to be reported when the
-program tries to perform the action.
+有些事情 JavaScript 会抱怨。电脑会立刻抱怨，如果你写了一个不追随该语言((语法))的程序。还有比如调用一个不是函数的东西，或者查看((未定义))值的属性都会在程序试图执行该命令时产生错误报告。
 
 {{index NaN, error}}
 
-But often, your nonsense computation will merely produce `NaN` (not a
-number) or an undefined value, while the program happily continues,
-convinced that it's doing something meaningful. The mistake will
-manifest itself only later, after the bogus value has traveled through
-several functions. It might not trigger an error at all but silently
-cause the program's output to be wrong. Finding the source of such
-problems can be difficult.
+但通常，你的不切实际的运算只会返回 `NaN`（不是数字）或者一个未定义的值，而且程序会继续运行下去，以为它在做件有意义的事。这个错误只会在后期表现出来，在这个无意义的值运行过多个函数后。它甚至可能不会产生任何错误，而是让程序返回一个错误的输出。找寻这类问题的源泉会很困难。
 
-The process of finding mistakes—bugs—in programs is called
-_((debugging))_.
+找寻程序中的错误的过程叫做_((调试))_。
 
 ## Strict mode
 
@@ -64,9 +38,7 @@ _((debugging))_.
 
 {{indexsee "use strict", "strict mode"}}
 
-JavaScript can be made a _little_ stricter by enabling _strict
-mode_. This is done by putting the string `"use strict"` at the top of
-a file or a function body. Here's an example:
+JavaScript 可以通过_严谨模式_而变得_略微_严格。只要在文件或函数块的最上方放入字符串 `"use strict"` 即可。比如：
 
 ```{test: "error \"ReferenceError: counter is not defined\""}
 function canYouSpotTheProblem() {
@@ -82,28 +54,13 @@ canYouSpotTheProblem();
 
 {{index "let keyword", [binding, global]}}
 
-Normally, when you forget to put `let` in front of your binding, as
-with `counter` in the example, JavaScript quietly creates a global
-binding and uses that. In strict mode, an ((error)) is reported
-instead. This is very helpful. It should be noted, though, that this
-doesn't work when the binding in question already exists as a global
-binding. In that case, the loop will still quietly overwrite the value
-of the binding.
+通常，如果你在绑定变量时，忘记了 `let`，如例题中的 `counter`，JavaScript 会默默创建并使用一个全局变量。在严谨模式中，它会报告一个((错误))。这非常有帮助。需要注意的是，如果该问题变量已经以全局变量模式存在的话，这一点就会失效。这时，该循环会默默改写全局变量的值。
 
 {{index "this binding", "global object", undefined, "strict mode"}}
 
-Another change in strict mode is that the `this` binding holds the
-value `undefined` in functions that are not called as ((method))s.
-When making such a call outside of strict mode, `this` refers to the
-global scope object, which is an object whose properties are the
-global bindings. So if you accidentally call a method or constructor
-incorrectly in strict mode, JavaScript will produce an error as soon
-as it tries to read something from `this`, rather than happily writing
-to the global scope.
+严谨模式中的另一个变化是函数中的 `this` 值为 `undefined` 除非它以((方法))模式被调用。在非严谨模式下，`this` 指全局范围对象，也就是一个属性为全局变量的对象。所以你如果在严谨模式下不小心调用了一个方法或构造器，JavaScript 会在它试图读取 `this` 值时立刻返回错误，而不是把它记录在全局范围内。
 
-For example, consider the following code, which calls a
-((constructor)) function without the `new` keyword so that its `this`
-will _not_ refer to a newly constructed object:
+比如下面的代码中，没有关键字 `new` 的((构造器))被调用后，它的 `this` _不_会引用一个新构造的对象：
 
 ```
 function Person(name) { this.name = name; }
@@ -114,9 +71,7 @@ console.log(name);
 
 {{index error}}
 
-So the bogus call to `Person` succeeded but returned an undefined
-value and created the global binding `name`. In strict mode, the
-result is different.
+上面对 `Person` 的无厘头调用成功了，但是返回的是一个未定义的值，而且创建了一个全局变量 `name`。在严谨模式中，将会是不同的结果：
 
 ```{test: "error \"TypeError: Cannot set property 'name' of undefined\""}
 "use strict";
@@ -125,40 +80,25 @@ let ferdinand = Person("Ferdinand"); // forgot new
 // → TypeError: Cannot set property 'name' of undefined
 ```
 
-We are immediately told that something is wrong. This is helpful.
+我们立刻被告知出事了。这很有帮助。
 
-Fortunately, constructors created with the `class` notation will
-always complain if they are called without `new`, making this less of
-a problem even in non-strict mode.
+幸运的是，通过 `class` 创建的构造器在没有 `new` 的调用下，一定会报告错误。这也减少了非严谨模式下的问题。
 
 {{index parameter, [binding, naming], "with statement"}}
 
-Strict mode does a few more things. It disallows giving a function
-multiple parameters with the same name and removes certain problematic
-language features entirely (such as the `with` statement, which is so
-wrong it is not further discussed in this book).
+严谨模式还做一些事。它不允许给一个函数多个相同名字的参数，并完全移除了一些有问题的语言特征（比如 `with` 语句，因为它太过荒谬，都不在本书的探讨范围内）。
 
 {{index debugging}}
 
-In short, putting `"use strict"` at the top of your program rarely
-hurts and might help you spot a problem.
+总而言之，在程序的最上方添加 `"use strict"` 会帮你发现一些问题，且少有害处。
 
 ## Types
 
-Some languages want to know the types of all your bindings and
-expressions before even running a program. They will tell you right
-away when a type is used in an inconsistent way. JavaScript considers
-types only when actually running the program, and even there often
-tries to implicitly convert values to the type it expects, so it's not
-much help.
+有些语言想在运行前知道所有变量及表达式的类型。他们会立刻告诉你如果一个类型的用法不一致。JavaScript 只有在运行时才考虑类型，而且还会试图默默转换值的类型，所以它提供不了任何帮助。
 
-Still, types provide a useful framework for talking about programs. A
-lot of mistakes come from being confused about the kind of value that
-goes into or comes out of a function. If you have that information
-written down, you're less likely to get confused.
+尽管如此，类型为讨论程序提供了一个有用的框架。很多错误的产生都因为困惑于一个程序的输入或输出值的类型。如果你将这个信息记录下来了，那么你就不太容易被困惑。
 
-You could add a comment like the following before the `goalOrientedRobot`
-function from the previous chapter to describe its type:
+你可以添加一些注释。比如下面例子中对上一章中对函数 `goalOrientedRobot` 的批注：
 
 ```
 // (VillageState, Array) → {direction: string, memory: Array}
@@ -167,119 +107,71 @@ function goalOrientedRobot(state, memory) {
 }
 ```
 
-There are a number of different conventions for annotating JavaScript
-programs with types.
+注释 JavaScript 程序类型的方法有很多。
 
-One thing about types is that they need to introduce their own
-complexity to be able to describe enough code to be useful. What do
-you think would be the type of the `randomPick` function that returns
-a random element from an array? You'd need to introduce a _((type
-variable))_, _T_, which can stand in for any type, so that you can
-give `randomPick` a type like `([T]) → T` (function from an array of
-*T*s to a *T*).
+关于类型有一点：它们需要介绍自己的复杂性，从而有效的描述足够的代码。你认为函数 `randomPick` 的类型应该是什么，从而返回一个数组中的随机元素？你需要介绍一个_((类型变量))_，_T_，可以代表任何类型。这样你就可以给 `randomPick` 一个类似 `([T]) → T` 的类型（从一个数组 *T* 的函数到一个 *T*）。
 
 {{index "type checking", TypeScript}}
 
 {{id typing}}
 
-When the types of a program are known, it is possible for the computer
-to _check_ them for you, pointing out mistakes before the program is
-run. There are several JavaScript dialects that add types to the
-language and check them. The most popular one is called
-[TypeScript](https://www.typescriptlang.org/). If you are interested
-in adding more rigor to your programs, I recommend you give it a try.
+当已知一个程序的类型时，电脑就可以帮忙_检查_它们，并在程序运行前指出错误。有很多 JavaScript 的方言把类型加入到其语言中，并检查它们。最流行的一个叫做 [TypeScript](https://www.typescriptlang.org/)。你如果有兴趣让你的程序更严谨，我建议你试试它。
 
-In this book, we'll continue using raw, dangerous, untyped JavaScript
-code.
+本书将继续使用原始的、危险的、无类型定义的 JavaScript。
 
 ## Testing
 
 {{index "test suite", "run-time error", automation, testing}}
 
-If the language is not going to do much to help us find mistakes,
-we'll have to find them the hard way: by running the program and
-seeing whether it does the right thing.
+如果语言本书不会帮我们找寻我们的错误，我们只能走那条艰难的路了：运行程序，并检测它是否运行正确。
 
-Doing this by hand, again and again, is a really bad idea. Not only is
-it annoying, it also tends to be ineffective since it takes too much
-time to exhaustively test everything every time you make a change.
+如此反复人工运行是个坏主意。这不仅讨嫌，而且还可能无效。因为每次更改后，它都需要花费太多时间去详尽的测试所有内容。
 
-Computers are good at repetitive tasks, and testing is the ideal
-repetitive task. Automated testing is the process of writing a program
-that tests another program. Writing tests is a bit more work than
-testing manually, but once you've done it, you gain a kind of
-superpower: it takes you only a few seconds to verify that your
-program still behaves properly in all the situations you wrote tests
-for. When you break something, you'll immediately notice, rather than
-randomly running into it at some later time.
+电脑对待重复的任务却很有一套。测试是一个理想中的重复任务。自动测试是编写一个程序来测试另一个程序的过程。写测试比手动测试需要略多的活，但一旦写完，你就拥有了一个超能力：几秒内你就可确保你的程序在所以已写的测试内都工作。当你破坏了某段代码时，你会通过这写测试立刻发现，而不是以后运行时的随机触发。
 
 {{index "toUpperCase method"}}
 
-Tests usually take the form of little labeled programs that verify
-some aspect of your code. For example, a set of tests for the
-(standard, probably already tested by someone else) `toUpperCase`
-method might look like this:
+测试通常采用带有少量标签的程序形式来验证代码中的某些方面。比如，一组给方法 `toUpperCase` 的测试（标准的，可能已经被其他人测试过了）可能如下：
 
 ```
 function test(label, body) {
-  if (!body()) console.log(`Failed: ${label}`);
+  if (!body()) console.log(`错误的: ${label}`);
 }
 
-test("convert Latin text to uppercase", () => {
+test("把拉丁文字改成大写", () => {
   return "hello".toUpperCase() == "HELLO";
 });
-test("convert Greek text to uppercase", () => {
+test("把希腊文字改成大写", () => {
   return "Χαίρετε".toUpperCase() == "ΧΑΊΡΕΤΕ";
 });
-test("don't convert case-less characters", () => {
+test("不改变没有大小写区分的文字", () => {
   return "مرحبا".toUpperCase() == "مرحبا";
 });
 ```
 
 {{index "domain-specific language"}}
 
-Writing tests like this tends to produce rather repetitive, awkward
-code. Fortunately, there exist pieces of software that help you build
-and run collections of tests (_((test suites))_) by providing a
-language (in the form of functions and methods) suited to expressing
-tests and by outputting informative information when a test fails.
-These are usually called _((test runners))_.
+写类似这种测试时，通常会出现很多反复的、尴尬的代码。好在有些软件就是帮助你创建并运行测试（_((测试套件))_）的。他们提供一个适合表达测试的语言（以函数和方法的形式），并在测试失败时返回有用的信息。这些通常叫做 _((test runners))_。
 
 {{index "persistent data structure"}}
 
-Some code is easier to test than other code. Generally, the more
-external objects that the code interacts with, the harder it is to set
-up the context in which to test it. The style of programming shown in
-the [previous chapter](robot), which uses self-contained persistent
-values rather than changing objects, tends to be easy to test.
+有些代码比其他代码容易测试。通常来讲，于外来对象互动越多的代码越难测试。[上一章](robot)中的编程风格，以独立的不改变的值代替可变的对象，往往容易测试。
 
 ## Debugging
 
 {{index debugging}}
 
-Once you notice there is something wrong with your program
-because it misbehaves or produces errors, the next step is to figure
-out _what_ the problem is.
+当你发现程序有错误时，下一步就是找寻问题的_来源_。
 
-Sometimes it is obvious. The ((error)) message will point at a
-specific line of your program, and if you look at the error
-description and that line of code, you can often see the problem.
+有些时候它很明显。((错误))报告会指出一行代码。你如果看问题描述和那行代码，你通常可以发现问题所在。
 
 {{index "run-time error"}}
 
-But not always. Sometimes the line that triggered the problem is
-simply the first place where a flaky value produced elsewhere gets
-used in an invalid way. If you have been solving the ((exercises)) in
-earlier chapters, you will probably have already experienced such
-situations.
+但这不是所有情况。有些时候，那行产生错误的代码只是第一次无效使用一个已经错误值的地方。你如果解答了前几章中的((习题))，你或许已经遇到过类似的情况。
 
 {{index "decimal number", "binary number"}}
 
-The following example program tries to convert a whole number to a
-string in a given base (decimal, binary, and so on) by repeatedly
-picking out the last ((digit)) and then dividing the number to get rid
-of this digit. But the strange output that it currently produces
-suggests that it has a ((bug)).
+下面的例题程序试图把一个整数编程一个给定进制（二进制、十进制等）的字符串。它反复选出最后的((数字))并除以一个数来清楚该数字。但返回的奇怪输出表明该程序有一个 ((bug))。
 
 ```
 function numberToString(n, base = 10) {
@@ -300,25 +192,15 @@ console.log(numberToString(13, 10));
 
 {{index analysis}}
 
-Even if you see the problem already, pretend for a moment that you
-don't. We know that our program is malfunctioning, and we want to find
-out why.
+如果你见过这个问题，假装你没有。已知我们的程序有问题，我们需要知道为什么。
 
 {{index "trial and error"}}
 
-This is where you must resist the urge to start making random changes
-to the code to see whether that makes it better. Instead, _think_. Analyze
-what is happening and come up with a ((theory)) of why it might be
-happening. Then, make additional observations to test this theory—or,
-if you don't yet have a theory, make additional observations to help
-you come up with one.
+此时的你必须抵抗随机改变代码来检测问题是否解决的冲动。反之，_思考_。分析下发生了什么，并提出一个((理论))来解释为什么。之后进行额外观察来检测这个理论。或者，你如果没有一个理论的话，进行额外观察来帮助你提出一个理论。
 
 {{index "console.log", output, debugging, logging}}
 
-Putting a few strategic `console.log` calls into the program is a good
-way to get additional information about what the program is doing. In
-this case, we want `n` to take the values `13`, `1`, and then `0`.
-Let's write out its value at the start of the loop.
+在程序中放几个有战略性的 `console.log` 是一个可以得到更到有关程序信息的好办法。在这个情况下，我们希望 `n` 先拿值 `13`，`1`，之后 `0`。让我们在循环前输出它的值。
 
 ```{lang: null}
 13
@@ -331,55 +213,31 @@ Let's write out its value at the start of the loop.
 
 {{index rounding}}
 
-_Right_. Dividing 13 by 10 does not produce a whole number. Instead of
-`n /= base`, what we actually want is `n = Math.floor(n / base)` so
-that the number is properly "shifted" to the right.
+_是的_。13 除以 10 无法得到一个整数。所以我们想要的是 `nn = Math.floor(n / base)` 而不是 `n /= base`。如此这个数字才会正确的向右“移动”。
 
 {{index "JavaScript console", "debugger statement"}}
 
-An alternative to using `console.log` to peek into the program's
-behavior is to use the _debugger_ capabilities of your browser.
-Browsers come with the ability to set a _((breakpoint))_ on a specific
-line of your code. When the execution of the program reaches a line
-with a breakpoint, it is paused, and you can inspect the values of
-bindings at that point. I won't go into details, as debuggers differ
-from browser to browser, but look in your browser's ((developer
-tools)) or search the Web for more information.
+一个取代 `console.log` 来窥视程序行为的方法是用浏览器的调试器功能。浏览器可以在在指定的一行设置_((断点))_。当程序运行到有断点的那行时，它会暂停。你就可以查看在该时段的变量值了。因为每个浏览器的调试器都不一样，所以我不会详细介绍。查看你的浏览器的((开发者工具))或搜索网页获取更多信息。
 
-Another way to set a breakpoint is to include a `debugger` statement
-(consisting of simply that keyword) in your program. If the
-((developer tools)) of your browser are active, the program will pause
-whenever it reaches such a statement.
+另一个设定断点的方法是在程序中加入 `debugger`（仅由该关键字组成）语句。如果你的浏览器的((开发者工具))被打开了，程序就会在抵达该语句时暂停。
 
 ## Error propagation
 
 {{index input, output, "run-time error", error, validation}}
 
-Not all problems can be prevented by the programmer, unfortunately. If
-your program communicates with the outside world in any way, it is
-possible to get malformed input, to become overloaded with work, or to
-have the network fail.
+遗憾的是，程序员无法预防所有问题。如果你的程序和外界有任何交流，它就有可能得到一个异常的输入；过大的工作量；或者网络连接失败。
 
 {{index "error recovery"}}
 
-If you're programming only for yourself, you can afford to just ignore
-such problems until they occur. But if you build something that is
-going to be used by anybody else, you usually want the program to do
-better than just crash. Sometimes the right thing to do is take the
-bad input in stride and continue running. In other cases, it is better
-to report to the user what went wrong and then give up. But in either
-situation, the program has to actively do something in response to the
-problem.
+如果你只给自己写程序，那么你可以无视这些问题，直到他们出现为止。只要你写的程序被其他人使用，你通常希望这个程序比崩溃做的更好。有些时候，正确的做法是无视错误的输入，并继续运行。其他时候，最好告诉用户出错后，放弃运行。无论如何，该程序都需要在问题面前做些什么。
 
 {{index "promptNumber function", validation}}
 
-Say you have a function `promptNumber` that asks the user for a number
-and returns it. What should it return if the user inputs "orange"?
+比如你有一个函数 `promptNumber` 需要用户输入一个数字，并返回该数字。当用户输入 "orange" 时该程序应该返回什么呢？
 
 {{index null, undefined, "return value", "special return value"}}
 
-One option is to make it return a special value. Common choices for
-such values are `null`, `undefined`, or -1.
+一个选择是让它返回一个特殊值。常见选项包括 `null`，`undefined`，或者 -`。
 
 ```{test: no}
 function promptNumber(question) {
@@ -388,24 +246,14 @@ function promptNumber(question) {
   else return result;
 }
 
-console.log(promptNumber("How many trees do you see?"));
+console.log(promptNumber("你见到了多少树？"));
 ```
 
-Now any code that calls `promptNumber` must check whether an actual
-number was read and, failing that, must somehow recover—maybe by
-asking again or by filling in a default value. Or it could again
-return a special value to _its_ caller to indicate that it failed to
-do what it was asked.
+现在任何调用 `promptNumber` 的代码都必须检查读取的是不是一个真正的数。如果不是，必须想办法恢复：可以是重问一次，或者提供一个默认值。它也可以返回一个特殊值给_它的_调用者表示它无法完成任务。
 
 {{index "error handling"}}
 
-In many situations, mostly when ((error))s are common and the caller
-should be explicitly taking them into account, returning a special
-value is a good way to indicate an error. It does, however, have its
-downsides. First, what if the function can already return every
-possible kind of value? In such a function, you'll have to do
-something like wrap the result in an object to be able to distinguish
-success from failure.
+许多情况下，通常当((错误))较为普遍且调用者需明确考虑他们时，返回一个特殊值是一个提示错误的好方法。然而有时它也有缺点。首先，如果该函数可以返回所有类型的值该如何？这种函数下，你需要把结果包在一个对象中，以便区分成功和失败。
 
 ```
 function lastElement(array) {
@@ -419,42 +267,23 @@ function lastElement(array) {
 
 {{index "special return value", readability}}
 
-The second issue with returning special values is that it can lead to
-awkward code. If a piece of code calls `promptNumber` 10 times,
-it has to check 10 times whether `null` was returned. And if its
-response to finding `null` is to simply return `null` itself, callers
-of the function will in turn have to check for it, and so on.
+其次，返回特殊值可能会产生尴尬的代码。如果一个程序调用 `promptNumber` 10次，它需要检查 10次返回的值是不是 `null`。如果它遇到 `null` 的反映只是简单的返回 `null`，该函数的调用者也需要检查 `null`。依此类推。
 
 ## Exceptions
 
 {{index "error handling"}}
 
-When a function cannot proceed normally, what we would _like_ to do is
-just stop what we are doing and immediately jump to a place that knows
-how to handle the problem. This is what _((exception handling))_ does.
+当一个函数不能正常运行，我们_希望_停止当前活动，并立刻跳到一个知道如何处理该问题的地方。这就是_((错误处理))_。
 
 {{index ["control flow", exceptions], "raising (exception)", "throw keyword", "call stack"}}
 
-Exceptions are a mechanism that makes it possible for code that runs
-into a problem to _raise_ (or _throw_) an exception. An exception can
-be any value. Raising one somewhat resembles a super-charged return
-from a function: it jumps out of not just the current function but
-also its callers, all the way down to the first call that
-started the current execution. This is called _((unwinding the
-stack))_. You may remember the stack of function calls that was
-mentioned in [Chapter ?](functions#stack). An exception zooms down
-this stack, throwing away all the call contexts it encounters.
+异常是一种机制，可以让遇到问题的代码_提出_（或_抛出_）一个异常。一个异常可以是任何值。提出一个类似一个函数的超额（super-charged）返回值：它不仅跳出当前函数，也会跳出该函数的调用者，直到第一个引起该错误的调用者。这叫做_((展开堆栈))_。你或许会记得[第三章](functions#stack)中提到的函数调用堆栈。一个异常会依据这个堆栈，抛去它遇到的所有相关调用。
 
 {{index "error handling", [syntax, statement], "catch keyword"}}
 
-If exceptions always zoomed right down to the bottom of the stack,
-they would not be of much use. They'd just provide a novel way to blow
-up your program. Their power lies in the fact that you can set
-"obstacles" along the stack to _catch_ the exception as it is zooming
-down. Once you've caught an exception, you can do something with it to
-address the problem and then continue to run the program.
+如果异常总是发生在堆栈的最底部，那它就没有太大帮助。它只是提供了一个新的膨胀你程序的方法而已。它的力量在于你可以沿途设置一些“障碍物”，在异常沿堆栈返回时_捕获_它。当你捕获到一个异常时，你可以在处理该问题后继续运行程序。
 
-Here's an example:
+例题如下：
 
 {{id look}}
 ```
@@ -462,72 +291,49 @@ function promptDirection(question) {
   let result = prompt(question);
   if (result.toLowerCase() == "left") return "L";
   if (result.toLowerCase() == "right") return "R";
-  throw new Error("Invalid direction: " + result);
+  throw new Error("无效的方向: " + result);
 }
 
 function look() {
-  if (promptDirection("Which way?") == "L") {
-    return "a house";
+  if (promptDirection("哪边？") == "L") {
+    return "一个房子";
   } else {
-    return "two angry bears";
+    return "两只熊";
   }
 }
 
 try {
-  console.log("You see", look());
+  console.log("你看到", look());
 } catch (error) {
-  console.log("Something went wrong: " + error);
+  console.log("出错啦: " + error);
 }
 ```
 
 {{index "exception handling", block, "throw keyword", "try keyword", "catch keyword"}}
 
-The `throw` keyword is used to raise an exception. Catching one is
-done by wrapping a piece of code in a `try` block, followed by the
-keyword `catch`. When the code in the `try` block causes an exception
-to be raised, the `catch` block is evaluated, with the name in
-parentheses bound to the exception value. After the `catch` block
-finishes—or if the `try` block finishes without problems—the program
-proceeds beneath the entire `try/catch` statement.
+关键词 `throw` 用来提出一个异常。可以通过把一段代码包裹在 `try` 块语句中，其次是关键字 `catch` 来捕获异常。当 `try` 块语句中的代码出现异常时，`catch` 块语句会和它参数中绑定的异常值一起被运行。在 `catch` 块语句结束后，或者 `try` 块语句正常运行结束后，程序照常运行整个 `try/catch` 语句下的代码。
 
 {{index debugging, "call stack", "Error type"}}
 
-In this case, we used the `Error` ((constructor)) to create our
-exception value. This is a ((standard)) JavaScript constructor that
-creates an object with a `message` property. In most JavaScript
-environments, instances of this constructor also gather information
-about the call stack that existed when the exception was created, a
-so-called _((stack trace))_. This information is stored in the `stack`
-property and can be helpful when trying to debug a problem: it tells
-us the function where the problem occurred and which functions made
-the failing call.
+该情况下，我们用 `Error` ((构造器))创建我们的异常值。这是一个((标准的)) JavaScript 构造器。它会创造一个带有 `message` 属性的对象。大部分 JavaScript 环境下，这个构造器的实例也收集关于在异常发生时堆栈的信息。也叫做_((堆栈跟踪))_。这些信息储存在 `stack` 属性中，且在调试时会有帮助。它告诉我们该异常发生的函数，以及所有导致该错误的调用函数。
 
 {{index "exception handling"}}
 
-Note that the `look` function completely ignores the possibility that
-`promptDirection` might go wrong. This is the big advantage of
-exceptions: error-handling code is necessary only at the point where
-the error occurs and at the point where it is handled. The functions
-in between can forget all about it.
+注意例题中的 `look` 函数完全忽略了 `promptDirection` 会出错的可能性。这就是异常的一大优点。处理错误的代码只需在错误发生点和处理点出现。中途的其他函数可以完全无视它。
 
-Well, almost...
+好吧，大致如此……
 
 ## Cleaning up after exceptions
 
 {{index "exception handling", "cleaning up", ["control flow", exceptions]}}
 
-The effect of an exception is another kind of control flow. Every
-action that might cause an exception, which is pretty much every
-function call and property access, might cause control to suddenly
-leave your code.
+异常的影响是另一种控制流。任何可能产生异常的行为，基本上是所以函数调用和属性访问，都可能让控制突然立刻你的代码。
 
-This means when code has several side effects, even if its
-"regular" control flow looks like they'll always all happen, an
-exception might prevent some of them from taking place.
+也就是说，当代码有多种副作用时，即使它的“常规”控制流似乎总会运行，一个异常可能会阻止其中一些运行。
 
 {{index "banking example"}}
 
-Here is some really bad banking code.
+下面是一段非常烂的银行代码。
 
 ```{includeCode: true}
 const accounts = {
@@ -537,9 +343,9 @@ const accounts = {
 };
 
 function getAccount() {
-  let accountName = prompt("Enter an account name");
+  let accountName = prompt("输入用户名");
   if (!accounts.hasOwnProperty(accountName)) {
-    throw new Error(`No such account: ${accountName}`);
+    throw new Error(`没有该用户: ${accountName}`);
   }
   return accountName;
 }
@@ -551,34 +357,17 @@ function transfer(from, amount) {
 }
 ```
 
-The `transfer` function transfers a sum of money from a given account
-to another, asking for the name of the other account in the process.
-If given an invalid account name, `getAccount` throws an exception.
+函数 `transfer` 从一个指定账户转账到另一个，途中询问另一个用户名。如果提供了错误的用户名，`getAccount` 会抛出一个异常。
 
-But `transfer` _first_ removes the money from the account and _then_
-calls `getAccount` before it adds it to another account. If it is
-broken off by an exception at that point, it'll just make the money
-disappear.
+但 `transfer` _首先_从账户中移除这笔钱，_之后_才在添加到另一个账户前调用 `getAccount`。如果此时程序因为异常而终止，这笔钱会直接消失。
 
-That code could have been written a little more intelligently, for
-example by calling `getAccount` before it starts moving money around.
-But often problems like this occur in more subtle ways. Even functions
-that don't look like they will throw an exception might do so in
-exceptional circumstances or when they contain a programmer mistake.
+这段代码可以被更好的编写。比如，在移除钱之前调用 `getAccount`。但通常类似的问题会在更微妙的情况下发生。即使一些看似不会出现异常的函数也会在特殊情况下抛出异常，或者在程序员写错代码时。
 
-One way to address this is to use fewer side effects. Again, a
-programming style that computes new values instead of changing
-existing data helps. If a piece of code stops running in the middle of
-creating a new value, no one ever sees the half-finished value, and
-there is no problem.
+解决此问题的一个方法是减少副作用。计算新的值，而不是改变已有数据，的编程风格是一个办法。如果一段代码在创建新值时停止运行，不会有人看到那个半完成的值，也就不会产生任何问题。
 
 {{index block, "try keyword", "finally keyword"}}
 
-But that isn't always practical. So there is another feature that
-`try` statements have. They may be followed by a `finally` block
-either instead of or in addition to a `catch` block. A `finally` block
-says "no matter _what_ happens, run this code after trying to run the
-code in the `try` block."
+但这并不总是可行。所以 `try` 语句有另一个特点。它后面可以跟着一个 `finally` 块语句，可代替或在 `catch` 块语句的基础上添加。`finally` 块语句是“无论任何时候，都要在试图运行 `try` 块语句代码后运行该代码。”
 
 ```{includeCode: true}
 function transfer(from, amount) {
@@ -597,122 +386,71 @@ function transfer(from, amount) {
 }
 ```
 
-This version of the function tracks its progress, and if, when
-leaving, it notices that it was aborted at a point where it had
-created an inconsistent program state, it repairs the damage it did.
+此版本的函数跟踪其进程。在结束时，它如果发现它中途终止而导致程序状态不一致时，它可以修复这个损伤。
 
-Note that even though the `finally` code is run when an exception
-is thrown in the `try` block, it does not interfere with the exception.
-After the `finally` block runs, the stack continues unwinding.
+尽管 `finally` 在 `try` 块语句抛出异常后依旧运行，它并不会干扰该异常。在 `finally` 块语句结束后，堆栈会继续递减。
 
 {{index "exception safety"}}
 
-Writing programs that operate reliably even when exceptions pop up in
-unexpected places is hard. Many people simply don't bother, and
-because exceptions are typically reserved for exceptional
-circumstances, the problem may occur so rarely that it is never even
-noticed. Whether that is a good thing or a really bad thing depends on
-how much damage the software will do when it fails.
+编写可以在异常发生后仍可靠且正常运行的程序很难。很多人甚至不会花费心思。因为异常通常为特殊情况所保留，这个问题很可能极少发生，以致它从未被发觉。至于这是件好事还是坏事，完全取决于在程序停止运行时所造成的灾害。
 
 ## Selective catching
 
 {{index "uncaught exception", "exception handling", "JavaScript console", "developer tools", "call stack", error}}
 
-When an exception makes it all the way to the bottom of the stack
-without being caught, it gets handled by the environment. What this
-means differs between environments. In browsers, a description of the
-error typically gets written to the JavaScript console (reachable
-through the browser's Tools or Developer menu). Node.js, the
-browserless JavaScript environment we will discuss in [Chapter
-?](node), is more careful about data corruption. It aborts the whole
-process when an unhandled exception occurs.
+当一个异常在没被捕获的情况下抵达堆栈的底层时，它会被环境处理。因此结果由环境决定。在浏览器中，该问题的描述通常会显示在 JavaScript console 中（可通过浏览器的工具或者开发者菜单到达）。Node.js，一个将在[第二十章](node)中讨论的无浏览器的 JavaScript 环境，会对数据损坏更加小心谨慎。当一个未处理的异常发生时，它会终止整个过程。
 
 {{index crash, "error handling"}}
 
-For programmer mistakes, just letting the error go through is often
-the best you can do. An unhandled exception is a reasonable way to
-signal a broken program, and the JavaScript console will, on modern
-browsers, provide you with some information about which function calls
-were on the stack when the problem occurred.
+对于程序员的错误，让错误通过往往是你能做的最好的事情。一个没处理的异常是一个符合常理的信号问题程序的方法。JavaScript console 此时，在现代浏览器中，会提供一些在堆栈中，当问题发生时函数调用的信息。
 
 {{index "user interface"}}
 
-For problems that are _expected_ to happen during routine use,
-crashing with an unhandled exception is a terrible strategy.
+对于日常使用中，_可能_发生的问题，因为一个未处理的异常而终止是一个可怕的策略。
 
 {{index [function, application], "exception handling", "Error type", [binding, undefined]}}
 
-Invalid uses of the language, such as referencing a nonexistent
-binding, looking up a property on `null`, or calling something
-that's not a function, will also result in exceptions being raised.
-Such exceptions can also be caught.
+语言的错误使用，比如引用一个不存在的变量，查询 `null` 的属性，或者调用一个非函数，都会产生异常。这类异常可以被捕获。
 
 {{index "catch keyword"}}
 
-When a `catch` body is entered, all we know is that _something_ in our
-`try` body caused an exception. But we don't know _what_ did or _which_
-exception it caused.
+当运行一个 `catch` 语句体时，我们只知道 `try` 块语句的_某行_抛出异常。但我们不知道_什么_导致的，或者它产生了_哪个_异常。
 
 {{index "exception handling"}}
 
-JavaScript (in a rather glaring omission) doesn't provide direct
-support for selectively catching exceptions: either you catch them all
-or you don't catch any. This makes it tempting to _assume_ that the
-exception you get is the one you were thinking about when you wrote
-the `catch` block.
+JavaScript（明显的遗漏中）并不提供直接捕获选择异常的支持：你要么捕获所以异常，要么一个都不要捕获。这会让我们_以为_被捕获的异常就是我们在写 `catch` 块语句时设想的那个。
 
 {{index "promptDirection function"}}
 
-But it might not be. Some other ((assumption)) might be violated, or
-you might have introduced a bug that is causing an exception. Here is
-an example that _attempts_ to keep on calling `promptDirection`
-until it gets a valid answer:
+但这并不一定。其他((假设))也可能被违反，或者你也许引进了一个产生该异常的 bug。下面是一个试图继续调用 `promptDirection` 直到它得到一个有效答案为止的例题：
 
 ```{test: no}
 for (;;) {
   try {
-    let dir = promtDirection("Where?"); // ← typo!
-    console.log("You chose ", dir);
+    let dir = promtDirection("哪里？"); // ← 拼写错误！
+    console.log("你的选择 ", dir);
     break;
   } catch (e) {
-    console.log("Not a valid direction. Try again.");
+    console.log("不是有效的方向。重新尝试。");
   }
 }
 ```
 
 {{index "infinite loop", "for loop", "catch keyword", debugging}}
 
-The `for (;;)` construct is a way to intentionally create a loop that
-doesn't terminate on its own. We break out of the loop only when a
-valid direction is given. _But_ we misspelled `promptDirection`, which
-will result in an "undefined variable" error. Because the `catch`
-block completely ignores its exception value (`e`), assuming it knows
-what the problem is, it wrongly treats the binding error as indicating
-bad input. Not only does this cause an infinite loop, it 
-"buries" the useful error message about the misspelled binding.
+`for (;;)` 故意创建一个不会自动结束的循环。我们只在得到一个有效方向后才会终结该循环。_但_我们拼错了 `promptDirection`，从而导致一个 "undefined variable" 错误。可是 `catch` 块语句，以为知道问题的起因，而完全无视它的异常值（`e`）。它因此错误的把绑定错误当成输入错误。这不但导致了无限循环，它也“埋葬”了有关拼写问题的错误信息。
 
-As a general rule, don't blanket-catch exceptions unless it is for the
-purpose of "routing" them somewhere—for example, over the network to
-tell another system that our program crashed. And even then, think
-carefully about how you might be hiding information.
+基本来讲，不要一网打尽异常，除非是为了把他们“引导至”其他地方。比如，通过网络告诉另一个系统我们的程序崩溃了。即使如此，也要仔细想想你可能如何隐藏了重要信息。
 
 {{index "exception handling"}}
 
-So we want to catch a _specific_ kind of exception. We can do this by
-checking in the `catch` block whether the exception we got is the one
-we are interested in and rethrowing it otherwise. But how do we
-recognize an exception?
+我们想捕获一个_特定_的异常。我们可以在 `check` 块语句里校验所得异常是不是我们想要的，如果不是要重新抛出。但我们该如何识别一个异常？
 
-We could compare its `message` property against the ((error)) message
-we happen to expect. But that's a shaky way to write code—we'd be
-using information that's intended for human consumption (the message)
-to make a programmatic decision. As soon as someone changes (or
-translates) the message, the code will stop working.
+我们可以把异常的 `message` 属性和我们期待的((错误))信息对比。但这不是写代码的应有方式。我们在使用给人类的信息来决定一个程序的走向。一旦有人改变（或翻译）了这个信息，这个代码就会停止工作。
 
 {{index "Error type", "instanceof operator", "promptDirection function"}}
 
-Rather, let's define a new type of error and use `instanceof` to
-identify it.
+我们定义一个新的错误类型，并用 `instanceof` 来识别它。
 
 ```{includeCode: true}
 class InputError extends Error {}
@@ -721,32 +459,27 @@ function promptDirection(question) {
   let result = prompt(question);
   if (result.toLowerCase() == "left") return "L";
   if (result.toLowerCase() == "right") return "R";
-  throw new InputError("Invalid direction: " + result);
+  throw new InputError("方向无效: " + result);
 }
 ```
 
 {{index "throw keyword", inheritance}}
 
-The new error class extends `Error`. It doesn't define its own
-constructor, which means that it inherits the `Error` constructor,
-which expects a string message as argument. In fact, it doesn't define
-anything at all—the class is empty. `InputError` objects behave like
-`Error` objects, except that they have a different class by which we
-can recognize them.
+新的错误类扩展 `Error`。它没有定义自己的构造器，所以继承了 `Error` 的构造器.也就是说它需要一个字符串作为参数。实际上，它其实没有定义任何东西，整个类都是空的。对象 `InputError` 类似 `Error`，除了它有一个不同的我们可以识别的类。
 
 {{index "exception handling"}}
 
-Now the loop can catch these more carefully.
+现在这个循环可以更谨慎的捕获异常了。
 
 ```{test: no}
 for (;;) {
   try {
-    let dir = promptDirection("Where?");
-    console.log("You chose ", dir);
+    let dir = promptDirection("哪里？");
+    console.log("你选择 ", dir);
     break;
   } catch (e) {
     if (e instanceof InputError) {
-      console.log("Not a valid direction. Try again.");
+      console.log("方向无效。重试。");
     } else {
       throw e;
     }
@@ -756,25 +489,20 @@ for (;;) {
 
 {{index debugging}}
 
-This will catch only instances of `InputError` and let unrelated
-exceptions through. If you reintroduce the typo, the undefined binding
-error will be properly reported.
+这只会捕获 `InputError` 的实例。任何无关的异常都会通过。如果你重新介绍了拼写错误，未定义的变量就会被正确报告。
 
 ## Assertions
 
 {{index "assert function", assertion, debugging}}
 
-_Assertions_ are checks inside a program that verify that something is
-the way it is supposed to be. They are used not to handle situations
-that can come up in normal operation but to find programmer mistakes.
+_断言_是程序内部的判断，用来确认某件事是它应有的样子。它们用来处理可能在正常情况下出现的情况，但找到程序员的错误。
 
-If, for example, `firstElement` is described as a function that should
-never be called on empty arrays, we might write it like this:
+比如，如果 `firstElement` 是一个永远不能被空数组调用的函数的话，我们可能把它写成：
 
 ```
 function firstElement(array) {
   if (array.length == 0) {
-    throw new Error("firstElement called with []");
+    throw new Error("firstElement 不能被 [] 调用");
   }
   return array[0];
 }
@@ -782,36 +510,17 @@ function firstElement(array) {
 
 {{index validation, "run-time error", crash, assumption}}
 
-Now, instead of silently returning undefined (which you get when
-reading an array property that does not exist), this will loudly blow
-up your program as soon as you misuse it. This makes it less likely
-for such mistakes to go unnoticed and easier to find their cause when
-they occur.
+现在，与其默默返回 undefined（就是你读取一个不存在的数组属性时的结果），它会在你错误运用时，返回错误提示。如此会避免此类错误被忽略，而且在错误发生时，更容易找到原因。
 
-I do not recommend trying to write assertions for every possible kind
-of bad input. That'd be a lot of work and would lead to very noisy
-code. You'll want to reserve them for mistakes that are easy to make
-(or that you find yourself making).
+我不推荐试图为每个可能的错误输入写断言。如此不仅工程浩大，且代码也显得杂乱。你应该把它们预定给容易发生的输入错误（或者你做的错误）。
 
 ## Summary
 
-Mistakes and bad input are facts of life. An important part of
-programming is finding, diagnosing, and fixing bugs. Problems can
-become easier to notice if you have an automated test suite or add
-assertions to your programs.
+错误和输入错误是人生常态。编程的重要一点是找寻，诊断，和修复 bugs。如果你的程序有一个自动化测试或添加了断言的话，问题会被更容易的发现。
 
-Problems caused by factors outside the program's control should
-usually be handled gracefully. Sometimes, when the problem can be
-handled locally, special return values are a good way to track them.
-Otherwise, exceptions may be preferable.
+对于程序无法掌控的外界因素所引发的问题应妥善处理。有时，当程序可在本地处理时，返回特殊值是一个很好的跟踪他们的方法。否则，异常会更可取。
 
-Throwing an exception causes the call stack to be unwound until the
-next enclosing `try/catch` block or until the bottom of the stack. The
-exception value will be given to the `catch` block that catches it,
-which should verify that it is actually the expected kind of exception
-and then do something with it. To help address the unpredictable
-control flow caused by exceptions, `finally` blocks can be used to
-ensure that a piece of code _always_ runs when a block finishes.
+引发异常会导致堆栈调用被取消，直到下一个封闭的 `try/catch` 块语句或堆栈的底层为止。异常值将提供给捕获它的 `catch` 块语句。该块语句应该先确定它是预期中的异常后，再对其进行处理。为了帮助解决由异常引起的不可预测的控制流，可以使用“finally”块来确保在块语句结束时_永远_运行一段代码
 
 ## Exercises
 
@@ -819,15 +528,11 @@ ensure that a piece of code _always_ runs when a block finishes.
 
 {{index "primitiveMultiply (exercise)", "exception handling", "throw keyword"}}
 
-Say you have a function `primitiveMultiply` that in 20 percent of
-cases multiplies two numbers and in the other 80 percent of cases raises an
-exception of type `MultiplicatorUnitFailure`. Write a function that
-wraps this clunky function and just keeps trying until a call
-succeeds, after which it returns the result.
+你有一个函数 `primitiveMultiply` 在 20% 情况下对两个数进行乘法，在剩下的 80% 情况下，会抛出一个类型为 `MultiplicatorUnitFailure` 的异常。写一个函数包裹住这个笨拙的函数，并反复尝试直到一个成果的调用，后返回结果。
 
 {{index "catch keyword"}}
 
-Make sure you handle only the exceptions you are trying to handle.
+确保你只处理需要处理的异常。
 
 {{if interactive
 
@@ -843,7 +548,7 @@ function primitiveMultiply(a, b) {
 }
 
 function reliableMultiply(a, b) {
-  // Your code here.
+  // 你的代码.
 }
 
 console.log(reliableMultiply(8, 8));
@@ -855,16 +560,9 @@ if}}
 
 {{index "primitiveMultiply (exercise)", "try keyword", "catch keyword", "throw keyword"}}
 
-The call to `primitiveMultiply` should definitely happen in a `try`
-block. The corresponding `catch` block should rethrow the exception
-when it is not an instance of `MultiplicatorUnitFailure` and ensure
-the call is retried when it is.
+调用 `primitiveMultiply` 的代码肯定应该在 `try` 块语句中。相应的 `catch` 块语句应该重新抛出异常，如果它的类型不是 `MultiplicatorUnitFailure`。如果异常类型一致的话，要确保重新调用该函数。
 
-To do the retrying, you can either use a loop that stops only when a
-call succeeds—as in the [`look` example](error#look) earlier in this
-chapter—or use ((recursion)) and hope you don't get a string of
-failures so long that it overflows the stack (which is a pretty safe
-bet).
+你可以用一个只有在调用成果后才结束的循环来实现重试。可参考本章出现的[`look` 例子](error#look)。或者一个((递归))，需要确保你不会因为堆栈溢出而得到一个字符串的错误提示（这是一个安全的选择）。
 
 hint}}
 
@@ -872,7 +570,7 @@ hint}}
 
 {{index "locked box (exercise)"}}
 
-Consider the following (rather contrived) object:
+考虑下面的（较为人为的）对象：
 
 ```
 const box = {
@@ -889,16 +587,11 @@ const box = {
 
 {{index "private property", "access control"}}
 
-It is a ((box)) with a lock. There is an array in the box, but you can
-get at it only when the box is unlocked. Directly accessing the
-private `_content` property is forbidden.
+这是一个有锁的((箱子))。箱子中有一个数组，但只有在箱子被解锁时，你才可以拿到它。禁止直接访问私有的 `_content` 属性。
 
 {{index "finally keyword", "exception handling"}}
 
-Write a function called `withBoxUnlocked` that takes a function value
-as argument, unlocks the box, runs the function, and then ensures that
-the box is locked again before returning, regardless of whether the
-argument function returned normally or threw an exception.
+写一个名为 `withBoxUnlocked` 函数，它的参数是一个函数值，解锁盒子，运行该函数，并在返回前确保盒子重新锁好。无论参数函数是正常返回还是抛出一个异常。
 
 {{if interactive
 
@@ -915,19 +608,19 @@ const box = {
 };
 
 function withBoxUnlocked(body) {
-  // Your code here.
+  // 你的代码.
 }
 
 withBoxUnlocked(function() {
-  box.content.push("gold piece");
+  box.content.push("金币");
 });
 
 try {
   withBoxUnlocked(function() {
-    throw new Error("Pirates on the horizon! Abort!");
+    throw new Error("海盗在地平线上！终止！");
   });
 } catch (e) {
-  console.log("Error raised: " + e);
+  console.log("抛出问题：" + e);
 }
 console.log(box.locked);
 // → true
@@ -935,19 +628,14 @@ console.log(box.locked);
 
 if}}
 
-For extra points, make sure that if you call `withBoxUnlocked` when
-the box is already unlocked, the box stays unlocked.
+额外加分，你如果在盒子已解锁时调用 `withBoxUnlocked`，该盒子应保持解锁状态。
 
 {{hint
 
 {{index "locked box (exercise)", "finally keyword", "try keyword"}}
 
-This exercise calls for a `finally` block. Your function should first
-unlock the box and then call the argument function from inside a `try`
-body. The `finally` block after it should lock the box again.
+这个练习需要一个 `finally` 块语句。你的函数应该先解锁盒子，再在一个 `try` 中调用参数函数。它后面的 `finally` 块语句应该重新锁上盒子。
 
-To make sure we don't lock the box when it wasn't already locked,
-check its lock at the start of the function and unlock and lock
-it only when it started out locked.
+为了确保我们没有锁上未被锁定的盒子，在函数开始时检查盒子锁的状态，并只在盒子被锁定时，解锁并重新锁定盒子。
 
 hint}}
