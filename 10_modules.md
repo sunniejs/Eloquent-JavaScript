@@ -1,10 +1,10 @@
 {{meta {load_files: ["code/packages_chapter_10.js", "code/chapter/07_robot.js"]}}}
 
-# 模块
+# Modules
 
 {{quote {author: "Tef", title: "Programming is Terrible", chapter: true}
 
-要写容易删减的代码，而不是容易扩展的代码。Write code that is easy to delete, not easy to extend.
+Write code that is easy to delete, not easy to extend.
 
 quote}}
 
@@ -14,31 +14,55 @@ quote}}
 
 {{index organization, [code, "structure of"]}}
 
-一个理想的程序具有非常清晰的结构。它的工作方式很容易解释，结构中的每一个部分都扮演着明确的角色。
+The ideal program has a crystal-clear structure. The way it works is
+easy to explain, and each part plays a well-defined role.
 
 {{index "organic growth"}}
 
-通常，一个真实的程序会有机地生长。新的功能会随着新需求的出现而被添加。结构化 —— 以及维持结构 —— 是额外的工作。而且这样的工作只有在未来才能收到回报，也就是说 _下_ 一次某人被分配到这个程序的时候。所以，忽视这样的工作，并放任部分程序变得深深缠绕在一起是一个诱人的做法。
+A typical real program grows organically. New pieces of functionality
+are added as new needs come up. Structuring—and preserving
+structure—is additional work. It's work that will pay off only in the
+future, the _next_ time someone works on the program. So it is
+tempting to neglect it and allow the parts of the program to become
+deeply entangled.
 
 {{index readability, reuse, isolation}}
 
-这会造成两个实际的问题。首先，理解一个这样的系统并不容易。如果程序中的所有的事物都可以互相影响，那将很难单独地去看其中一段代码。你将不得不建立起对所有代码的整体理解。其次，如果你想在别的地方使用这个程序的任何功能的话，从头写起可能会比从上下关系中分清思路更简单。
+This causes two practical issues. First, understanding such a system
+is hard. If everything can touch everything else, it is difficult to
+look at any given piece in isolation. You are forced to build up a
+holistic understanding of the entire thing. Second, if you want to
+use any of the functionality from such a program in another situation,
+rewriting it may be easier than trying to disentangle it from its
+context.
 
-有一个短语 "((大泥球))" 通常被用于形容这种很庞大的、无结构的程序。所有的代码都粘在一起，当你从其中抽出一段代码，整个程序将会溃散，而且会弄脏你的手。
+The phrase "((big ball of mud))" is often used for such large,
+structureless programs. Everything sticks together, and when you try
+to pick out a piece, the whole thing comes apart, and your hands get
+dirty.
 
-## 模块
+## Modules
 
 {{index dependency, [interface, module]}}
 
-_模块_ 是一个避免这些问题的尝试。一个 ((模块)) 是一段程序，它指定了自身所依赖着哪些其他的程序，以及它可以给其他模块提供什么样的功能(它的 _接口_)。 
+_Modules_ are an attempt to avoid these problems. A ((module)) is a
+piece of program that specifies which other pieces it relies on
+and which functionality it provides for other modules
+to use (its _interface_).
 
 {{index "big ball of mud"}}
 
-模块接口与对象接口有很多相同点，如我们在 [第六章](object#interface) 提到的那样。它们使得部分模块可以被外界所用，而其余的模块保持私密性。通过限制模块间的交互，系统变得更像((乐高))，其中各个部分通过有着明确定义的连接器来交互，而不像泥浆，所有代码都掺杂在一起。
+Module interfaces have a lot in common with object interfaces, as we
+saw them in [Chapter ?](object#interface). They make part of the
+module available to the outside world and keep the rest private. By
+restricting the ways in which modules interact with each other, the
+system becomes more like ((LEGO)), where pieces interact through
+well-defined connectors, and less like mud, where everything mixes
+with everything.
 
 {{index dependency}}
 
-模块之间的关系被称为 _依赖_。当一个模块需求另一个模块的一段代码时，它就被称为依赖那个模块。The relations between modules are called _dependencies_. When a module
+The relations between modules are called _dependencies_. When a module
 needs a piece from another module, it is said to depend on that
 module. When this fact is clearly specified in the module itself, it
 can be used to figure out which other modules need to be present to be
@@ -61,7 +85,7 @@ it too much since it can be a big distraction. Once you have
 something that feels solid, that's a good time to take a step back and
 organize it.
 
-## 包Packages
+## Packages
 
 {{index bug, dependency, structure, reuse}}
 
@@ -388,7 +412,7 @@ console.log(parse("x = 10\ny = 20"));
 // → {x: "10", y: "20"}
 ```
 
-## ECMAScript 模块
+## ECMAScript modules
 
 ((CommonJS modules)) work quite well and, in combination with NPM, 
 have allowed the JavaScript community to start sharing code on a large
