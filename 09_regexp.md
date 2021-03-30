@@ -712,13 +712,13 @@ spitefulness=9.7
 ; 分号后面的是注释
 ; 每一个区块针对一个仇敌
 [larry]
-fullname=Larry Doe 拉里·兜
-type=kindergarten bully 幼儿园小霸王
+fullname=Larry Doe
+type=kindergarten bully
 website=http://www.geocities.com/CapeCanaveral/11451
 
 [davaeorn]
-fullname=Davaeorn 达瓦尔
-type=evil wizard 邪恶巫师
+fullname=Davaeorn 
+type=evil wizard 
 outputdir=/home/marijn/enemies/davaeorn
 ```
 
@@ -742,7 +742,7 @@ outputdir=/home/marijn/enemies/davaeorn
 
 ```{startCode: true}
 function parseINI(string) {
-  // Start with an object to hold the top-level fields
+  // 从包含顶层字段的对象开始
   let result = {};
   let section = result;
   string.split(/\r?\n/).forEach(line => {
@@ -752,7 +752,7 @@ function parseINI(string) {
     } else if (match = line.match(/^\[(.*)\]$/)) {
       section = result[match[1]] = {};
     } else if (!/^\s*(;.*)?$/.test(line)) {
-      throw new Error("Line '" + line + "' is not valid.");
+      throw new Error("该行 '" + line + "' 是无效的.");
     }
   });
   return result;
@@ -845,7 +845,7 @@ Unicode 定义了很多有用的属性，尽管要找到你需要的那个属性
 | `/(abc)/`   | 一个子表达式组
 | `/a|b|c/`   | 几种样式任选其一
 | `/\d/`      | 任何数字字符
-| `/\w/`      | 字母或数字字符("((单词字符))")
+| `/\w/`      | 字母或数字字符("单词字符")
 | `/\s/`      | 任何空白字符
 | `/./`       | 除换行符以外的字符
 | `/\b/`      | 单词边界
@@ -889,7 +889,7 @@ _Code golf_ 是一个游戏的名称，在这个游戏里，你得用尽可能�
 
 {{if interactive
 ```
-// Fill in the regular expressions
+// 填充正则表达式
 
 verify(/.../,
        ["my car", "bad cats"],
@@ -921,7 +921,7 @@ verify(/.../,
 
 
 function verify(regexp, yes, no) {
-  // Ignore unfinished exercises
+  // 忽略还未完成的练习
   if (regexp.source == "...") return;
   for (let str of yes) if (!regexp.test(str)) {
     console.log(`Failure to match '${str}'`);
@@ -997,7 +997,7 @@ if}}
 
 {{index ["regular expression", escaping], ["backslash character", "in regular expressions"]}}
 
-首先，不要忘记句点前的反斜杠。First, do not forget the backslash in front of the period.
+首先，不要忘记句点前的反斜杠。
 
 要匹配((数字))或((指数))前面可选的加号或减号，可以通过 `[+\-]?` 或 `(\+|-|)`(加号、减号或啥也没有)来达到目的。
 
