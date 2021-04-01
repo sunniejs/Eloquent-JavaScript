@@ -676,7 +676,7 @@ console.log("Banana".match(/an/g));
 
 所以说，在使用全局正则表达式的时候需谨慎。在不得不使用它们的情况下 —— 调用 `replace` 或者当你必须使用 `lastIndex` 的时候 —— 通常也只有这些时候你会想要用到它们。
 
-### 在比配中循环
+### 循环匹配项
 
 {{index "lastIndex property", "exec method", loop}}
 
