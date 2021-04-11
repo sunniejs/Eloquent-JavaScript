@@ -180,8 +180,7 @@ CommonJS 模块主要的概念是一个名为 `require` 的函数。当你用依
 
 {{index "formatDate module", "Date class", "ordinal package", "date-names package"}}
 
-以下的示例模块提供了一个格式化日期的函数。它用了两个来自 NPM 的((包)) —— 将数字转换成类似 `"1st"` 和 
-`"2nd"` 的 `ordinal`，以及获取工作日和月份的英文名称的 `date-names`。该模块只导出一个名为 `formatDate` 的函数，该函数接受一个 `Date` 对象以及一个((模板))字符串。
+以下的示例模块提供了一个格式化日期的函数。它用了两个来自 NPM 的((包)) —— 将数字转换成类似 `"1st"` 和`"2nd"` 的 `ordinal`，以及获取工作日和月份的英文名称的 `date-names`。该模块只导出一个名为 `formatDate` 的函数，该函数接受一个 `Date` 对象以及一个((模板))字符串。
 
 模板字符串可能含有表示格式的代码，例如 `YYYY` 表示全年，`Do` 表示月份中的第几天。你可以提供一个类似 `"MMMM Do YYYY"` 的字符串来得到 "November 22nd 2017" 这样的输出。
 
@@ -212,7 +211,7 @@ const {formatDate} = require("./format-date");
 
 console.log(formatDate(new Date(2017, 9, 13),
                        "dddd the Do"));
-// → Friday the 13th    周五，本月13号
+// → Friday the 13th    周五，13号
 ```
 
 {{index "require function", "CommonJS modules", "readFile function"}}
