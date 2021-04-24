@@ -195,21 +195,21 @@ storage(bigOak, "enemies")
 
 这个异步函数会返回一个有意义的值。这是 promise 的一个主要优势 —— 它们简化了异步函数的使用方法。与其必须通过回调来传递，基于承诺的函数与正常函数看起来很像：它们接受输入作为参数，并且返回其输出。唯一的区别在于其输出在当下或许还不可用。
 
-## 失败
+## 故障
 
 {{index "exception handling"}}
 
-正常的 JavaScript 计算会在失败时会抛出异常，异步计算通常需要类似的事物。一个网络请求可能会失败，或者部分属于异步计算的代码可能会抛出异常。
+正常的 JavaScript 计算会在出故障时会抛出异常，异步计算通常需要类似的事物。一个网络请求可能会故障，或者部分属于异步计算的代码可能会抛出异常。
 
 {{index "callback function", error}}
 
-具有回调风格的异步编程最严重的问题之一在于，它极难确保失败会被妥当地报告给回调。
+具有回调风格的异步编程最严重的问题之一在于，它极难确保故障会被妥当地报告给回调。
 
-一个被普遍采用的传统做法是，回调的第一个参数被用于表明操作失败，而第二个参数会包含在操作成功的情况下生成的值。这样的回调函数必须总是检查它们是否收到了异常，以及确保由它们引发的问题(包含被它们调用的函数抛出的异常)被捕获，并传递给正确的函数。
+一个被普遍采用的传统做法是，回调的第一个参数被用于表明操作故障，而第二个参数会包含在操作成功的情况下生成的值。这样的回调函数必须总是检查它们是否收到了异常，以及确保由它们引发的问题(包含被它们调用的函数抛出的异常)被捕获，并传递给正确的函数。
 
 {{index "rejecting (a promise)", "resolving (a promise)", "then method"}}
 
-Promises 使事情变得更简单了。它们既可能兑现(操作成功完成)，也可能会拒绝(操作失败)。兑现处理器(以 `then` 注册)只有在操作成功的情况下才会被调用，而拒绝会被自动传播到被 `then` 返回的新的 promise 中。而且，当一个处理器抛出异常的时候，这将自动导致它拒绝 `then` 的调用所产生的 promise。因此，如果在一连串异步操作中的任何一个元素失败了，整串操作的结果将被标记为已拒绝，并且在失败的点之后不会有兑现处理器被调用。
+Promises 使事情变得更简单了。它们既可能兑现(操作成功完成)，也可能会拒绝(操作故障)。兑现处理器(以 `then` 注册)只有在操作成功的情况下才会被调用，而拒绝会被自动传播到被 `then` 返回的新的 promise 中。而且，当一个处理器抛出异常的时候，这将自动导致它拒绝 `then` 的调用所产生的 promise。因此，如果在一连串异步操作中的任何一个元素出故障了，整串操作的结果将被标记为已拒绝，并且在出故障的点之后不会有兑现处理器被调用。
 
 {{index "Promise.reject function", "Promise class"}}
 
@@ -225,7 +225,7 @@ Promises 使事情变得更简单了。它们既可能兑现(操作成功完成)
 
 除了兑现函数之外，传递给 `Promise` 构造器的函数可接受第二个参数，该参数被用来处理新的 promise 拒绝时的情况。
 
-通过对 `then` and `catch` 的调用而生成的 promise 链值可以被视为异步值或失败通过的管道。由于这样的链是由对处理器的注册而创建的，每一个链接都有一个与之关联的成功处理器或一个拒绝处理器(或两者都有)。与结果类型(成功或失败)不匹配的处理器将会被忽略。但是那些匹配的处理器将被调用，而它们的结果决定哪种值会出现 —— 返回非 promise 值的时候是成功，当它抛出异常的时候则是拒绝，在该值被返回的时候还伴有 promise 的结果。
+通过对 `then` and `catch` 的调用而生成的 promise 链值可以被视为异步值或故障通过的管道。由于这样的链是由对处理器的注册而创建的，每一个链接都有一个与之关联的成功处理器或一个拒绝处理器(或两者都有)。与结果类型(成功或故障)不匹配的处理器将会被忽略。但是那些匹配的处理器将被调用，而它们的结果决定哪种值会出现 —— 返回非 promise 值的时候是成功，当它抛出异常的时候则是拒绝，在该值被返回的时候还伴有 promise 的结果。
 
 ```{test: no}
 new Promise((_, reject) => reject(new Error("Fail")))
@@ -235,7 +235,7 @@ new Promise((_, reject) => reject(new Error("Fail")))
     return "nothing";
   })
   .then(value => console.log("Handler 2", value));
-// → Caught failure Error: Fail   捕获失败错误：失败
+// → Caught failure Error: Fail   捕获故障错误：故障
 // → Handler 2 nothing            第二个处理器  空
 ```
 
@@ -243,7 +243,7 @@ new Promise((_, reject) => reject(new Error("Fail")))
 
 就像未被捕获的异常会被环境给处理掉那样，当一个 promise 的拒绝没有被处理时，JavaScript 环境会检测到这一点，并将其报告为一个错误。
 
-## 网络并不简单Networks are hard
+## 网络可难了
 
 {{index [network, reliability]}}
 
@@ -251,15 +251,15 @@ new Promise((_, reject) => reject(new Error("Fail")))
 
 {{index "send method", error, timeout}}
 
-事实上，这将会导致传递给 `send` 的回调永远也不会被调用，从而可能会导致程序在意识到出现问题之前就停止运行。如果一个请求在一段给定的时间内没有收到响应，它可以 _超时_ 并报告失败的话，那将是挺好的。
+事实上，这将会导致传递给 `send` 的回调永远也不会被调用，从而可能会导致程序在意识到出现问题之前就停止运行。如果一个请求在一段给定的时间内没有收到响应，它可以 _超时_ 并报告故障的话，那将是挺好的。
 
-通常来说，传输失败是随机的事故，比如汽车大灯干扰光信号，只需重试请求就可以致使请求成功。所以，我们使得请求函数在放弃之前自动重发几次请求。
+通常来说，传输故障是随机的事故，比如汽车大灯干扰光信号，只需重试请求就可以致使请求成功。所以，我们使得请求函数在放弃之前自动重发几次请求。
 
 {{index "Promise class", "callback function", [interface, object]}}
 
 另外，由于我们已经确立了 promise 是个好东西，我们也来让请求函数返回一个 promise。就它们所能表达的东西而言，回调和 promise 是相同的。基于回调的函数可以被包装成公开基于 promise 的接口，反之亦然。
 
-即使一个((请求))和它的((响应))都传递无误，其响应可能会指示失败 —— 比方说，如果该请求试图使用一个未被定义的请求类型，或者处理器抛出一个异常的情况。为了应对这样的情况，`send` 和 `defineRequestType` 会遵循之前提到的传统，即如果有失败的原因的话，传递给回调的第一个参数是失败原因，而第二个参数是实际的结果。
+即使一个((请求))和它的((响应))都传递无误，其响应可能会指示故障 —— 比方说，如果该请求试图使用一个未被定义的请求类型，或者处理器抛出一个异常的情况。为了应对这样的情况，`send` 和 `defineRequestType` 会遵循之前提到的传统，即如果有故障的原因的话，传递给回调的第一个参数是故障原因，而第二个参数是实际的结果。
 
 这些可以被我们的包装器转译成 promise 的兑现和拒绝。
 
@@ -327,7 +327,7 @@ function requestType(name, handler) {
 
 {{index "try keyword", "callback function"}}
 
-要注意对 `handler` 的调用必须被包装在一个 `try` 块中，以确保任何由它直接引发的异常会被传递给回调。这很好地说明了使用原生回调妥当处理错误的难处 —— 很容易忘记对异常进行这样妥当的路由，而你要是不这么做的话，失败并不会被报告至正确的回调中。Promises 将这一步很大程度上给自动化了，因此更不容易出错。
+要注意对 `handler` 的调用必须被包装在一个 `try` 块中，以确保任何由它直接引发的异常会被传递给回调。这很好地说明了使用原生回调妥当处理错误的难处 —— 很容易忘记对异常进行这样妥当的路由，而你要是不这么做的话，故障并不会被报告至正确的回调中。Promises 将这一步很大程度上给自动化了，因此更不容易出错。
 
 ## Promises 的集合
 
@@ -355,7 +355,7 @@ function availableNeighbors(nest) {
 
 {{index "then method"}}
 
-当一个邻居鸟巢不可访问时，我们并不想让整个组合起来的 promise 失败，因为那样的话我们什么信息也不会知道。因此，映射到邻居集合并把它们转化为请求 promises 的函数会附有处理器，该处理器使成功的请求生成 `true`， 被拒绝的请求则生成 `false`。
+当一个邻居鸟巢不可访问时，我们并不想让整个组合起来的 promise 出故障，因为那样的话我们什么信息也不会知道。因此，映射到邻居集合并把它们转化为请求 promises 的函数会附有处理器，该处理器使成功的请求生成 `true`， 被拒绝的请求则生成 `false`。
 
 {{index "filter method", "map method", "some method"}}
 
@@ -424,17 +424,11 @@ if}}
 
 一个替代方法是为讯息设置一种从节点对节点进行跳跃的方式，直到它们到达目的地为止。此方法的难点在于，它要求对网络的布局有所了解。为了将一个请求朝一个遥远的鸟巢的方向发送过去，了解发送至哪个邻近鸟巢可以更快到达目的地是必要的。朝错误的方向发送并没有多少用处。
 
-Since each nest knows only about its direct neighbors, it doesn't have
-the information it needs to compute a route. We must somehow spread
-the information about these connections to all nests, preferably in a
-way that allows it to change over time, when nests are abandoned or
-new nests are built.
+由于每个鸟巢只知道与其直接相邻的鸟巢，它并没有计算路径所需要的信息。我们必须想办法将关于这些连接的信息传播到所有鸟巢，最好能允许信息随时间的推移而改变，比如说旧的鸟巢被遗弃或新鸟巢被建造起来。
 
 {{index flooding}}
 
-We can use flooding again, but instead of checking whether a given
-message has already been received, we now check whether the new set of
-neighbors for a given nest matches the current set we have for it.
+我们可以再次使用泛洪，但是与其说检查一条讯息是否已经被接收，我们现在要检查是否一个给定鸟巢新的邻居集合与其当前的邻居集合相匹配。
 
 {{index "broadcastConnections function", "connections binding"}}
 
@@ -469,23 +463,15 @@ everywhere(nest => {
 
 我们使用 `JSON.stringify` 来进行比较，因为将 `==` 用于对象或数组的话，只有在两者的值完全相同时才会返回 true，而这并不是我们当下所需要的。通过比较 JSON 字符串来对其内容进行比较是一个原始但是有效的方法。
 
-The nodes immediately start broadcasting their connections, which
-should, unless some nests are completely unreachable, quickly give
-every nest a map of the current network ((graph)).
+这些节点会立即开始广播它们的连接，这将会很快给予每一个鸟巢一个当前网络((图))的映射(除非某些鸟巢完全无法访问)。
 
 {{index pathfinding}}
 
-A thing you can do with graphs is find routes in them, as we saw in
-[Chapter ?](robot). If we have a route toward a message's
-destination, we know which direction to send it in.
+你可以对图做的一件事情是从它们之间寻找路径，像我们在 [第七章](robot) 中所看到的那样。如果我们有指向一条讯息目的地的路径，我们便知道该往哪个方向发送该讯息。
 
 {{index "findRoute function"}}
 
-这个 `findRoute` 函数This `findRoute` function, which greatly resembles the `findRoute`
-from [Chapter ?](robot#findRoute), searches for a way to reach a given
-node in the network. But instead of returning the whole route, it just
-returns the next step. That next nest will itself, using its current
-information about the network, decide where _it_ sends the message.
+这个 `findRoute` 函数与 [第七章](robot#findRoute) 中的 `findRoute` 很相像，它搜寻一条到达网络中的给定节点的路径。但是与其说返回整个路径，它只返回下一步而已。下一个鸟巢本身会利用它对网络当下的信息，从而决定 _它_ 朝哪里发送讯息。
 
 ```{includeCode: true}
 function findRoute(from, to, connections) {
@@ -503,11 +489,7 @@ function findRoute(from, to, connections) {
 }
 ```
 
-现在我们可以构建一个可以发送长距离讯息的函数。如果讯息将被传达到一个直接邻居，那么它会被正常传达。Now we can build a function that can send long-distance messages. If
-the message is addressed to a direct neighbor, it is delivered as
-usual. If not, it is packaged in an object and sent to a neighbor that
-is closer to the target, using the `"route"` request type, which will
-cause that neighbor to repeat the same behavior.
+现在我们可以构建一个可以发送长距离讯息的函数。如果讯息将被传达到一个直接邻居，那么它会被正常传达。如若不然，它将会被打包成一个对象发送至一个与目标更近的邻居那里，并使用 `"route"` 作为请求类型，使得那个邻居重复同样的行动。
 
 {{index "routeRequest function"}}
 
@@ -531,8 +513,7 @@ requestType("route", (nest, {target, type, content}) => {
 
 {{if interactive
 
-我们现在可以向教堂钟楼上的鸟巢发送一条讯息，也就是去掉四个网络跳跃。We can now send a message to the nest in the church tower, which is
-four network hops removed.
+我们现在可以向教堂钟楼上的鸟巢发送一条讯息，也就是去掉四个网络跃点。
 
 ```
 routeRequest(bigOak, "Church Tower", "note",
@@ -543,27 +524,17 @@ if}}
 
 {{index [network, abstraction], layering}}
 
-We've constructed several layers of functionality on top of a
-primitive communication system to make it convenient to use.
-This is a nice (though simplified) model of how real computer networks
-work.
+我们在原始的通讯系统的基础上构建了数层功能，为了让它便于使用。这是一个描述真实计算机网络如何工作的、不错的(虽然是简化之后的)模型。
 
 {{index error}}
 
-A distinguishing property of computer networks is that they aren't
-reliable—abstractions built on top of them can help, but you can't
-abstract away network failure. So network programming is typically
-very much about anticipating and dealing with failures.
+计算机网络的一个显著特征在于，它们并不可靠 —— 建立在它们的基础之上的抽象层可以提供帮助，但是你不能将网络故障给抽象化。因此，网络编程通常有很大一部分是关于预判和处理故障。
 
 ## Async 函数
 
-为了储存重要信息，((乌鸦))在鸟巢中复制信息的做法是出了名的。这样一来，当一只鹰摧毁了一个鸟巢时，其中的信息并不会丢失。To store important information, ((crow))s are known to duplicate it
-across nests. That way, when a hawk destroys a nest, the information
-isn't lost.
+为了储存重要信息，((乌鸦))在鸟巢中复制信息的做法是出了名的。这样一来，当一只鹰摧毁了一个鸟巢时，其中的信息并不会丢失。
 
-To retrieve a given piece of information that it doesn't have in its
-own storage bulb, a nest computer might consult random other nests in
-the network until it finds one that has it.
+一台巢机为了获取它自己存储鳞茎中没有的一段信息时，它可能会随机咨询网络中其他的鸟巢，直到找到拥有这段信息的鸟巢为止。
 
 {{index "findInStorage function", "network function"}}
 
@@ -601,35 +572,23 @@ function findInRemoteStorage(nest, name) {
 
 {{index "Map class", "Object.keys function", "Array.from function"}}
 
-Because `connections` is a `Map`, `Object.keys` doesn't work on it. It
-has a `keys` _method_, but that returns an iterator rather than an
-array. An iterator (or iterable value) can be converted to an array
-with the `Array.from` function.
+由于 `connections` 是一个 `Map`，`Object.keys` 对其产生不了作用。它有一个 `keys` _方法_，然而那只会返回一个迭代器，而不是一个数组。一个迭代器(或可迭代的值)可以被 `Array.from` 函数转化为一个数组。
 
 {{index "Promise class", recursion}}
 
-Even with promises this is some rather awkward code. Multiple
-asynchronous actions are chained together in non-obvious ways. We
-again need a recursive function (`next`) to model looping through the
-nests.
+即使用了 promise，这也是多少有些尴尬的代码。多个异步操作以一种不明显的方式被串联了起来。我们再次需要一个递归函数(`next`)来对鸟巢的循环进行建模。
 
 {{index "synchronous programming", "asynchronous programming"}}
 
-And the thing the code actually does is completely linear—it always
-waits for the previous action to complete before starting the next
-one. In a synchronous programming model, it'd be simpler to express.
+而且，这代码实际上做的事情完全是线性的 —— 它总会等先前的操作完成之后才开启下一项操作。这在同步编程模型中表达起来会更加容易。
 
 {{index "async function", "await keyword"}}
 
-The good news is that JavaScript allows you to write pseudo-synchronous
-code to describe asynchronous computation. An `async` function is a
-function that implicitly returns a
-promise and that can, in its body, `await` other promises in a way
-that _looks_ synchronous.
+好消息是 JavaScript 允许你写用于描述异步运算的伪同步代码。一个 `async` 函数是一个隐性返回一个 promise 的函数，而且它可以在其主体中以一种 _看似_ 同步的方式 `await`(译者注：期盼) 其他 promise。  
 
 {{index "findInStorage function"}}
 
-We can rewrite `findInStorage` like this:
+我们可以这样重写 `findInStorage`：
 
 ```
 async function findInStorage(nest, name) {
@@ -653,12 +612,7 @@ async function findInStorage(nest, name) {
 
 {{index "async function", "return keyword", "exception handling"}}
 
-An `async` function is marked by the word `async` before the
-`function` keyword. Methods can also be made `async` by writing
-`async` before their name. When such a function or method is called,
-it returns a promise. As soon as the body returns something, that
-promise is resolved. If it throws an exception, the promise is
-rejected.
+一个 `async` 函数由 `function` 关键词前面的 `async` 单词所标记。在方法前面加上 `async` 也会使得它们变得 `async`。当一个这样的函数或方法被调用的时候，它会返回一个 promise。其主体一旦有返回什么东西，该 promise 会立即兑现。如果它抛出了异常的话，则该 promise 被拒绝。
 
 {{if interactive
 
@@ -671,19 +625,11 @@ if}}
 
 {{index "await keyword", ["control flow", asynchronous]}}
 
-Inside an `async` function, the word `await` can be put in front of an
-expression to wait for a promise to resolve and only then continue
-the execution of the function.
+在一个 `async` 函数中，单词 `await` 可以被放置于一个表达式的前面，以等待一个 promise 兑现，并且仅在那之后继续执行该函数。
 
-Such a function no longer, like a regular JavaScript function, runs
-from start to completion in one go. Instead, it can be _frozen_ at any
-point that has an `await`, and can be resumed at a later time.
+与普通的 JavaScript 函数不同，这样的函数不再从开启到结束一气呵成。相反，它在任何具有 `await` 的时间点都可以被 _冻结_，并且可以在之后的时间点恢复。
 
-For non-trivial asynchronous code, this notation is usually more
-convenient than directly using promises. Even if you need to do
-something that doesn't fit the synchronous model, such as perform
-multiple actions at the same time, it is easy to combine `await` with
-the direct use of promises.
+对于并不简易的异步代码来说，这个写法通常比直接使用 promise 更加方便。即使你需要做一些并不符合同步模型的事情，比如说同时执行多项操作，将 `await` 与 promise 的直接使用相结合也是容易的。
 
 ## 生成器
 
@@ -691,10 +637,7 @@ the direct use of promises.
 
 函数可以被暂停而后再次恢复的能力并不是 `async` 函数所独有的。JavaScript 函数还有一个名为 _((generator))(生成器)_ 函数的特性。两者类似，但生成器没有用到 promise。
 
-当你用 `function*`(在单词 `function` 后面放一个星号) 定义一个函数的时候，它会成为生成器。当你调用一个生成器时，它返回一个我们在[第六章](object)已经见过的((迭代器))。When you define a function with `function*` (placing an asterisk after
-the word `function`), it becomes a generator. When you call a
-generator, it returns an ((iterator)), which we already saw in
-[Chapter ?](object).
+当你用 `function*`(在单词 `function` 后面放一个星号) 定义一个函数的时候，它会成为生成器。当你调用一个生成器时，它返回一个我们在[第六章](object)已经见过的((迭代器))。
 
 ```
 function* powers(n) {
@@ -714,17 +657,9 @@ for (let power of powers(3)) {
 
 {{index "next method", "yield keyword"}}
 
-Initially, when you call `powers`, the function is frozen at its
-start. Every time you call `next` on the iterator, the function runs
-until it hits a `yield` expression, which pauses it and causes the
-yielded value to become the next value produced by the iterator. When
-the function returns (the one in the example never does), the iterator
-is done.
+当你一开始调用 `powers` 的时候，函数会在其起点被冻结。你每次调用迭代器的 `next` 的时候，该函数会一直运行，直到碰上 `yield`(译者注：产出) 表达式，该表达式会暂停它，并且导致产出的值成为下一个迭代器所生成的值。当函数返回的时候(示例中的函数永远不会返回)，迭代器就结束了。
 
-Writing iterators is often much easier when you use generator
-functions. The iterator for the `Group` class (from the exercise in
-[Chapter ?](object#group_iterator)) can be written with this
-generator:
+当你使用生成器函数的时候，编写迭代器通常会容易许多。用于 `Group` 类(来自[第六章](object#group_iterator)的练习题)的迭代器可以用这个生成器来编写：
 
 {{index "Group class"}}
 
@@ -745,35 +680,23 @@ class Group {
 
 {{index [state, in iterator]}}
 
-There's no longer a need to create an object to hold the iteration
-state—generators automatically save their local state every time
-they yield.
+我们不再需要去创建一个保留迭代状态的对象 —— 生成器在每一次产出的时候会自动保存它们的本地状态。
 
-Such `yield` expressions may occur only directly in the generator
-function itself and not in an inner function you define inside of it.
-The state a generator saves, when yielding, is only its _local_
-environment and the position where it yielded.
+这样的 `yield` 表达式可能只会直接在生成器函数之中出现，而不会出现在你所定义的一个内部函数里。当产出时，生成器所保存的状态只会是它的 _本地_ 环境以及它产出的位置。
 
 {{index "await keyword"}}
 
-An `async` function is a special type of generator. It produces a
-promise when called, which is resolved when it returns (finishes) and
-rejected when it throws an exception. Whenever it yields (awaits) a
-promise, the result of that promise (value or thrown exception) is the
-result of the `await` expression.
+一个 `async` 函数是一种特殊类型的生成器。它被调用时生成一个 promise，这个 promise 会在它返回(完成)时被兑现、在抛出异常时被拒绝。无论什么时候它产出(期盼)一个 promise，那个 promise 的结果(值或者是抛出的异常)就会是 `await` 表达式的结果。
 
-## 事件环The event loop
+## 事件循环The event loop
 
 {{index "asynchronous programming", scheduling, "event loop", timeline}}
 
-Asynchronous programs are executed piece by piece. Each piece may
-start some actions and schedule code to be executed when the action
-finishes or fails. In between these pieces, the program sits idle,
-waiting for the next action.
+异步程序是逐段被执行的。每一段可能开启某些操作，且计划在这些操作完成或出故障时执行某些代码。在这些段之间，程序处于空闲状态，等待下一个操作。
 
 {{index "setTimeout function"}}
 
-So callbacks are not directly called by the code that scheduled them.
+所以说回调并不是被计划它们的代码直接调用的。如果我从一个函数里调用 `setTimeout` So callbacks are not directly called by the code that scheduled them.
 If I call `setTimeout` from within a function, that function will have
 returned by the time the callback function is called. And when the
 callback returns, control does not go back to the function that
@@ -781,7 +704,7 @@ scheduled it.
 
 {{index "Promise class", "catch keyword", "exception handling"}}
 
-Asynchronous behavior happens on its own empty function ((call
+异步行为在它自己的空函数中发生(())Asynchronous behavior happens on its own empty function ((call
 stack)). This is one of the reasons that, without promises, managing
 exceptions across asynchronous code is hard. Since each callback
 starts with a mostly empty stack, your `catch` handlers won't be on
@@ -825,9 +748,7 @@ console.log("Wasted time until", Date.now() - start);
 
 {{index "resolving (a promise)", "rejecting (a promise)", "Promise class"}}
 
-Promises always resolve or reject as a new event. Even if a promise is
-already resolved, waiting for it will cause your callback to run after
-the current script finishes, rather than right away.
+Promises 总是作为一个新的事件来兑现或拒绝。即使一个 promise 已经兑现了，等待它将会导致你的回调在当前的脚本结束之后运行，而不是立刻运行。
 
 ```
 Promise.resolve("Done").then(console.log);
@@ -940,7 +861,7 @@ relatively easy.
 
 ## 摘要Summary
 
-Asynchronous programming makes it possible to express waiting for
+异步编程使得这样一种表达成为可能：即等待长时间运行的操作时无需在这些操作的过程中成为Asynchronous programming makes it possible to express waiting for
 long-running actions without freezing the program during these
 actions. JavaScript environments typically implement this style of
 programming using callbacks, functions that are called when the
