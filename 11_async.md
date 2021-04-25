@@ -1,6 +1,6 @@
 {{meta {load_files: ["code/crow-tech.js", "code/chapter/11_async.js"]}}}
 
-# 异步编程Asynchronous Programming
+# 异步编程
 
 {{quote {author: "Laozi", title: "Tao Te Ching", chapter: true}
 
@@ -21,7 +21,7 @@ quote}}
 
 当这样的事情发生之际，让处理器处于闲置的状态是很可惜的 —— 可能它同时还有别的可以做的事情。在某种程度上，这是你的操作系统要处理的事情，它会在多个运行着的程序之间切换处理器。但是当我们只有 _单个_ 程序在等待网络请求并需要有进展的时候，这就帮不到忙了。
 
-## 异步性Asynchronicity
+## 异步性
 
 {{index "synchronous programming"}}
 
@@ -163,7 +163,7 @@ defineRequestType("note", (nest, content, source, done) => {
 ```
 let fifteen = Promise.resolve(15);
 fifteen.then(value => console.log(`Got ${value}`));
-// → Got 15    获取 15
+// → Got 15     获取 15
 ```
 
 {{index "then method"}}
@@ -365,7 +365,7 @@ function availableNeighbors(nest) {
 
 只有相邻鸟巢之间可以沟通的这个事实阻碍了这个网络的实用性。
 
-为了向整个网络广播信息，一个解决方法是设置一种自动转发给其他邻居的请求种类。然后这些邻居会依次转发给它们的邻居，直到整个网络都收到讯息。
+为了向整个网络广播信息，一个解决方法是设置一种自动转发给其他邻居的请求类型。然后这些邻居会依次转发给它们的邻居，直到整个网络都收到讯息。
 
 {{index "sendGossip function"}}
 
@@ -688,7 +688,7 @@ class Group {
 
 一个 `async` 函数是一种特殊类型的生成器。它被调用时生成一个 promise，这个 promise 会在它返回(完成)时被兑现、在抛出异常时被拒绝。无论什么时候它产出(期盼)一个 promise，那个 promise 的结果(值或者是抛出的异常)就会是 `await` 表达式的结果。
 
-## 事件循环The event loop
+## 事件循环
 
 {{index "asynchronous programming", scheduling, "event loop", timeline}}
 
@@ -696,19 +696,11 @@ class Group {
 
 {{index "setTimeout function"}}
 
-所以说回调并不是被计划它们的代码直接调用的。如果我从一个函数里调用 `setTimeout` So callbacks are not directly called by the code that scheduled them.
-If I call `setTimeout` from within a function, that function will have
-returned by the time the callback function is called. And when the
-callback returns, control does not go back to the function that
-scheduled it.
+所以说回调并不是被计划它们的代码直接调用的。如果我从一个函数里调用 `setTimeout`，那个函数在回调函数被调用的时候已经返回了，控制并不会回到计划它的函数那里。
 
 {{index "Promise class", "catch keyword", "exception handling"}}
 
-异步行为在它自己的空函数中发生(())Asynchronous behavior happens on its own empty function ((call
-stack)). This is one of the reasons that, without promises, managing
-exceptions across asynchronous code is hard. Since each callback
-starts with a mostly empty stack, your `catch` handlers won't be on
-the stack when they throw an exception.
+异步行为在它自己的空函数((调用堆栈))中发生。这也是在没有 promise 的情况下的异步代码中难以管理异常的原因之一。由于每个回调都从一个几乎是空的堆栈开始，当它们抛出异常的时候，你的 `catch` 处理器不会在堆栈上。
 
 ```
 try {
@@ -716,24 +708,16 @@ try {
     throw new Error("Woosh");
   }, 20);
 } catch (_) {
-  // This will not run
+  // 以下代码并不会运行
   console.log("Caught!");
 }
 ```
 
 {{index thread, queue}}
 
-No matter how closely together events—such as timeouts or incoming
-requests—happen, a JavaScript environment will run only one program at
-a time. You can think of this as it running a big loop _around_ your
-program, called the _event loop_. When there's nothing to be done,
-that loop is stopped. But as events come in, they are added to a queue,
-and their code is executed one after the other. Because no two things
-run at the same time, slow-running code might delay the handling of
-other events.
+无论事件之间 —— 诸如 timeouts(译者注：超时) 或者传入的请求 —— 有多近，一个 JavaScript 环境一次只会运行一个程序。你可以将其视为一个运行着的、_围绕_ 着你的程序的大循环，名为 _事件循环_。当没有事情需要被完成的时候，这个循环就会停止。但是当事件传入时，它们会被添加到一个队列中，而且它们的代码会一个接一个地被执行。由于不会有两件事同时运行，缓慢运行的代码可能会使其他事件的处理延后。
 
-This example sets a timeout but then dallies until after the
-timeout's intended point of time, causing the timeout to be late.
+这个示例设置了一个 timeout，但是闲置直到 timeout 预期的时间点之后，使得该 timeout 过时了。
 
 ```
 let start = Date.now();
@@ -742,8 +726,8 @@ setTimeout(() => {
 }, 20);
 while (Date.now() < start + 50) {}
 console.log("Wasted time until", Date.now() - start);
-// → Wasted time until 50
-// → Timeout ran at 55
+// → Wasted time until 50     浪费时间至50毫秒之后
+// → Timeout ran at 55        超时在第55毫秒时运行
 ```
 
 {{index "resolving (a promise)", "rejecting (a promise)", "Promise class"}}
@@ -753,25 +737,19 @@ Promises 总是作为一个新的事件来兑现或拒绝。即使一个 promise
 ```
 Promise.resolve("Done").then(console.log);
 console.log("Me first!");
-// → Me first!
-// → Done
+// → Me first!      我先出现！
+// → Done           完毕
 ```
 
 在之后的章节中，我们会见到多种在事件循环上运行的其他类型的事件。
 
-## 异步 bugs Asynchronous bugs
+## 异步 bugs
 
 {{index "asynchronous programming", [state, transitions]}}
 
-When your program runs synchronously, in a single go, there are no
-state changes happening except those that the program itself
-makes. For asynchronous programs this is different—they may have
-_gaps_ in their execution during which other code can run.
+当你的程序一次性同步运行时，除了程序本身产生的状态变化之外，并没有其他的状态变化发生。对于异步程序来说这就有所不同 —— 它们可能在执行期间有 _间隙_，从而让别的代码可以运行其中。
 
-Let's look at an example. One of the hobbies of our crows is to count
-the number of chicks that hatch throughout the village every year.
-Nests store this count in their storage bulbs. The following code tries to
-enumerate the counts from all the nests for a given year:
+让我们来看一个示例。我们的乌鸦的爱好之一是数点每年村子里孵化了多少只小鸡。鸟巢会将这个计数存入它们的存储鳞茎。以下代码试图列举给定年份中来自所有鸟巢的计数：
 
 {{index "anyStorage function", "chicks function"}}
 
@@ -794,18 +772,13 @@ async function chicks(nest, year) {
 
 {{index "async function"}}
 
-The `async name =>` part shows that ((arrow function))s can also be
-made `async` by putting the word `async` in front of them.
+带有 `async name =>` 的部分表明了((箭头函数))也可以被 `async` 化，只要在它们前面放上单词 `async` 即可。
 
 {{index "Promise.all function"}}
 
-The code doesn't immediately look suspicious...it maps the `async`
-arrow function over the set of nests, creating an array of promises,
-and then uses `Promise.all` to wait for all of these before returning
-the list they build up.
+这段代码并不会立即让人产生怀疑 —— 它将 `async` 箭头函数映射于鸟巢的集合，创建一个由 promises 组成的数组，然后使用 `Promise.all` 在返回所有 promises 构建的 list 之前等待它们。
 
-But it is seriously broken. It'll always return only a single line of
-output, listing the nest that was slowest to respond.
+但是这其实很有问题。它总是只返回一行输出，列出响应速度最慢的鸟巢。
 
 {{if interactive
 
@@ -815,31 +788,19 @@ chicks(bigOak, 2017).then(console.log);
 
 if}}
 
-Can you work out why?
+你能弄清楚这是为什么吗？
 
 {{index "+= operator"}}
 
-The problem lies in the `+=` operator, which takes the _current_ value
-of `list` at the time where the statement starts executing and then,
-when the `await` finishes, sets the `list` binding to be that value
-plus the added string.
+问题在于 `+=` 运算符，该运算符在语句开始执行的时候提取 `list` _当前_ 的值，然后当 `await` 完成时将 `list` 绑定设置为这个值并且加上增添的字符串。
 
 {{index "await keyword"}}
 
-But between the time where the statement starts executing and the time
-where it finishes there's an asynchronous gap. The `map` expression
-runs before anything has been added to the list, so each of the `+=`
-operators starts from an empty string and ends up, when its storage
-retrieval finishes, setting `list` to a single-line list—the result of
-adding its line to the empty string.
+然而，在语句开始执行与结束之间的这段时间里存在一个异步间隙。`map` 表达式在任何东西被添加到 list 之前就运行了，所以每一个 `+=` 运算符从一个空的字符串开始，然后在它的存储获取结束之后，将 `list` 设为一行 list —— 把这行加入空字符串的结果。
 
 {{index "side effect"}}
 
-This could have easily been avoided by returning the lines from the
-mapped promises and calling `join` on the result of `Promise.all`,
-instead of building up the list by changing a binding. As usual,
-computing new values is less error-prone than changing existing
-values.
+与其说通过改变绑定来构建这个 list，如果返回映射的 promise 行并且对 `Promise.all` 的结果调用 `join`的话，就可以轻易避免以上的问题。像往常一样，计算新的值比更改现有的值要更不容易出错。
 
 {{index "chicks function"}}
 
@@ -853,58 +814,33 @@ async function chicks(nest, year) {
 }
 ```
 
-Mistakes like this are easy to make, especially when using `await`,
-and you should be aware of where the gaps in your code occur. An
-advantage of JavaScript's _explicit_ asynchronicity (whether through
-callbacks, promises, or `await`) is that spotting these gaps is
-relatively easy.
+像这样的错误是容易犯的，尤其是当你使用 `await` 的时候，而且你应该了解你代码中的间隙出现的位置。JavaScript 的 _显性_ 异步性(可能通过回调、promise、或 `await`)的一个优点在于，找出这些间隙相对来说比较容易。
 
 ## 摘要Summary
 
-异步编程使得这样一种表达成为可能：即等待长时间运行的操作时无需在这些操作的过程中成为Asynchronous programming makes it possible to express waiting for
-long-running actions without freezing the program during these
-actions. JavaScript environments typically implement this style of
-programming using callbacks, functions that are called when the
-actions complete. An event loop schedules such callbacks to be called
-when appropriate, one after the other, so that their execution does
-not overlap.
+异步编程使得这样一种表达成为可能：即等待长时间运行的操作时无需将程序冻结。JavaScript 环境通常用回调实现这种风格的编程，回调是当操作完成时调用的函数。一个事件循环会计划在妥当的时机一个接一个调用这样的回调，从而令它们的执行不会重叠。
 
-Programming asynchronously is made easier by promises, objects that
-represent actions that might complete in the future, and `async`
-functions, which allow you to write an asynchronous program as if it
-were synchronous.
+异步编程由于 promises 和 `async` 函数而变得更为简单。Promise 是表示可能在未来才完成的操作的对象，`async` 函数允许你像同步程序一样编写异步程序。
 
-## 练习题Exercises
+## 练习题
 
 ### 追踪手术刀Tracking the scalpel
 
 {{index "scalpel (exercise)"}}
 
-The village crows own an old scalpel that they occasionally use on
-special missions—say, to cut through screen doors or packaging. To be
-able to quickly track it down, every time the scalpel is moved to
-another nest, an entry is added to the storage of both the nest that
-had it and the nest that took it, under the name `"scalpel"`, with its
-new location as the value.
+村里的乌鸦拥有一把旧手术刀，它们偶尔在特殊任务中才会用到 —— 比如说切掉挡道的物体或者包裹。为了能快速追踪手术刀的下落，每一次手术刀被移动到另一个鸟巢的时候，一个条目会被添加到原本有手术刀的鸟巢和刚获得手术刀的鸟巢的存储鳞茎中，被放到 `"scalpel"` 名下，以其新位置为值。
 
-This means that finding the scalpel is a matter of following the
-breadcrumb trail of storage entries, until you find a nest where that
-points at the nest itself.
+这意味着寻找手术刀需要一路跟随存储条目的面包屑的踪迹，直到你找到一个指向其本身的鸟巢。
 
 {{index "anyStorage function", "async function"}}
 
-Write an `async` function `locateScalpel` that does this, starting at
-the nest on which it runs. You can use the `anyStorage` function
-defined earlier to access storage in arbitrary nests. The scalpel has
-been going around long enough that you may assume that every nest has
-a `"scalpel"` entry in its data storage.
+编写一个可以达到以上效果的名为 `locateScalpel` 的 `async` 函数，以它运行着的鸟巢为起点。你可以使用先前定义好的 `anyStorage` 函数来访问任意鸟巢的存储鳞茎。你可以假设该手术刀已经在鸟巢中流通了足够久的时间，以至于每一个鸟巢在其数据存储中都拥有一个 `"scalpel"` 条目。
 
-Next, write the same function again without using `async` and `await`.
+在那之后，在不使用 `async` 和 `await` 的情况下编写同样的函数。
 
 {{index "exception handling"}}
 
-Do request failures properly show up as rejections of the returned
-promise in both versions? How?
+在两个版本中，请求故障有没有妥当地以返回的 promise 的拒绝形式出现？怎么回事？
 
 {{if interactive
 
@@ -918,7 +854,7 @@ function locateScalpel2(nest) {
 }
 
 locateScalpel(bigOak).then(console.log);
-// → Butcher Shop
+// → Butcher Shop     屠宰门店
 ```
 
 if}}
@@ -927,55 +863,31 @@ if}}
 
 {{index "scalpel (exercise)"}}
 
-This can be done with a single loop that searches through the nests,
-moving forward to the next when it finds a value that doesn't match
-the current nest's name and returning the name when it finds a
-matching value. In the `async` function, a regular `for` or `while`
-loop can be used.
+这可以用一个搜遍鸟巢的循环来解决，当它找到的值不符合当前鸟巢名的时候，继续往下一个鸟巢搜寻，并且在找到匹配值的时候将其名字返回。在 `async` 函数中，可以使用一个正常的 `for` 或 `while` 循环。
 
 {{index recursion}}
 
-To do the same in a plain function, you will have to build your loop
-using a recursive function. The easiest way to do this is to have that
-function return a promise by calling `then` on the promise that
-retrieves the storage value. Depending on whether that value matches
-the name of the current nest, the handler returns that value or a
-further promise created by calling the loop function again.
+想要以普通的函数达到同样目的，你将必须使用一个递归函数来构建你的循环。最简单的做法是通过调用获取存储值的 promise 上的 `then` 来致使该函数返回一个 promise。取决于那个值是否匹配当前的鸟巢名称，处理器会返回其值，或者返回由于再次调用循环函数而创建的另外一个 promise。
 
-Don't forget to start the loop by calling the recursive function once
-from the main function.
+不要忘了通过从主函数调用一次递归函数来开始循坏。
 
 {{index "exception handling"}}
 
-In the `async` function, rejected promises are converted to exceptions
-by `await`. When an `async` function throws an exception, its promise
-is rejected. So that works.
+在 `async` 函数中，被拒绝的 promises 会被 `await` 转化为异常。当一个 `async` 函数抛出异常时，它的 promise 就被拒绝，所以这行得通。
 
-If you implemented the non-`async` function as outlined earlier, the way
-`then` works also automatically causes a failure to end up in the
-returned promise. If a request fails, the handler passed to `then`
-isn't called, and the promise it returns is rejected with the same
-reason.
+如果你如上述所示的那样实现了不含 `async` 的函数，`then` 工作的方式会自动导致返回的 promise 中出现一个故障。如果一个请求出了故障，传递给 `then` 的处理器不会被调用，并且它返回的 promise 会被同样的原因给拒绝。
 
 hint}}
 
-### 建立 Promise.all 
+### 建立 Promise.all
 
 {{index "Promise class", "Promise.all function", "building Promise.all (exercise)"}}
 
-Given an array of ((promise))s, `Promise.all` returns a promise that
-waits for all of the promises in the array to finish. It then
-succeeds, yielding an array of result values. If a promise
-in the array fails, the promise returned by `all` fails too, with the
-failure reason from the failing promise.
+给定一个由 ((promise)) 组成的数组，`Promise.all` 会返回一个等待所有数组中的 promises 完成的 promise。然后它会成功，产出一个由结果值组成的数组。如果在数组中有一个 promise 出故障，由 `all` 返回的 promise 也会出故障，其故障原因来自出故障的那个 promise。
 
-Implement something like this yourself as a regular function
-called `Promise_all`.
+你自己来编写一个名为 `Promise_all` 的正常的函数来实现这种功能。
 
-Remember that after a promise has succeeded or failed, it can't
-succeed or fail again, and further calls to the functions that resolve
-it are ignored. This can simplify the way you handle failure of your
-promise.
+记住，当一个 promise 成功或出故障之后，它不能再次成功或出故障，并且对兑现它的函数进行更多的调用会被忽视。这可以简化你处理 promise 的故障的方式。
 
 {{if interactive
 
@@ -1015,25 +927,12 @@ if}}
 
 {{index "Promise.all function", "Promise class", "then method", "building Promise.all (exercise)"}}
 
-The function passed to the `Promise` constructor will have to call
-`then` on each of the promises in the given array. When one of them
-succeeds, two things need to happen. The resulting value needs to be
-stored in the correct position of a result array, and we must check
-whether this was the last pending ((promise)) and finish our own
-promise if it was.
+传递给 `Promise` 构造器的函数需要对给定数组中每一个 promise 调用 `then`。当其中一个 promise 成功时，两件事情需要发生。作为结果的值需要被存入结果数组中正确的位置，而且我们必须查验这是否是最后一个待定的((promise))，如果是的话就完成我们自己的 promise。
 
 {{index "counter variable"}}
 
-The latter can be done with a counter that is initialized to the
-length of the input array and from which we subtract 1 every time a
-promise succeeds. When it reaches 0, we are done. Make sure you take
-into account the situation where the input array is empty (and thus no
-promise will ever resolve).
+后者可以用一个 counter 来实现，这个 counter 会被初始化为输入数组的长度，并且每次有一个 promise 成功时，我们从中减去 1。当 counter 变为 0 的时候，任务就完成了。要确保你把输入数组为空的情况(所以根本没有 promise 会被兑现)也纳入考虑之中。
 
-Handling failure requires some thought but turns out to be extremely
-simple. Just pass the `reject` function of the wrapping promise to
-each of the promises in the array as a `catch` handler or as a second
-argument to `then` so that a failure in one of them triggers the
-rejection of the whole wrapper promise.
+处理故障需要动一些脑筋，但其实非常简单。仅仅把用于包装的 promise 的 `reject` 函数传递给数组中每一个 promise，作为一个 `catch` 处理器或者是 `then` 的第二个参数，从而使得两者中一旦出现故障，就会引发整个包装器 promise 的拒绝。
 
 hint}}
