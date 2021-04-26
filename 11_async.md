@@ -816,7 +816,7 @@ async function chicks(nest, year) {
 
 像这样的错误是容易犯的，尤其是当你使用 `await` 的时候，而且你应该了解你代码中的间隙出现的位置。JavaScript 的 _显性_ 异步性(可能通过回调、promise、或 `await`)的一个优点在于，找出这些间隙相对来说比较容易。
 
-## 摘要Summary
+## 摘要
 
 异步编程使得这样一种表达成为可能：即等待长时间运行的操作时无需将程序冻结。JavaScript 环境通常用回调实现这种风格的编程，回调是当操作完成时调用的函数。一个事件循环会计划在妥当的时机一个接一个调用这样的回调，从而令它们的执行不会重叠。
 
@@ -824,7 +824,7 @@ async function chicks(nest, year) {
 
 ## 练习题
 
-### 追踪手术刀Tracking the scalpel
+### 追踪手术刀
 
 {{index "scalpel (exercise)"}}
 
