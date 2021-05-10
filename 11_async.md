@@ -162,7 +162,7 @@ defineRequestType("note", (nest, content, source, done) => {
 
 ```
 let fifteen = Promise.resolve(15);
-fifteen.then(value => console.log(`Got ${value}`));
+fifteen.then(value => console.log(`获取 ${value}`));
 // → 获取 15
 ```
 
