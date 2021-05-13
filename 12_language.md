@@ -1,11 +1,10 @@
 {{meta {load_files: ["code/chapter/12_language.js"], zip: "node/html"}}}
 
-# Project: A Programming Language
+# 项目：一门编程语言
 
 {{quote {author: "Hal Abelson and Gerald Sussman", title: "Structure and Interpretation of Computer Programs", chapter: true}
 
-The evaluator, which determines the meaning of expressions in a
-programming language, is just another program.
+求值器可以决定一门编程语言中表达式的含义，而它本身也只是一个程序。
 
 quote}}
 
@@ -13,54 +12,33 @@ quote}}
 
 {{figure {url: "img/chapter_picture_12.jpg", alt: "Picture of an egg with smaller eggs inside", chapter: "framed"}}}
 
-Building your own ((programming language)) is surprisingly easy (as
-long as you do not aim too high) and very enlightening.
+构建你自己的((编程语言))其实出乎意料地简单(只要你的要求不是太高)而且很启发人。
 
-The main thing I want to show in this chapter is that there is no
-((magic)) involved in building your own language. I've often felt that
-some human inventions were so immensely clever and complicated that
-I'd never be able to understand them. But with a little reading and
-experimenting, they often turn out to be quite mundane.
+我想要透过本章传达的主要信息在于，构建你自己的编程语言并不需要什么((魔法))。我常常感到有些人类的发明聪明绝顶、纷繁复杂，以至于我永远也无法理解它们。然而通过少量的阅读和实验之后，我常发现它们也不过如此。
 
 {{index "Egg language", [abstraction, "in Egg"]}}
 
-We will build a programming language called Egg. It will be a tiny,
-simple language—but one that is powerful enough to express any
-computation you can think of. It will allow simple ((abstraction))
-based on ((function))s.
+我们将构建一门名为 Egg 的编程语言。它将会是一门微小、简易的语言 —— 但又足够强大，可以表达你所能想到的任何计算。它会允许基于((函数))的简单的((抽象化))。
 
 {{id parsing}}
 
-## Parsing
+## 解析
 
 {{index parsing, validation, [syntax, "of Egg"]}}
 
-The most immediately visible part of a programming language is its
-_syntax_, or notation. A _parser_ is a program that reads a piece
-of text and produces a data structure that reflects the structure of
-the program contained in that text. If the text does not form a valid
-program, the parser should point out the error.
+一门编程语言最显而易见的部分就是其 _句法_，或者说写法。一个 _解析器_ 是一个程序，它读取一段文本，然后生成一个数据结构，以反映那段文本所含的程序的结构。如果这段文本并不能形成有效的程序，那么解析器应当指出其错误。
 
 {{index "special form", [function, application]}}
 
-Our language will have a simple and uniform syntax. Everything in Egg
-is an ((expression)). An expression can be the name of a binding, a
-number, a string, or an _application_. Applications are used for
-function calls but also for constructs such as `if` or `while`.
+我们的语言将会有简洁而统一的句法。Egg 中的所有东西都是((表达式))。一个表达式可以是绑定的名字、一个数字、一个字符串，或者一个 _应用_。应用可以被用于函数的调用，以及诸如 `if` 或者 `while` 这样的构造。
 
 {{index "double-quote character", parsing, [escaping, "in strings"], [whitespace, syntax]}}
 
-To keep the parser simple, strings in Egg do not support anything like
-backslash escapes. A string is simply a sequence of characters that
-are not double quotes, wrapped in double quotes. A number is a
-sequence of digits. Binding names can consist of any character that is
-not whitespace and that does not have a special meaning in the syntax.
+为了使解析器使用起来简单，在 Egg 中的字符串并不支持类似反斜杠转义符这样的东西。字符串只是被双引号包起来的非双引号的字符序列。一个数值是数字的序列。绑定名称可以包含任何不是空白的、在句法中没有特殊含义的字符。
 
 {{index "comma character", [parentheses, arguments]}}
 
-Applications are written the way they are in JavaScript, by putting
-parentheses after an expression and having any number of
-((argument))s between those parentheses, separated by commas.
+应用的写法与在 JavaScript 中一样，即通过在表达式后面放置括号，在括号中定义任意数量的、以逗号分隔的((参数))。
 
 ```{lang: null}
 do(define(x, 10),
@@ -71,31 +49,17 @@ do(define(x, 10),
 
 {{index block, [syntax, "of Egg"]}}
 
-The ((uniformity)) of the ((Egg language)) means that things that are
-((operator))s in JavaScript (such as `>`) are normal bindings in this
-language, applied just like other ((function))s. And since the
-syntax has no concept of a block, we need a `do` construct to
-represent doing multiple things in sequence.
+((Egg 语言))的((统一性))意味着 JavaScript 中的((运算符))(比如 `>`)在这门语言中只是普通的绑定，应用起来就像其他的((函数))一样。而且由于句法中没有语句块的概念，我们需要一个 `do` 结构来表示多项操作的依次执行。
 
 {{index "type property", parsing, ["data structure", tree]}}
 
-The data structure that the parser will use to describe a program
-consists of ((expression)) objects, each of which has a `type`
-property indicating the kind of expression it is and other properties
-to describe its content.
+解析器用于描述程序的数据结构由((表达式))对象组成，每个对象都含有一个表明表达式种类的 `type` 属性，以及其他描述其内容的属性。
 
 {{index identifier}}
 
-Expressions of type `"value"` represent literal strings or numbers.
-Their `value` property contains the string or number value that they
-represent. Expressions of type `"word"` are used for identifiers
-(names). Such objects have a `name` property that holds the
-identifier's name as a string. Finally, `"apply"` expressions
-represent applications. They have an `operator` property that refers
-to the expression that is being applied, as well as an `args` property that
-holds an array of argument expressions.
+属于 `"value"` 类型的表达式表示字面字符串和数字。它们的 `value` 属性包含了其表示的字符串或数字。`"word"` 类型的表达式则被用于标识器(名称)。这样的对象有一个 `name` 属性，该属性存有字符串形式的标识器名称。最后，`"apply"` 表达式表示应用，它们有一个 `operator` 属性，该属性指向正在被应用的表达式。此外，`"apply"` 表达式还有一个保存一个由参数表达式组成的数组的 `args` 属性。
 
-The `>(x, 5)` part of the previous program would be represented like this:
+之前程序中 `>(x, 5)` 的部分会被这样表达：
 
 ```{lang: "application/json"}
 {
@@ -110,46 +74,27 @@ The `>(x, 5)` part of the previous program would be represented like this:
 
 {{indexsee "abstract syntax tree", "syntax tree", ["data structure", tree]}}
 
-Such a data structure is called a _((syntax tree))_. If you
-imagine the objects as dots and the links between them as lines
-between those dots, it has a ((tree))like shape. The fact that
-expressions contain other expressions, which in turn might contain
-more expressions, is similar to the way tree branches split and split
-again.
+这样的数据结构被称为 _((句法树))_。如果你将对象想像成点，而对象之间的链接想像成这些点之间的线段的话，它就有了一个((树))的形状。表达式之中包含了其他表达式，而其他的表达式可能含有更多的表达式 —— 这就像一再分杈的树枝一样。
 
 {{figure {url: "img/syntax_tree.svg", alt: "The structure of a syntax tree",width: "5cm"}}}
 
 {{index parsing}}
 
-Contrast this to the parser we wrote for the configuration file format
-in [Chapter ?](regexp#ini), which had a simple structure: it split the
-input into lines and handled those lines one at a time. There were
-only a few simple forms that a line was allowed to have.
+将这个解析器与我们在[第九章](regexp#ini)里给配置文件格式写的解析器做一个对比，我们发现之前的解析器有一个简单的结构：它将输入分割成行，并且逐行进行处理。每一行只允许有几种简单的形式。
 
 {{index recursion, [nesting, "of expressions"]}}
 
-Here we must find a different approach. Expressions are not separated
-into lines, and they have a recursive structure. Application
-expressions _contain_ other expressions.
+我们必须找到一个不同的办法来面对当下的问题。表达式并没有被分割成行，而且它们有一个递归的结构。应用表达式 _包含_ 其他的表达式。
 
 {{index elegance}}
 
-Fortunately, this problem can be solved very well by writing a parser
-function that is recursive in a way that reflects the recursive nature
-of the language.
+幸运的是，通过编写一个能反映这种语言本身递归性质的递归解析器函数就可以很好地解决这个问题。
 
 {{index "parseExpression function", "syntax tree"}}
 
-We define a function `parseExpression`, which takes a string as input
-and returns an object containing the data structure for the expression
-at the start of the string, along with the part of the string left
-after parsing this expression. When parsing subexpressions (the
-argument to an application, for example), this function can be called
-again, yielding the argument expression as well as the text that
-remains. This text may in turn contain more arguments or may be the
-closing parenthesis that ends the list of arguments.
+我们定义一个名为 `parseExpression` 的函数，该函数接受一个字符串作为输入，并且返回一个含有字符串初始位置的表达式的数据结构、字符串在解析这个表达式之后余下的部分的对象。当解析子表达式(比如一个应用的参数)的时候，这个函数可以被再次调用，产出参数的表达式以及剩余文本。剩余的文本可以依次包含更多的参数，或者成为结束参数列表的闭括号。
 
-This is the first part of the parser:
+这是解析器的第一部分：
 
 ```{includeCode: true}
 function parseExpression(program) {
@@ -177,30 +122,15 @@ function skipSpace(string) {
 
 {{index "skipSpace function", [whitespace, syntax]}}
 
-Because Egg, like JavaScript, allows any amount of whitespace
-between its elements, we have to repeatedly cut the whitespace off the
-start of the program string. That is what the `skipSpace` function
-helps with.
+由于 Egg 与 JavaScript 一样，在其元素之间允许任意数量的空白存在，我们需要在程序字符串的开头重复地剔除空白。这就是 `skipSpace` 函数的用武之地。
 
 {{index "literal expression", "SyntaxError type"}}
 
-After skipping any leading space, `parseExpression` uses three
-((regular expression))s to spot the three atomic elements that Egg
-supports: strings, numbers, and words. The parser constructs a
-different kind of data structure depending on which one matches. If
-the input does not match one of these three forms, it is not a valid
-expression, and the parser throws an error. We use `SyntaxError`
-instead of `Error` as the exception constructor, which is another standard
-error type, because it is a little more specific—it is also the error
-type thrown when an attempt is made to run an invalid JavaScript
-program.
+抛开所有开头的空格之后，`parseExpression` 使用三个((正则表达式))来针对 Egg 所支持的三种基础元素：字符串、数字、单词。解析器会根据其匹配到的不同数据结构进行构造。倘若输入并不符合这三种元素中的任何一种，那么该表达式就是无效的，而且解析器会抛出一个错误。我们用属于另一种标准错误类型的 `SyntaxError` 作为异常构造器，而不是 `Error`，因为它稍微更具体一些 —— 它也是试图运行无效的 JavaScript 程序时会被抛出的错误类型。
 
 {{index "parseApply function"}}
 
-We then cut off the part that was matched from the program string and
-pass that, along with the object for the expression, to `parseApply`,
-which checks whether the expression is an application. If so, it
-parses a parenthesized list of arguments.
+然后，我们从程序字符串剔除已匹配的部分，将余下的字符串与表达式对象传递给 `parseApply` 函数，该函数检查一个表达式是否为应用。如果是应用的话，则会解析一个带有括号的参数列表。
 
 ```{includeCode: true}
 function parseApply(expr, program) {
@@ -227,29 +157,17 @@ function parseApply(expr, program) {
 
 {{index parsing}}
 
-If the next character in the program is not an opening parenthesis,
-this is not an application, and `parseApply` returns the expression it
-was given.
+如果程序中下一个字符不是开括号，那么它就不是一个应用，且 `parseApply` 返回给定的表达式。
 
 {{index recursion}}
 
-Otherwise, it skips the opening parenthesis and creates the ((syntax
-tree)) object for this application expression. It then recursively
-calls `parseExpression` to parse each argument until a closing
-parenthesis is found. The recursion is indirect, through `parseApply`
-and `parseExpression` calling each other.
+否则的话，该函数会跳过开括号，并创建这个应用表达式的((句法树))对象。然后，它将递归调用 `parseExpression` 来对每一个参数进行解析，直到一个闭括号被找到。这个递归是间接的，通过 `parseApply` 和 `parseExpression` 彼此调用。
 
-Because an application expression can itself be applied (such as in
-`multiplier(2)(1)`), `parseApply` must, after it has parsed an
-application, call itself again to check whether another pair of
-parentheses follows.
+由于一个应用表达式本身也可以被应用(比如 `multiplier(2)(1)`)，`parseApply` 必须在它对一个应用解析之后，再次对其进行调用以检查自身是否后面还跟着另外一对括号。
 
 {{index "syntax tree", "Egg language", "parse function"}}
 
-This is all we need to parse Egg. We wrap it in a convenient `parse`
-function that verifies that it has reached the end of the input string
-after parsing the expression (an Egg program is a single expression),
-and that gives us the program's data structure.
+我们解析 Egg 所需要做的就是这些。我们将程序包装在方便的 `parse` 函数里，该函数确保在解析表达式(一个 Egg 程序就是一个表达式)之后输入字符串的末尾已被达到，而且这给了我们该程序的数据结构。
 
 ```{includeCode: strip_log, test: join}
 function parse(program) {
@@ -269,20 +187,13 @@ console.log(parse("+(a, 10)"));
 
 {{index "error message"}}
 
-It works! It doesn't give us very helpful information when it fails
-and doesn't store the line and column on which each expression starts,
-which might be helpful when reporting errors later, but it's good
-enough for our purposes.
+这行得通！它在出故障的时候并不会给我们非常有用的信息，也不保存每一个表达式起始的行和列(可能在之后报告错误的时候会有帮助)，但是它已经足够满足我们的目的了。
 
-## The evaluator
+## 求值器
 
 {{index "evaluate function", evaluation, interpretation, "syntax tree", "Egg language"}}
 
-What can we do with the syntax tree for a program? Run it, of course!
-And that is what the evaluator does. You give it a syntax tree and a
-scope object that associates names with values, and it will evaluate
-the expression that the tree represents and return the value that this
-produces.
+我们可以对程序的句法树做些什么呢？当然是运行它了！而这正是求值器(evaluator)所做的事情。你给它一个句法树和一个将名称和值联系起来的作用域对象，它就会对句法树所表示的表达式进行求值，并且返回结果的值。
 
 ```{includeCode: true}
 const specialForms = Object.create(null);
@@ -316,45 +227,27 @@ function evaluate(expr, scope) {
 
 {{index "literal expression", scope}}
 
-The evaluator has code for each of the ((expression)) types. A literal
-value expression produces its value. (For example, the expression
-`100` just evaluates to the number 100.) For a binding, we must check
-whether it is actually defined in the scope and, if it is, fetch the
-binding's value.
+这个求值器针对每一种类型的((表达式))都有相应代码。一个字面值表达式产生它自身的值(譬如，`100` 这个表达式求值的结果为 100 这个数字)。对于一个绑定而言，我们必须检查它是否已经在作用域中被定义了，如果是的话，就获取该绑定的值。
 
 {{index [function, application]}}
 
-Applications are more involved. If they are a ((special form)), like
-`if`, we do not evaluate anything and pass the argument expressions,
-along with the scope, to the function that handles this form. If it is
-a normal call, we evaluate the operator, verify that it is a function,
-and call it with the evaluated arguments.
+应用(Applications)则更复杂一些。如果它们属于像 `if` 那样的((特殊形式))，我们不对其进行求值，而是将参数表达式与作用域一起传递给处理这个形式的函数。如果应用是普通调用，那我们对运算符进行求值，确认其是否是函数，并且以求值后的参数来调用它。
 
-We use plain JavaScript function values to represent Egg's function
-values. We will come back to this [later](language#egg_fun), when the
-special form called `fun` is defined.
+为了表示 Egg 的函数值，我们使用普通的 JavaScript 函数。我们 [之后](language#egg_fun) 在定义了名为 `fun` 的特殊形式的时候，会回到这个话题。
 
 {{index readability, "evaluate function", recursion, parsing}}
 
-The recursive structure of `evaluate` resembles the similar structure
-of the parser, and both mirror the structure of the language itself.
-It would also be possible to integrate the parser with the evaluator
-and evaluate during parsing, but splitting them up this way makes the
-program clearer.
+`evaluate` 的递归结构与解析器的结构类似，而且两者都反映出该语言本身的结构。将解析器和求值器整合于一体、并在解析的时候进行求值也是可能的，但是将它们如此分离使得该程序更容易被理解。
 
 {{index "Egg language", interpretation}}
 
-This is really all that is needed to interpret Egg. It is that simple.
-But without defining a few special forms and adding some useful values
-to the ((environment)), you can't do much with this language yet.
+这便是解读 Egg 所需的所有代码了，就是如此简单。然而，如果不定义一些特殊形式、以及给该语言的((环境))添加一些有用的值的话，你用这个语言就做不了什么事情。
 
-## Special forms
+## 特殊形式
 
 {{index "special form", "specialForms object"}}
 
-The `specialForms` object is used to define special syntax in Egg. It
-associates words with functions that evaluate such forms. It is
-currently empty. Let's add `if`.
+`specialForms` 对象用于定义 Egg 中的特殊句法，它将单词和求解这种形式的函数联系了起来。当前该对象是空的，我们加上 `if`。
 
 ```{includeCode: true}
 specialForms.if = (args, scope) => {
@@ -370,28 +263,17 @@ specialForms.if = (args, scope) => {
 
 {{index "conditional execution", "ternary operator", "?: operator", "conditional operator"}}
 
-Egg's `if` construct expects exactly three arguments. It will evaluate
-the first, and if the result isn't the value `false`, it will evaluate
-the second. Otherwise, the third gets evaluated. This `if` form is
-more similar to JavaScript's ternary `?:` operator than to
-JavaScript's `if`. It is an expression, not a statement, and it
-produces a value, namely, the result of the second or third argument.
+Egg 的 `if` 构造语句必须接受三个参数，它会首先求解第一个参数，且在其结果不为 `false` 值的情况下求解第二个参数。否则的话，第三个参数会被求解。与 JavaScript 的 `if` 相比，这个 Egg 中的 `if` 形式与 JavaScript 的三元 `?:` 操作符更为相似。它是一个表达式，而不是语句，而且它产生一个值，也就是第二个或第三个参数的结果。
 
 {{index Boolean}}
 
-Egg also differs from JavaScript in how it handles the condition value
-to `if`. It will not treat things like zero or the empty string as
-false, only the precise value `false`.
+在处理 `if` 的条件值时，Egg 也与 JavaScript 有所不同。它并不会将零或空字符串视为 false，只有当值确实为 `false` 的时候，才将其视为 false。
 
 {{index "short-circuit evaluation"}}
 
-The reason we need to represent `if` as a special form, rather than a
-regular function, is that all arguments to functions are evaluated
-before the function is called, whereas `if` should evaluate only
-_either_ its second or its third argument, depending on the value of
-the first.
+我们将 `if` 表示为一个特殊形式，而不是一个普通的函数，这是由于所有函数的参数在调用之前都会被求解，而 `if` 只应该根据第一个参数的值对第二个 _或_ 第三个参数进行求解。
 
-The `while` form is similar.
+与之类似的还有 `while` 形式。
 
 ```{includeCode: true}
 specialForms.while = (args, scope) => {
@@ -402,15 +284,13 @@ specialForms.while = (args, scope) => {
     evaluate(args[1], scope);
   }
 
-  // Since undefined does not exist in Egg, we return false,
-  // for lack of a meaningful result.
+  // 由于 undefined 在 Egg 中并不存在
+  // 缺乏有意义的结果，所以我们返回 false
   return false;
 };
 ```
 
-Another basic building block is `do`, which executes all its arguments
-from top to bottom. Its value is the value produced by the last
-argument.
+另一个基本构建块是 `do`，它会自上而下执行其所有的参数。该表达式的值是最后一个参数产生的值。
 
 ```{includeCode: true}
 specialForms.do = (args, scope) => {
@@ -424,12 +304,7 @@ specialForms.do = (args, scope) => {
 
 {{index ["= operator", "in Egg"], [binding, "in Egg"]}}
 
-To be able to create bindings and give them new values, we also
-create a form called `define`. It expects a word as its first argument
-and an expression producing the value to assign to that word as its
-second argument. Since `define`, like everything, is an expression, it
-must return a value. We'll make it return the value that was assigned
-(just like JavaScript's `=` operator).
+为了可以创建绑定并对其赋予新的值，我们还创建了名为 `define` 的形式。它期待一个单词作为其第一个参数，一个产生的值被赋予那个单词的表达式作为其第二个参数。既然 `define` 也是个表达式，像别的表达式一样，它必须返回一个值。我们会使它返回赋予给绑定的值(就像 JavaScript 的 `=` 运算符一样)。
 
 ```{includeCode: true}
 specialForms.define = (args, scope) => {
@@ -442,7 +317,7 @@ specialForms.define = (args, scope) => {
 };
 ```
 
-## The environment
+## 环境
 
 {{index "Egg language", "evaluate function", [binding, "in Egg"]}}
 
@@ -534,7 +409,7 @@ implemented in less than 150 ((lines of code)).
 
 {{id egg_fun}}
 
-## Functions
+## 函数Functions
 
 {{index function, "Egg language"}}
 
@@ -573,7 +448,7 @@ specialForms.fun = (args, scope) => {
 
 {{index "local scope"}}
 
-Functions in Egg get their own local scope. The function produced by
+Egg 中的函数拥有它们自己的本地作用域。Functions in Egg get their own local scope. The function produced by
 the `fun` form creates this local scope and adds the argument bindings
 to it. It then evaluates the function body in this scope and returns
 the result.
@@ -688,9 +563,9 @@ language can be more expressive than a general-purpose language
 because it is designed to describe exactly the things that need to be
 described in its domain, and nothing else.
 
-## Exercises
+## 练习题Exercises
 
-### Arrays
+### 数组Arrays
 
 {{index "Egg language", "arrays in egg (exercise)", [array, "in Egg"]}}
 
