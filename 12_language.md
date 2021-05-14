@@ -321,15 +321,9 @@ specialForms.define = (args, scope) => {
 
 {{index "Egg language", "evaluate function", [binding, "in Egg"]}}
 
-The ((scope)) accepted by `evaluate` is an object with properties
-whose names correspond to binding names and whose values correspond to
-the values those bindings are bound to. Let's define an object to
-represent the ((global scope)).
+`evaluate` 接受的((作用域))是一个对象，该对象的属性名对应绑定名，其属性的值对应这些绑定所绑定的值。让我们定义一个用于表示((全局作用域))的对象。
 
-To be able to use the `if` construct we just defined, we must have
-access to ((Boolean)) values. Since there are only two Boolean values,
-we do not need special syntax for them. We simply bind two names to
-the values `true` and `false` and use them.
+为了能够使用我们刚才定义的 `if` 构造语句，我们必须能够访问((布尔))值。由于只存在两个布尔值，我们不需要给它们特殊的句法。我们只需将两个名称与 `true` 和 `false` 值绑定，就可以使用它们了。
 
 ```{includeCode: true}
 const topScope = Object.create(null);
@@ -338,7 +332,7 @@ topScope.true = true;
 topScope.false = false;
 ```
 
-We can now evaluate a simple expression that negates a Boolean value.
+我们现在可以对一个简单的、对布尔值求反的表达式进行求解。
 
 ```
 let prog = parse(`if(true, false, true)`);
@@ -348,11 +342,7 @@ console.log(evaluate(prog, topScope));
 
 {{index arithmetic, "Function constructor"}}
 
-To supply basic ((arithmetic)) and ((comparison)) ((operator))s, we
-will also add some function values to the ((scope)). In the interest
-of keeping the code short, we'll use `Function` to synthesize a bunch
-of operator functions in a loop, instead of defining them
-individually.
+为了提供基本的((算术))和((比较))运算符，我们也会给((作用域))添加一些函数值。因为想要让代码保持简短，与其说单独对运算符函数进行定义，我们用 `Function` 在一个循环中合成一批运算符。
 
 ```{includeCode: true}
 for (let op of ["+", "-", "*", "/", "==", "<", ">"]) {
@@ -360,8 +350,7 @@ for (let op of ["+", "-", "*", "/", "==", "<", ">"]) {
 }
 ```
 
-A way to ((output)) values is also useful, so we'll wrap
-`console.log` in a function and call it `print`.
+拥有一种能((输出))值的方法也会很有用，所以我们将 `console.log` 包装在一个函数中，并将其称为 `print`。
 
 ```{includeCode: true}
 topScope.print = value => {
@@ -372,9 +361,7 @@ topScope.print = value => {
 
 {{index parsing, "run function"}}
 
-That gives us enough elementary tools to write simple programs. The
-following function provides a convenient way to parse a program and
-run it in a fresh scope:
+这给了我们足够的基本工具来编写简单的程序。下列函数提供了一个简单的方法来解析程序，并且在一个新的作用域中运行该程序：
 
 ```{includeCode: true}
 function run(program) {
@@ -384,9 +371,7 @@ function run(program) {
 
 {{index "Object.create function", prototype}}
 
-We'll use object prototype chains to represent nested scopes so that
-the program can add bindings to its local scope without changing the
-top-level scope.
+我们将使用对象原型链来表示嵌套的作用域，这样一来，该程序就可以向其本地作用域添加绑定，而无需更改顶层的作用域。
 
 ```
 run(`
@@ -402,23 +387,17 @@ do(define(total, 0),
 
 {{index "summing example", "Egg language"}}
 
-This is the program we've seen several times before, which computes
-the sum of the numbers 1 to 10, expressed in Egg. It is clearly uglier
-than the equivalent JavaScript program—but not bad for a language
-implemented in less than 150 ((lines of code)).
+这个程序我们之前已经见了几次，它计算数字 1 到 10 的和， 以 Egg 语言表达。显然，与同样功能的 JavaScript 程序相比，它更为难看 —— 但是对一门只用了不到 150 ((行代码))就实现的语言来说，已经不错了。
 
 {{id egg_fun}}
 
-## 函数Functions
+## 函数
 
 {{index function, "Egg language"}}
 
-A programming language without functions is a poor programming
-language indeed.
+一门没有函数的编程语言确实是一门糟糕的编程语言。
 
-Fortunately, it isn't hard to add a `fun` construct, which treats its
-last argument as the function's body and uses all arguments before
-that as the names of the function's parameters.
+所幸想要添加一个 `fun` 构造语句并不难，它将其最后一个参数视为函数主体，并将最后一个参数之前的参数都用作函数的参数名称。
 
 ```{includeCode: true}
 specialForms.fun = (args, scope) => {
@@ -448,10 +427,7 @@ specialForms.fun = (args, scope) => {
 
 {{index "local scope"}}
 
-Egg 中的函数拥有它们自己的本地作用域。Functions in Egg get their own local scope. The function produced by
-the `fun` form creates this local scope and adds the argument bindings
-to it. It then evaluates the function body in this scope and returns
-the result.
+Egg 中的函数拥有它们自己的本地作用域。由 `fun` 形式产生的函数可以创建这个本地作用域，并且向其添加参数绑定。然后，它在这个作用域中对函数主体进行求解F，并返回结果。
 
 ```{startCode: true}
 run(`
