@@ -427,7 +427,7 @@ specialForms.fun = (args, scope) => {
 
 {{index "local scope"}}
 
-Egg 中的函数拥有它们自己的本地作用域。由 `fun` 形式产生的函数可以创建这个本地作用域，并且向其添加参数绑定。然后，它在这个作用域中对函数主体进行求解F，并返回结果。
+Egg 中的函数拥有它们自己的本地作用域。由 `fun` 形式产生的函数可以创建这个本地作用域，并且向其添加参数绑定。然后，它在这个作用域中对函数主体进行求解，并返回结果。
 
 ```{startCode: true}
 run(`
@@ -446,74 +446,39 @@ do(define(pow, fun(base, exp,
 // → 1024
 ```
 
-## Compilation
+## 编译
 
 {{index interpretation, compilation}}
 
-What we have built is an interpreter. During evaluation, it acts
-directly on the representation of the program produced by the parser.
+我们构建的是一个解读器(interpreter)。在求值的过程中，解读器直接作用于解析器产生的表征程序。
 
 {{index efficiency, performance, [binding, definition], [memory, speed]}}
 
-_Compilation_ is the process of adding another step between the
-parsing and the running of a program, which transforms the program
-into something that can be evaluated more efficiently by doing as much
-work as possible in advance. For example, in well-designed languages
-it is obvious, for each use of a binding, which binding is being
-referred to, without actually running the program. This can be used to
-avoid looking up the binding by name every time it is accessed,
-instead directly fetching it from some predetermined memory
-location.
+_编译_ 是在程序的解析和运行之间添加的另一道工序，它通过事先完成尽可能多的工作，将程序转化之后，该程序可以被更有效率地求解。比方说，在设计优良的编程语言中，即使没有真的运行程序，每一个绑定的用法、绑定指向的值都是显而易见的。这可以被用来避免每一次访问绑定时都搜索绑定名称，从而直接从预先定义好的内存地址获取绑定。
 
-Traditionally, ((compilation)) involves converting the program to
-((machine code)), the raw format that a computer's processor can
-execute. But any process that converts a program to a different
-representation can be thought of as compilation.
+从传统上来说，((编译))包括将程序转换成((机器代码))，也就是计算机的处理器可以执行的原始格式。然而，任何将程序转换成一种不同的表征形式的过程都可以被称为编译。
 
 {{index simplicity, "Function constructor", transpilation}}
 
-It would be possible to write an alternative ((evaluation)) strategy
-for Egg, one that first converts the program to a JavaScript program,
-uses `Function` to invoke the JavaScript compiler on it, and then runs
-the result. When done right, this would make Egg run very fast while
-still being quite simple to implement.
+为 Egg 编写一种替代的((求值))策略是可行的，首先将程序转换成 JavaScript 程序，采用 `Function` 调用 JavaScript 的编译器，然后运行编译结果。如果做法无误，这将会使得 Egg 运行起来非常迅速，而实现起来仍然很简单。
 
-If you are interested in this topic and willing to spend some time on
-it, I encourage you to try to implement such a compiler as an
-exercise.
+如果你对这个话题有兴趣，并且愿意多花些时间在上面的话，我鼓励你试着去实现一个这样的编译器，作为锻炼。
 
-## Cheating
+## 借鉴
 
 {{index "Egg language"}}
 
-When we defined `if` and `while`, you probably noticed that they were
-more or less trivial wrappers around JavaScript's own `if` and
-`while`. Similarly, the values in Egg are just regular old JavaScript
-values.
+当我们定义 `if` 和 `while` 的时候，你可能意识到了它们或多或少不过是 JavaScript 自身的 `if` 和 `while` 语句的小型包装器罢了。同样的，Egg 中的值就是 Javascript 中普通的值。
 
-If you compare the implementation of Egg, built on top of JavaScript,
-with the amount of work and complexity required to build a programming
-language directly on the raw functionality provided by a machine, the
-difference is huge. Regardless, this example ideally gave you an
-impression of the way ((programming language))s work.
+如果你将 Egg 的实现方式(构建于 JavaScript 的基础之上)与另一种直接基于机器提供的原始功能之上构建的编程语言相比，你会发现后者所需的精力和复杂程度都多出许多。不论如何，本章这个 Egg 语言的例子就是想让你对((编程语言))的工作方式有一个印象。
 
-And when it comes to getting something done, cheating is more
-effective than doing everything yourself. Though the toy language in
-this chapter doesn't do anything that couldn't be done better in
-JavaScript, there _are_ situations where writing small languages helps
-get real work done.
+在需要完成一些事情的时候，借鉴别人的代码比起你自己编写所有的功能要有效率得多。虽然本章我们编写的闹着玩的语言并不能在任何 JavaScript 能做的事情上做得更为出色，但 _有_ 编写微型编程语言帮助我们完成真实工作的情况。
 
-Such a language does not have to resemble a typical programming
-language. If JavaScript didn't come equipped with regular expressions,
-for example, you could write your own parser and evaluator for regular
-expressions.
+这样的语言并不需要与一门典型的编程语言相仿。打个比方，如果 JavaScript 并没有自带正则表达式的话，你可以自行为正则表达式编写解析器和求值器。
 
 {{index "artificial intelligence"}}
 
-Or imagine you are building a giant robotic ((dinosaur)) and need to
-program its ((behavior)). JavaScript might not be the most effective
-way to do this. You might instead opt for a language that looks like
-this:
+或者，想象一下你正在建造一个巨型机器((恐龙))，并且需要对其((行为))进行编程。JavaScript 可能不是完成这个任务最有效的方式。你可能需要选择一门看起来像这样的语言：
 
 ```{lang: null}
 behavior walk
@@ -533,28 +498,20 @@ behavior attack
 
 {{index expressivity}}
 
-This is what is usually called a _((domain-specific language))_, a
-language tailored to express a narrow domain of knowledge. Such a
-language can be more expressive than a general-purpose language
-because it is designed to describe exactly the things that need to be
-described in its domain, and nothing else.
+这通常被称为 _((领域特定语言))_，也就是一门专为表达某个精细领域的知识而设计的语言。这样的语言比通用目的的语言更有表述性，因为它就是为了描述它领域中的事物而生的，不包含多余的东西。
 
-## 练习题Exercises
+## 练习题
 
-### 数组Arrays
+### 数组
 
 {{index "Egg language", "arrays in egg (exercise)", [array, "in Egg"]}}
 
-Add support for arrays to Egg by adding the following three
-functions to the top scope: `array(...values)` to construct an array
-containing the argument values, `length(array)` to get an array's
-length, and `element(array, n)` to fetch the n^th^ element from an
-array.
+为了给 Egg 添加数组支持，通过将下列三个函数添加到顶层作用域：`array(...values)` 来构造一个含有参数值的数组，`length(array)` 获取一个数组的长度，还有 `element(array, n)` 来获取一个数组中第 n^th^ 个元素。
 
 {{if interactive
 
 ```{test: no}
-// Modify these definitions...
+// 修改下列定义
 
 topScope.array = "...";
 
@@ -581,30 +538,21 @@ if}}
 
 {{index "arrays in egg (exercise)"}}
 
-The easiest way to do this is to represent Egg arrays with JavaScript
-arrays.
+最简单的方法是用 JavaScript 数组来表示 Egg 数组。
 
 {{index "slice method"}}
 
-The values added to the top scope must be functions. By using a rest
-argument (with triple-dot notation), the definition of `array` can be
-_very_ simple.
+加入顶层作用域的值必须是函数。一旦采用剩余参数(...三点写法)，`array` 的定义就会 _很_ 简单。
 
 hint}}
 
-### Closure
+### 闭包
 
 {{index closure, [function, scope], "closure in egg (exercise)"}}
 
-The way we have defined `fun` allows functions in Egg to reference
-the surrounding scope, allowing the function's body to use local
-values that were visible at the time the function was defined, just
-like JavaScript functions do.
+我们定义 `fun` 的方式允许 Egg 中的函数引用它周围的作用域，这样一来，函数主体就可以使用在定义函数时可见的本地值，就像 JavaScript 函数那样。
 
-The following program illustrates this: function `f` returns a
-function that adds its argument to `f`'s argument, meaning that it
-needs access to the local ((scope)) inside `f` to be able to use
-binding `a`.
+下列程序展示了这个特点：函数 `f` 返回一个将自己的参数添加到 `f` 参数的函数，这意味着为了可以使用绑定 `a`，该函数需要访问 `f` 中的本地((作用域))。
 
 ```
 run(`
@@ -614,49 +562,34 @@ do(define(f, fun(a, fun(b, +(a, b)))),
 // → 9
 ```
 
-Go back to the definition of the `fun` form and explain which
-mechanism causes this to work.
+回到 `fun` 形式的定义，解释哪一个机制使得它可以如此被使用。
 
 {{hint
 
 {{index closure, "closure in egg (exercise)"}}
 
-Again, we are riding along on a JavaScript mechanism to get the
-equivalent feature in Egg. Special forms are passed the local scope in
-which they are evaluated so that they can evaluate their subforms in
-that scope. The function returned by `fun` has access to the `scope`
-argument given to its enclosing function and uses that to create the
-function's local ((scope)) when it is called.
+同样的，我们正借鉴 JavaScript 的机制来建立在 Egg 中等效的特性。特殊形式是可以接受它们被求解的本地作用域，从而让它们可以在那个作用域中求解其次形式。由 `fun` 返回的函数可以访问传递给它封闭函数的 `scope` 参数，并且在调用该函数时将其用于创建它的本地((作用域))。
 
 {{index compilation}}
 
-This means that the ((prototype)) of the local scope will be the scope
-in which the function was created, which makes it possible to access
-bindings in that scope from the function. This is all there is to
-implementing closure (though to compile it in a way that is actually
-efficient, you'd need to do some more work).
+这意味着本地作用域的((原型))会成为函数被创建时的作用域，也就使得从函数中访问那个作用域中的绑定成为可能。这就是实现闭包所需要做的(然而要将它以一种真实有效率的方式编译的话，你还需要做一些额外的功课)。
 
 hint}}
 
-### Comments
+### 注释
 
 {{index "hash character", "Egg language", "comments in egg (exercise)"}}
 
-It would be nice if we could write ((comment))s in Egg. For example,
-whenever we find a hash sign (`#`), we could treat the rest of the
-line as a comment and ignore it, similar to `//` in JavaScript.
+如果我们可以在 Egg 中编写((注释))的话，那是很好的。举个例子，每当我们找到一个井号(`#`)，我们可以将该行剩余的部分视为注释，并忽略它，像 JavaScript 中的 `//` 一样。
 
 {{index "skipSpace function"}}
 
-We do not have to make any big changes to the parser to support this.
-We can simply change `skipSpace` to skip comments as if they are
-((whitespace)) so that all the points where `skipSpace` is called will
-now also skip comments. Make this change.
+我们并不需要为了支持这个特性而对解析器做出很大的改动。我们可以简单地改动 `skipSpace`，让它像跳过((空格))那样跳过注释，因此所有调用 `skipSpace` 的地方现在也可以跳过注释。做出上述的这个改动。
 
 {{if interactive
 
 ```{test: no}
-// This is the old skipSpace. Modify it...
+// 这是之前的 skipSpace，对它进行修改
 function skipSpace(string) {
   let first = string.search(/\S/);
   if (first == -1) return "";
@@ -677,14 +610,9 @@ if}}
 
 {{index "comments in egg (exercise)", [whitespace, syntax]}}
 
-Make sure your solution handles multiple comments in a row, with
-potentially whitespace between or after them.
+确保你的解决方法可以一下子处理多行注释(前后可能都有空格)。
 
-A ((regular expression)) is probably the easiest way to solve this.
-Write something that matches "whitespace or a comment, zero or more
-times". Use the `exec` or `match` method and look at the length of the
-first element in the returned array (the whole match) to find out how
-many characters to slice off.
+解决这个问题最简单的方法大概是((正则表达式))。编写可以匹配“空格或一段注释，零次或多次”。采用 `exec` 或者 `match` 方法，并且查看返回的数组中的第一个元素(整个匹配项)的长度，从而找出需要剔除多少个字符。
 
 hint}}
 
@@ -692,23 +620,15 @@ hint}}
 
 {{index [binding, definition], assignment, "fixing scope (exercise)"}}
 
-Currently, the only way to assign a binding a value is `define`.
-This construct acts as a way both to define new bindings and to give
-existing ones a new value.
+目前，将绑定赋值的唯一办法是采用 `define`。这个构造既能定义新的绑定，也可以赋予已存在的绑定一个新的值。
 
 {{index "local binding"}}
 
-This ((ambiguity)) causes a problem. When you try to give a nonlocal
-binding a new value, you will end up defining a local one with the
-same name instead. Some languages work like this by design, but I've
-always found it an awkward way to handle ((scope)).
+这种((模棱两可的特性))导致了一个问题。当你想要给一个非本地绑定赋上新的值的时候，你最终会用同样的名称定义一个本地绑定。有的编程语言就是照此设计的，但我总觉得这种处理((作用域))的做法有些尴尬。
 
 {{index "ReferenceError type"}}
 
-Add a special form `set`, similar to `define`, which gives a binding a
-new value, updating the binding in an outer scope if it doesn't
-already exist in the inner scope. If the binding is not defined at
-all, throw a `ReferenceError` (another standard error type).
+添加一个名为 `set` 的特殊形式，它与 `define` 相似，会给绑定一个新的值，并且在该绑定不存在于内部作用域的情况下更新其外部作用域的绑定。如果绑定根本就没有被定义的话，抛出一个 `ReferenceError` (另一种类型的标准错误)。
 
 {{index "hasOwnProperty method", prototype, "getPrototypeOf function"}}
 
@@ -746,7 +666,7 @@ if}}
 
 {{index [binding, "compilation of"], assignment, "getPrototypeOf function", "hasOwnProperty method", "fixing scope (exercise)"}}
 
-You will have to loop through one ((scope)) at a time, using
+你将会需要一次循环一个((作用域))，使用 `Object.getPrototypeOf` 去向下一个外部作用域。对于每个作用域，采用 `hasOwnProperty` 来找出由 `set` 的首个参数的 `name` 属性指向的绑定在该作用域中是否存在。如果它存在的话，将其设为绑定You will have to loop through one ((scope)) at a time, using
 `Object.getPrototypeOf` to go to the next outer scope. For each scope,
 use `hasOwnProperty` to find out whether the binding, indicated by the
 `name` property of the first argument to `set`, exists in that scope.
