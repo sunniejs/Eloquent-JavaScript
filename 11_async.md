@@ -715,19 +715,19 @@ try {
 
 {{index thread, queue}}
 
-无论事件之间 —— 诸如 timeouts(译者注：超时) 或者传入的请求 —— 有多近，一个 JavaScript 环境一次只会运行一个程序。你可以将其视为一个运行着的、_围绕_ 着你的程序的大循环，名为 _事件循环_。当没有事情需要被完成的时候，这个循环就会停止。但是当事件传入时，它们会被添加到一个队列中，而且它们的代码会一个接一个地被执行。由于不会有两件事同时运行，缓慢运行的代码可能会使其他事件的处理延后。
+无论事件之间 —— 诸如超时或者传入的请求 —— 有多近，一个 JavaScript 环境一次只会运行一个程序。你可以将其视为一个运行着的、_围绕_ 着你的程序的大循环，名为 _事件循环_。当没有事情需要被完成的时候，这个循环就会停止。但是当事件传入时，它们会被添加到一个队列中，而且它们的代码会一个接一个地被执行。由于不会有两件事同时运行，缓慢运行的代码可能会使其他事件的处理延后。
 
-这个示例设置了一个 timeout，但是闲置直到 timeout 预期的时间点之后，使得该 timeout 过时了。
+这个示例设置了一个超时，但是闲置直到超时预期的时间点之后，使得该超时过时了。
 
 ```
 let start = Date.now();
 setTimeout(() => {
-  console.log("Timeout ran at", Date.now() - start);
+  console.log("超时在这时运行", Date.now() - start);
 }, 20);
 while (Date.now() < start + 50) {}
-console.log("Wasted time until", Date.now() - start);
-// → Wasted time until 50     浪费时间至50毫秒之后
-// → Timeout ran at 55        超时在第55毫秒时运行
+console.log("浪费时间至", Date.now() - start);
+// → 浪费时间至50毫秒之后
+// → 超时在第55毫秒时运行
 ```
 
 {{index "resolving (a promise)", "rejecting (a promise)", "Promise class"}}
@@ -854,7 +854,7 @@ function locateScalpel2(nest) {
 }
 
 locateScalpel(bigOak).then(console.log);
-// → Butcher Shop     屠宰门店
+// → 屠宰门店
 ```
 
 if}}
@@ -900,7 +900,7 @@ function Promise_all(promises) {
 
 // 测试代码
 Promise_all([]).then(array => {
-  console.log("This should be []:", array);
+  console.log("这应该变成 []:", array);
 });
 function soon(val) {
   return new Promise(resolve => {
@@ -908,15 +908,15 @@ function soon(val) {
   });
 }
 Promise_all([soon(1), soon(2), soon(3)]).then(array => {
-  console.log("This should be [1, 2, 3]:", array);
+  console.log("这应该变成 [1, 2, 3]:", array);
 });
 Promise_all([soon(1), Promise.reject("X"), soon(3)])
   .then(array => {
-    console.log("We should not get here");
+    console.log("我们不应该到达这里");
   })
   .catch(error => {
     if (error != "X") {
-      console.log("Unexpected failure:", error);
+      console.log("意料之外的故障：", error);
     }
   });
 ```
