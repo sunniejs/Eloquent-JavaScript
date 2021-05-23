@@ -722,12 +722,12 @@ try {
 ```
 let start = Date.now();
 setTimeout(() => {
-  console.log("超时在这时运行", Date.now() - start);
+  console.log("超时运行发生在", Date.now() - start);
 }, 20);
 while (Date.now() < start + 50) {}
 console.log("浪费时间至", Date.now() - start);
-// → 浪费时间至50毫秒之后
-// → 超时在第55毫秒时运行
+// → 浪费时间至 50
+// → 超时运行发生在 55
 ```
 
 {{index "resolving (a promise)", "rejecting (a promise)", "Promise class"}}
