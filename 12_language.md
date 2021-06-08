@@ -12,7 +12,7 @@ quote}}
 
 {{figure {url: "img/chapter_picture_12.jpg", alt: "Picture of an egg with smaller eggs inside", chapter: "framed"}}}
 
-构建你自己的((编程语言))其实出乎意料地简单(只要你的要求不是太高)而且很启发人。
+构建你自己的((编程语言))其实出乎意料地简单（只要你的要求不是太高）而且很启发人。
 
 我想要透过本章传达的主要信息在于，构建你自己的编程语言并不需要什么((魔法))。我常常感到有些人类的发明聪明绝顶、纷繁复杂，以至于我永远也无法理解它们。然而通过少量的阅读和实验之后，我常发现它们也不过如此。
 
@@ -107,7 +107,7 @@ function parseExpression(program) {
   } else if (match = /^[^\s(),#"]+/.exec(program)) {
     expr = {type: "word", name: match[0]};
   } else {
-    throw new SyntaxError("Unexpected syntax: " + program);
+    throw new SyntaxError("不是预期的句法: " + program);
   }
 
   return parseApply(expr, program.slice(match[0].length));
@@ -237,7 +237,7 @@ function evaluate(expr, scope) {
 
 {{index readability, "evaluate function", recursion, parsing}}
 
-`evaluate` 的递归结构与解析器的结构类似，而且两者都反映出该语言本身的结构。将解析器和求值器整合于一体、并在解析的时候进行求值也是可能的，但是将它们如此分离使得该程序更容易被理解。
+`evaluate` 的递归结构与解析器的结构类似，而且两者都反映出该语言本身的结构。将解析器和求值器整合于一体、并在解析的时候进行求值也是可以的，不过将它们如此分离使得该程序更容易被理解。
 
 {{index "Egg language", interpretation}}
 
@@ -252,7 +252,7 @@ function evaluate(expr, scope) {
 ```{includeCode: true}
 specialForms.if = (args, scope) => {
   if (args.length != 3) {
-    throw new SyntaxError("Wrong number of args to if");
+    throw new SyntaxError("传给 if 的参数数量错误");
   } else if (evaluate(args[0], scope) !== false) {
     return evaluate(args[1], scope);
   } else {
@@ -263,7 +263,7 @@ specialForms.if = (args, scope) => {
 
 {{index "conditional execution", "ternary operator", "?: operator", "conditional operator"}}
 
-Egg 的 `if` 构造语句必须接受三个参数，它会首先求解第一个参数，且在其结果不为 `false` 值的情况下求解第二个参数。否则的话，第三个参数会被求解。与 JavaScript 的 `if` 相比，这个 Egg 中的 `if` 形式与 JavaScript 的三元 `?:` 操作符更为相似。它是一个表达式，而不是语句，而且它产生一个值，也就是第二个或第三个参数的结果。
+Egg 的 `if` 构造语句必须接受三个参数，它会首先求解第一个参数，且在其结果不为 `false` 的情况下求解第二个参数。否则的话，第三个参数会被求解。与 JavaScript 的 `if` 相比，这个 Egg 中的 `if` 形式与 JavaScript 的三元 `?:` 操作符更为相似。它是一个表达式，而不是语句，而且它产生一个值，也就是第二个或第三个参数的结果。
 
 {{index Boolean}}
 
@@ -642,7 +642,7 @@ Object.prototype.hasOwnProperty.call(scope, name);
 
 ```{test: no}
 specialForms.set = (args, scope) => {
-  // Your code here.
+  // 在这里输入你的代码
 };
 
 run(`
