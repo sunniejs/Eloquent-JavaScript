@@ -1,11 +1,8 @@
-# JavaScript and the Browser
+# JavaScript 和浏览器 JavaScript and the Browser
 
 {{quote {author: "Tim Berners-Lee", title: "The World Wide Web: A very short personal history", chapter: true}
 
-The dream behind the Web is of a common information space in which we
-communicate by sharing information. Its universality is essential: the
-fact that a hypertext link can point to anything, be it personal,
-local or global, be it draft or highly polished.
+万维网(The Web)背后的梦想是有一个我们通过分享信息来交流的共同信息空间。这个空间的普遍性是不可或缺的：一个超文本链接可以指向任何内容，无论是私人的、本地的、全球的、作为草稿的或是精雕细琢的。
 
 quote}}
 
@@ -13,60 +10,29 @@ quote}}
 
 {{figure {url: "img/chapter_picture_13.jpg", alt: "Picture of a telephone switchboard", chapter: "framed"}}}
 
-The next chapters of this book will talk about web browsers. Without
-web ((browser))s, there would be no JavaScript. Or even if there were,
-no one would ever have paid any attention to it.
+本书接下来的几章会谈到网页浏览器。如果没有网页((浏览器))的话，就不会有 JavaScript。即使有 JavaScript，也没人会注意到它。
 
 {{index decentralization, compatibility}}
 
-Web technology has been decentralized from the start, not just
-technically but also in the way it evolved. Various browser vendors
-have added new functionality in ad hoc and sometimes poorly thought-out
-ways, which then, sometimes, ended up being adopted by others—and
-finally set down as in ((standards)).
+万维网技术从一开始就是去中心化的，不仅仅在于技术层面，也包括其演变的方式。有很多浏览器厂商给万维网临时添入了新的功能，有时是未经深思熟虑的，而这些功能日后被其他浏览器采用 —— 并最终成为了((标准))。
 
-This is both a blessing and a curse. On the one hand, it is empowering
-to not have a central party control a system but have it be improved
-by various parties working in loose ((collaboration)) (or occasionally
-open hostility). On the other hand, the haphazard way in which the Web
-was developed means that the resulting system is not exactly a shining
-example of internal ((consistency)). Some parts of it are downright
-confusing and poorly conceived.
+这既是一个祝福，也是一个咒诅。一方面，由于没有一个中央组织对系统进行控制，导致多个组织之间通过松散的((合作))(偶尔还有公开互怼的情况)来对其进行提升。另一方面，万维网以这种无组织、无纪律的方式被开发，意味着最终的系统并不是一个拥有内在((一致性))的光辉范例。它有些部分是比较令人困惑的，而且构思拙劣。
 
-## Networks and the Internet
+## 网络和互联网Networks and the Internet
 
-Computer ((network))s have been around since the 1950s. If you put
-cables between two or more computers and allow them to send data back
-and forth through these cables, you can do all kinds of wonderful
-things.
+计算机((网络))自1950年代就出现了，当你在两台或两台以上的计算机之间连上缆线，并且允许它们通过这些缆线来回发送数据的时候，你便可以做很多神奇的事情。
 
-And if connecting two machines in the same building allows us to do
-wonderful things, connecting machines all over the planet should be
-even better. The technology to start implementing this vision was
-developed in the 1980s, and the resulting network is called the
-_((Internet))_. It has lived up to its promise.
+如果连接同一栋楼里的两台机器可以让我们做神奇的事情，那么将遍布地球上的机器都连接上的话应该会更棒。开始实现这个愿景的技术在 1980 年代被开发，最终产生的网络被称为 _((互联网))_。互联网没有辜负人们对它的期许。
 
-A computer can use this network to shoot bits at another computer. For
-any effective ((communication)) to arise out of this bit-shooting, the
-computers on both ends must know what the bits are supposed to
-represent. The meaning of any given sequence of bits depends entirely
-on the kind of thing that it is trying to express and on the
-((encoding)) mechanism used.
+一台计算机可以使用这个网络来向另外一台计算机发送比特(bits)。为了使这发送比特的方式产生有效的((通信))，在两端的计算机必须知道这些比特表达的是什么。一个给定序列的比特的含义完全取决于该序列表达的信息类型和使用的((编码))机制。
 
 {{index [network, protocol]}}
 
-A _network ((protocol))_ describes a style of communication over a
-((network)). There are protocols for sending email, for fetching email,
-for sharing files, and even for controlling computers that happen to be
-infected by malicious software.
+_网络((协议))_ 描述了在一个((网络))中通信的风格。有适用于发送邮件的协议、获取邮件的协议、共享文件的协议，甚至还有能控制被恶意软件感染的计算机的协议。 
 
 {{indexsee "Hypertext Transfer Protocol", HTTP}}
 
-For example, the _Hypertext Transfer Protocol_ (((HTTP))) is
-a protocol for retrieving named ((resource))s (chunks of information,
-such as web pages or pictures). It specifies that the side making the
-request should start with a line like this, naming the resource and
-the version of the protocol that it is trying to use:
+例如，_超文本传输协议_ (((HTTP))) 是一个检索已命名的((资源))(信息块，如网页或者图片)的协议。该协议指定了发出请求的一方应该如此开始第一行 —— 命名资源以及正在尝试使用的协议版本： 
 
 ```{lang: "text/plain"}
 GET /index.html HTTP/1.1
@@ -128,7 +94,7 @@ web pages in a browser. The "Web" part in the name refers to the fact
 that such pages can easily link to each other, thus connecting into a
 huge ((mesh)) that users can move through.
 
-To become part of the Web, all you need to do is connect a machine to
+想要成为 Web To become part of the Web, all you need to do is connect a machine to
 the ((Internet)) and have it listen on port 80 with the ((HTTP))
 protocol so that other computers can ask it for documents.
 
