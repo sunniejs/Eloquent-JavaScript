@@ -1,11 +1,8 @@
-# JavaScript and the Browser
+# JavaScript 与浏览器
 
 {{quote {author: "Tim Berners-Lee", title: "The World Wide Web: A very short personal history", chapter: true}
 
-The dream behind the Web is of a common information space in which we
-communicate by sharing information. Its universality is essential: the
-fact that a hypertext link can point to anything, be it personal,
-local or global, be it draft or highly polished.
+万维网(The Web)背后的梦想是有一个我们通过分享信息来交流的共同信息空间。这个空间的普遍性是不可或缺的：一个超文本链接可以指向任何内容，无论是私人的、本地的、全球的、作为草稿的或是精雕细琢的。
 
 quote}}
 
@@ -13,164 +10,85 @@ quote}}
 
 {{figure {url: "img/chapter_picture_13.jpg", alt: "Picture of a telephone switchboard", chapter: "framed"}}}
 
-The next chapters of this book will talk about web browsers. Without
-web ((browser))s, there would be no JavaScript. Or even if there were,
-no one would ever have paid any attention to it.
+本书接下来的几章会谈到网页浏览器。如果没有网页((浏览器))的话，就不会有 JavaScript。即使有 JavaScript，也没人会注意到它。
 
 {{index decentralization, compatibility}}
 
-Web technology has been decentralized from the start, not just
-technically but also in the way it evolved. Various browser vendors
-have added new functionality in ad hoc and sometimes poorly thought-out
-ways, which then, sometimes, ended up being adopted by others—and
-finally set down as in ((standards)).
+万维网技术从一开始就是去中心化的，不仅仅在于技术层面，也包括其演变的方式。有很多浏览器厂商给万维网临时添入了新的功能，有时是未经深思熟虑的，而这些功能日后被其他浏览器采用 —— 并最终成为了((标准))。
 
-This is both a blessing and a curse. On the one hand, it is empowering
-to not have a central party control a system but have it be improved
-by various parties working in loose ((collaboration)) (or occasionally
-open hostility). On the other hand, the haphazard way in which the Web
-was developed means that the resulting system is not exactly a shining
-example of internal ((consistency)). Some parts of it are downright
-confusing and poorly conceived.
+这既是一个祝福，也是一个咒诅。一方面，由于没有一个中央组织对系统进行控制，导致多个组织之间通过松散的((合作))(偶尔还有公开互怼的情况)来对其进行提升。另一方面，万维网以这种无组织、无纪律的方式被开发，意味着最终的系统并不是一个拥有内在((一致性))的光辉范例。它有些部分是比较令人困惑的，而且构思拙劣。
 
-## Networks and the Internet
+## 网络与互联网
 
-Computer ((network))s have been around since the 1950s. If you put
-cables between two or more computers and allow them to send data back
-and forth through these cables, you can do all kinds of wonderful
-things.
+计算机((网络))自1950年代就出现了，当你在两台或两台以上的计算机之间连上缆线，并且允许它们通过这些缆线来回发送数据的时候，你便可以做很多神奇的事情。
 
-And if connecting two machines in the same building allows us to do
-wonderful things, connecting machines all over the planet should be
-even better. The technology to start implementing this vision was
-developed in the 1980s, and the resulting network is called the
-_((Internet))_. It has lived up to its promise.
+如果连接同一栋楼里的两台机器可以让我们做神奇的事情，那么将遍布地球上的机器都连接上的话应该会更棒。开始实现这个愿景的技术在 1980 年代被开发，最终产生的网络被称为 _((互联网))_。互联网没有辜负人们对它的期许。
 
-A computer can use this network to shoot bits at another computer. For
-any effective ((communication)) to arise out of this bit-shooting, the
-computers on both ends must know what the bits are supposed to
-represent. The meaning of any given sequence of bits depends entirely
-on the kind of thing that it is trying to express and on the
-((encoding)) mechanism used.
+一台计算机可以使用这个网络来向另外一台计算机发送比特(bits)。为了使这发送比特的方式产生有效的((通信))，在两端的计算机必须知道这些比特表达的是什么。一个给定序列的比特的含义完全取决于该序列表达的信息类型和使用的((编码))机制。
 
 {{index [network, protocol]}}
 
-A _network ((protocol))_ describes a style of communication over a
-((network)). There are protocols for sending email, for fetching email,
-for sharing files, and even for controlling computers that happen to be
-infected by malicious software.
+_网络((协议))_ 描述了在一个((网络))中通信的风格。有适用于发送邮件的协议、获取邮件的协议、共享文件的协议，甚至还有能控制被恶意软件感染的计算机的协议。 
 
 {{indexsee "Hypertext Transfer Protocol", HTTP}}
 
-For example, the _Hypertext Transfer Protocol_ (((HTTP))) is
-a protocol for retrieving named ((resource))s (chunks of information,
-such as web pages or pictures). It specifies that the side making the
-request should start with a line like this, naming the resource and
-the version of the protocol that it is trying to use:
+例如，_超文本传输协议_ (((HTTP))) 是一个获取已命名的((资源))(信息块，如网页或者图片)的协议。该协议指定了发出请求的一方应该如此开始第一行 —— 命名资源以及正在尝试使用的协议版本： 
 
 ```{lang: "text/plain"}
 GET /index.html HTTP/1.1
 ```
 
-There are a lot more rules about the way the requester can include more
-information in the ((request)) and the way the other side, which
-returns the resource, packages up its content. We'll look at HTTP in a
-little more detail in [Chapter ?](http).
+关于请求的一方可以在((请求))中囊括更多信息的方式，以及接收方返回资源、对内容进行打包的方式，还有很多其他的规则。我们会在[第十八章](http)更详细地介绍。
 
 {{index layering, stream, ordering}}
 
-Most protocols are built on top of other protocols. HTTP treats the
-network as a streamlike device into which you can put bits and have
-them arrive at the correct destination in the correct order. As we saw
-in [Chapter ?](async), ensuring those things is already a rather
-difficult problem.
+大多数协议构建于其他协议的基础之上。HTTP 将网络视为一个流水般的设备，你可以将比特放入其中，它们便会以正确的顺序流向正确的地点。我们在[第十一章](async)已经了解到，确保这样的事情发生是比较困难的问题。
 
 {{index TCP}}
 
 {{indexsee "Transmission Control Protocol", TCP}}
 
-The _Transmission Control Protocol_ (TCP) is a ((protocol)) that
-addresses this problem. All Internet-connected devices "speak" it, and
-most communication on the ((Internet)) is built on top of it.
+_传输控制协议_ (TCP) 就是为了解决这个问题而生的((协议))。它是所有连接到互联网的设备的“语言”，而且大多数((互联网))上的通信都是基于该协议。
 
 {{index "listening (TCP)"}}
 
-A TCP ((connection)) works as follows: one computer must be waiting,
-or _listening_, for other computers to start talking to it. To be able
-to listen for different kinds of communication at the same time on a
-single machine, each listener has a number (called a _((port))_)
-associated with it. Most ((protocol))s specify which port should be
-used by default. For example, when we want to send an email using the
-((SMTP)) protocol, the machine through which we send it is expected to
-be listening on port 25.
+一个 TCP ((连接)) 是这样运作的：一台计算机必须等待(或者 _聆听_)，以便其他计算机开始对其讲话。为了能在一台机器上同时聆听来自不同类型的通信，每个聆听器有一个关联的号码(即 _((端口))_)。大多数((协议))会指定默认情况下哪个端口应被使用。例如，当我们想要用 ((SMTP)) 协议发送一封邮件时，发送邮件的机器会在端口 25 进行聆听。
 
-Another computer can then establish a ((connection)) by connecting to
-the target machine using the correct port number. If the target
-machine can be reached and is listening on that port, the connection
-is successfully created. The listening computer is called the
-_((server))_, and the connecting computer is called the _((client))_.
+之后，另一台计算机可以用正确的端口号与目标机器建立((连接))。如果目标机器可以被找到，并且正在那个端口上聆听，那就意味着连接被成功创建了。正在聆听的计算机被称为 _((服务器))_，试图与其建立连接的计算机被称为 _((客户))_。
 
 {{index [abtraction, "of the network"]}}
 
-Such a connection acts as a two-way ((pipe)) through which bits can
-flow—the machines on both ends can put data into it. Once the bits are
-successfully transmitted, they can be read out again by the machine on
-the other side. This is a convenient model. You could say that ((TCP))
-provides an abstraction of the network.
+这样的连接就像一个双通((管道))，比特可以在其中流动 —— 管道两端的机器可以放入数据。一旦比特被成功传输，它们可以被另一端的机器再次读取。这是一个方便的模型。你可以说 ((TCP)) 提供了网络的抽象。
 
 {{id web}}
 
-## The Web
+## 万维网(The Web)
 
-The _((World Wide Web))_ (not to be confused with the ((Internet)) as
-a whole) is a set of ((protocol))s and formats that allow us to visit
-web pages in a browser. The "Web" part in the name refers to the fact
-that such pages can easily link to each other, thus connecting into a
-huge ((mesh)) that users can move through.
+_((万维网))_ (别和整个((互联网))混为一谈) 是一些((协议))和格式的合集，它们让我们能够在浏览器中访问网页。字面中“网”的部分是指这些网页可以轻易地互相连接，因而连成了庞大的、用户可以穿行其间的((网状物))。
 
-To become part of the Web, all you need to do is connect a machine to
-the ((Internet)) and have it listen on port 80 with the ((HTTP))
-protocol so that other computers can ask it for documents.
+想要成为万维网的一部分，你只需将一台机器连上((互联网))，并且让它在端口 80 使用 ((HTTP)) 协议来聆听，这样其他计算机就可以向它寻求文档。 
 
 {{index URL}}
 
 {{indexsee "Uniform Resource Locator", URL}}
 
-Each ((document)) on the Web is named by a _Uniform Resource Locator_
-(URL), which looks something like this:
+万维网上的每一个((文件))以 _统一资源定位符_ (URL) 被命名，看起来就像这样：
 
 ```{lang: null}
   http://eloquentjavascript.net/13_browser.html
  |      |                      |               |
- protocol       server               path
+   协议           服务器               路径
 ```
 
 {{index HTTPS}}
 
-The first part tells us that this URL uses the HTTP ((protocol)) (as
-opposed to, for example, encrypted HTTP, which would be _https://_).
-Then comes the part that identifies which ((server)) we are requesting
-the document from. Last is a path string that identifies the specific
-document (or _((resource))_) we are interested in.
+第一个部分告诉我们这个 URL 使用 HTTP ((协议)) (比如说如果是加密的 HTTP，那会是 _https://_)。中间的部分指出我们从哪一个 ((服务器)) 请求文件。最后一个部分则是我们感兴趣的具体文件((或 _((资源))_))的路径字符串。 
 
-Machines connected to the Internet get an _((IP address))_, which is a
-number that can be used to send messages to that machine, and looks
-something like `149.210.142.219` or `2001:4860:4860::8888`. But lists
-of more or less random numbers are hard to remember and awkward to
-type, so you can instead register a _((domain)) name_ for a specific
-address or set of addresses. I registered _eloquentjavascript.net_ to
-point at the IP address of a machine I control and can thus use that
-domain name to serve web pages.
+连上互联网的机器拥有一个 _((IP 地址))_，它是一个可以被用于给该机器发送信息的数字，看起来像 `149.210.142.219` 或者 `2001:4860:4860::8888`。然而，多少有些随机的数字列表很难记，而且打字很尴尬，所以你可以针对特定的地址或一组地址注册一个 _((域))名_。我注册了 _eloquentjavascript.net_，这个域名指向我控制的机器的 IP 地址，所以我可以使用它来提供网页。
 
 {{index browser}}
 
-If you type this URL into your browser's ((address bar)), the browser
-will try to retrieve and display the ((document)) at that URL. First,
-your browser has to find out what address _eloquentjavascript.net_
-refers to. Then, using the ((HTTP)) protocol, it will make a
-connection to the server at that address and ask for the resource
-_/13_browser.html_. If all goes well, the server sends back a
-document, which your browser then displays on your screen.
+如果你将上述 URL 输入你浏览器中的((地址栏))，你的浏览器会试图获取并显示存在于该 URL 的((文档))。首先，你的浏览器需要找出 _eloquentjavascript.net_ 指向了哪个地址。然后，它会利用 ((HTTP)) 协议连接至那个地址的服务器，并且索要 _/13_browser.html_ 这个资源。如果一切顺利的话，该服务器会发回一个文档，然后你的浏览器将其渲染到屏幕上。
 
 ## HTML
 
@@ -178,32 +96,29 @@ document, which your browser then displays on your screen.
 
 {{indexsee "Hypertext Markup Language", HTML}}
 
-HTML, which stands for _Hypertext Markup Language_, is the document
-format used for web pages. An HTML document contains ((text)), as well
-as _((tag))s_ that give structure to the text, describing things such
-as links, paragraphs, and headings.
+HTML 指的是 _超文本标记语言_，它是网页使用的文档格式。一个 HTML 文档包含((文本))和给予文本结构的 _((标签))_，标签描述了诸如链接、段落及标题等元素。
 
-A short HTML document might look like this:
+一个简短的 HTML 文档看起来可能是这样的：
 
 ```{lang: "text/html"}
 <!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>My home page</title>
+    <title>我的主页</title>
   </head>
   <body>
-    <h1>My home page</h1>
-    <p>Hello, I am Marijn and this is my home page.</p>
-    <p>I also wrote a book! Read it
-      <a href="http://eloquentjavascript.net">here</a>.</p>
+    <h1>我的主页</h1>
+    <p>你好，我是 Marijn，这是我的主页哦。</p>
+    <p>我还写了一本书！来
+      <a href="http://eloquentjavascript.net">这里</a>阅读吧！</p>
   </body>
 </html>
 ```
 
 {{if book
 
-This is what such a document would look like in the browser:
+这样的文档在浏览器中看起来如下所示：
 
 {{figure {url: "img/home-page.png", alt: "My home page",width: "6.3cm"}}}
 
@@ -211,161 +126,99 @@ if}}
 
 {{index [HTML, notation]}}
 
-The tags, wrapped in ((angle brackets)) (`<` and `>`, the symbols for
-_less than_ and _greater than_), provide information about the
-((structure)) of the document. The other ((text)) is just plain text.
+标签被包裹在((角括号))(`<` 和 `>`，_小于_ 和 _大于_ 的符号)里，它们提供了关于文档((结构))的信息。其余的文本只是纯文本。
 
 {{index doctype, version}}
 
-The document starts with `<!doctype html>`, which tells the browser to
-interpret the page as _modern_ HTML, as opposed to various dialects
-that were in use in the past.
+该文档以 `<!doctype html>` 作为开头，它告诉浏览器将当前页面视为 _现代_ HTML 来解读，而不是以前被人们使用的诸多“方言”版本。
 
 {{index "head (HTML tag)", "body (HTML tag)", "title (HTML tag)", "h1 (HTML tag)", "p (HTML tag)"}}
 
-HTML documents have a head and a body. The head contains information
-_about_ the document, and the body contains the document itself. In
-this case, the head declares that the title of this document is "My
-home page" and that it uses the UTF-8 encoding, which is a way to
-encode Unicode text as binary data. The document's body contains a
-heading (`<h1>`, meaning "heading 1"—`<h2>` to `<h6>` produce
-subheadings) and two ((paragraph))s (`<p>`).
+HTML 文档有一个头部和主体。头部包含了 _关于_ 文档的信息，而主体包含文档本身。在上述例子中，头部声明了该文档的抬头是“我的主页”，并使用 UTF-8 编码 —— 将 Unicode 文本编码为二进制数据的一种方式。该文档的主体包含了一个标题(`<h1>`，代表“一级标题” —— `<h2>` 至 `<h6>` 可产生不同大小的子标题)以及两个((段落))的 (`<p>`)。
 
 {{index "href attribute", "a (HTML tag)"}}
 
-Tags come in several forms. An ((element)), such as the body, a
-paragraph, or a link, is started by an _((opening tag))_ like `<p>`
-and ended by a _((closing tag))_ like `</p>`. Some opening tags, such
-as the one for the ((link)) (`<a>`), contain extra information in the
-form of `name="value"` pairs. These are called _((attribute))s_. In
-this case, the destination of the link is indicated with
-`href="http://eloquentjavascript.net"`, where `href` stands for
-"hypertext reference".
+标签有好几种不同的形式。一个((元素))，比如主体、段落或者链接都以一个形似 `<p>` 的 _((起始标签))_ 开始，并以一个形似 `</p>` 的 _((闭合标签))_ 结束。有的起始标签以 `名称="值"` 对的形式包含额外的信息，比如用于((链接))的标签(`<a>`)。这些被称为 _((属性))_。在上述示例代码中，该链接的目的地是用 `href="http://eloquentjavascript.net"` 表明的，其中 `href` 意思是 “超文本引用(hypertext reference)”。
 
 {{index "src attribute", "self-closing tag", "img (HTML tag)"}}
 
-Some kinds of ((tag))s do not enclose anything and thus do not need to
-be closed. The metadata tag `<meta charset="utf-8">` is an example of
-this.
+有一些((标签))不包含任何元素，因此无需闭合。元数据标签 `<meta charset="utf-8">` 就是一个这样的范例。
 
 {{index [escaping, "in HTML"]}}
 
-To be able to include ((angle brackets)) in the text of a document,
-even though they have a special meaning in HTML, yet another form of
-special notation has to be introduced. A plain opening angle bracket
-is written as `&lt;` ("less than"), and a closing bracket is written
-as `&gt;` ("greater than"). In HTML, an ampersand (`&`) character
-followed by a name or character code and a semicolon (`;`) is called an _((entity))_
-and will be replaced by the character it encodes.
+为了能够在文档的文本里包含((角括号))，由于它们在 HTML 中有特殊含义，需引入另一种特殊的写法。一个普通的起始角括号写成 `&lt;`("less than")，一个闭合角括号写成 `&gt;` ("greater than")。在 HTML 中，`&` 字符后跟一个名称或字符码、一个分号 (`;`) —— 这样的组合被称为一个 _((实体))_，并且会被其编码的字符给替换掉。
 
 {{index ["backslash character", "in strings"], "ampersand character", "double-quote character"}}
 
-This is analogous to the way backslashes are used in JavaScript
-strings. Since this mechanism gives ampersand characters a special
-meaning, too, they need to be escaped as `&amp;`. Inside attribute
-values, which are wrapped in double quotes, `&quot;` can be used to
-insert an actual quote character.
+这种写法与 JavaScript 字符串中反斜杠的用法相似。由于这机制也赋予 & 字符特殊的含义，它们也需要被规避成 `&amp;`。在属性值的双引号之间，`&quot;` 可以被用来插入一个字面引号。
 
 {{index "error tolerance", parsing}}
 
-HTML is parsed in a remarkably error-tolerant way. When tags that
-should be there are missing, the browser reconstructs them. The way in
-which this is done has been standardized, and you can rely on all
-modern browsers to do it in the same way.
+HTML 是以一种非常能容忍错误的方式被解析的。当应该出现的标签没有出现时，浏览器会重建这些标签。这种重建标签的方式已经被标准化了，你可以认为所有现代浏览器都是以同样的方式进行标签的重建。
 
-The following document will be treated just like the one shown previously:
+下面的文档与我们之前所见的文档显示的结果是相同的：
 
 ```{lang: "text/html"}
 <!doctype html>
 
 <meta charset=utf-8>
-<title>My home page</title>
+<title>我的主页</title>
 
-<h1>My home page</h1>
-<p>Hello, I am Marijn and this is my home page.
-<p>I also wrote a book! Read it
-  <a href=http://eloquentjavascript.net>here</a>.
+<h1>我的主页</h1>
+<p>你好，我是 Marijn，这是我的主页哦。
+<p>我还写了一本书！来
+<a href=http://eloquentjavascript.net>这里</a>阅读吧！
 ```
 
 {{index "title (HTML tag)", "head (HTML tag)", "body (HTML tag)", "html (HTML tag)"}}
 
-The `<html>`, `<head>`, and `<body>` tags are gone completely. The
-browser knows that `<meta>` and `<title>` belong in the head and that
-`<h1>` means the body has started. Furthermore, I am no longer
-explicitly closing the paragraphs since opening a new paragraph or
-ending the document will close them implicitly. The quotes around the
-attribute values are also gone.
+`<html>`、`<head>` 和 `<body>` 标签完全消失了。浏览器知道 `<meta>` 和 `<title>` 属于头部，且 `<h1>` 意味着主体部分的开始。另外，我没有明确地闭合段落，因为开启一个新的段落或者结束文档会隐性地将它们闭合。属性值周围的引号也不见了。
 
-This book will usually omit the `<html>`, `<head>`, and `<body>` tags
-from examples to keep them short and free of clutter. But I _will_
-close tags and include quotes around attributes.
+本书通常会省略示例代码中的 `<html>`、`<head>` 和 `<body>` 标签，从而使代码简短，免得凌乱不堪。但我 _会_ 闭合标签，并且在属性的周围加上引号。
 
 {{index browser}}
 
-I will also usually omit the ((doctype)) and `charset` declaration.
-This is not to be taken as an encouragement to drop these from HTML
-documents. Browsers will often do ridiculous things when you forget
-them. You should consider the doctype and the `charset` metadata
-to be implicitly present in examples, even when they are not actually shown
-in the text.
+我通常也会把 ((doctype)) 和 `charset` 声明省略掉。这可不是在鼓励你将它们从 HTML 文档中剔除。当你忘了添加这些声明时，浏览器通常会做出不可理喻的事情。即使元数据 doctype 和 `charset` 不在示例代码的文本中，你也应该认为它们隐形地存在着。
 
 {{id script_tag}}
 
-## HTML and JavaScript
+## HTML 与 JavaScript
 
 {{index [JavaScript, "in HTML"], "script (HTML tag)"}}
 
-In the context of this book, the most important HTML tag is
-`<script>`. This tag allows us to include a piece of JavaScript in a
-document.
+在这本书的内容语境下，最重要的 HTML 标签莫过于 `<script>`。这个标签允许我们在一个文档中插入一段 JavaScript 代码。
 
 ```{lang: "text/html"}
 <h1>Testing alert</h1>
-<script>alert("hello!");</script>
+<script>alert("Hello!");</script>
 ```
 
 {{index "alert function", timeline}}
 
-Such a script will run as soon as its `<script>` tag is encountered
-while the browser reads the HTML. This page will pop up a dialog when
-opened—the `alert` function resembles `prompt`, in that it pops up a
-little window, but only shows a message without asking for input.
+当浏览器在读取 HTML 时，一旦遇到脚本的 `<script>` 标签，该脚本就会被立即运行。这个网页在打开时会弹出一个对话框 —— `alert` 函数与 `prompt` 类似，它也会弹出一个小窗口，但只显示一条信息，而不要求输入。
 
 {{index "src attribute"}}
 
-Including large programs directly in HTML documents is often
-impractical. The `<script>` tag can be given an `src` attribute  to fetch a script file (a text file containing a JavaScript
-program) from a URL.
+直接把庞大的程序塞进 HTML 文档通常是不切实际的。我们可以给 `<script>` 标签一个 `src` 属性，用来从一个 URL 获取脚本文件(一个含有 JavaScript 程序的文本文件)。
 
 ```{lang: "text/html"}
 <h1>Testing alert</h1>
 <script src="code/hello.js"></script>
 ```
 
-The _code/hello.js_ file included here contains the same
-program—`alert("hello!")`. When an HTML page references other URLs as
-part of itself—for example, an image file or a script—web browsers
-will retrieve them immediately and include them in the page.
+这段代码中出现的 _code/hello.js_ 文件包含了同样的程序 —— `alert("hello!")`。当一个 HTML 页面引用其他的 URL 作为自身的一部分时 —— 例如，一个图像文件或脚本 —— 网页浏览器会立即获取它们并囊括于网页上。
 
 {{index "script (HTML tag)", "closing tag"}}
 
-A script tag must always be closed with `</script>`, even if it refers
-to a script file and doesn't contain any code. If you forget this, the
-rest of the page will be interpreted as part of the script.
+一个脚本标签必须被 `</script>` 闭合，即使它引用了一个不含任何代码的脚本文件。如果你忘记这点，页面剩余的部分会被解读为脚本的一部分。
 
 {{index "relative path", dependency}}
 
-You can load ((ES modules)) (see [Chapter ?](modules#es)) in the
-browser by giving your script tag a `type="module"` attribute. Such
-modules can depend on other modules by using ((URL))s relative to
-themselves as module names in `import` declarations.
+通过给你的脚本标签赋予一个 `type="module"` 属性，你便可以在浏览器中加载((ES 模块))(见[第十章](modules#es))。这样的模块可以通过使用相对 ((URL)) 作为 `import` 声明的模块名称来依赖于其他模块。
 
 {{index "button (HTML tag)", "onclick attribute"}}
 
-Some attributes can also contain a JavaScript program. The `<button>`
-tag shown next (which shows up as a button) has an `onclick`
-attribute. The attribute's value will be run whenever the button is
-clicked.
+有些属性也可以包含 JavaScript 程序。下面展示的 `<button>` 标签(会以按钮的形式显示)有一个 `onclick` 属性，该属性值会在每一次按钮被点击时运行。
 
 ```{lang: "text/html"}
 <button onclick="alert('Boom!');">DO NOT PRESS</button>
@@ -373,86 +226,38 @@ clicked.
 
 {{index "single-quote character", [escaping, "in HTML"]}}
 
-Note that I had to use single quotes for the string in the `onclick`
-attribute because double quotes are already used to quote the whole
-attribute. I could also have used `&quot;`.
+注意我需要对 `onclick` 属性的字符串使用单引号，这是因为双引号已经被用在整个属性上了。我也可以用 `&quot;`。
 
-## In the sandbox
+## 在沙箱之中
 
 {{index "malicious script", "World Wide Web", browser, website, security}}
 
-Running programs downloaded from the ((Internet)) is potentially
-dangerous. You do not know much about the people behind most sites you
-visit, and they do not necessarily mean well. Running programs by
-people who do not mean well is how you get your computer infected by
-((virus))es, your data stolen, and your accounts hacked.
+运行从((互联网))上下载下来的程序是有潜在危险的。你对大部分访问的网站背后的人知之甚少，并且他们未必心怀好意。运行心怀歹意的人所开发的程序会导致你的计算机被((病毒))感染、数据被偷窃，还有账号被盗用。
 
-Yet the attraction of the Web is that you can browse it without
-necessarily ((trust))ing all the pages you visit. This is why browsers
-severely limit the things a JavaScript program may do: it can't look
-at the files on your computer or modify anything not related to the
-web page it was embedded in.
+然而，万维网的魅力就在于你浏览网页的时候不必((信任))这些访问的页面。这也正是为什么浏览器极大地限制了 JavaScript 程序可以做的事情：它不能读取你计算机上的文件，或是修改任何与该程序嵌入的网页无关的事物。
 
 {{index isolation}}
 
-Isolating a programming environment in this way is called
-_((sandbox))ing_, the idea being that the program is harmlessly
-playing in a sandbox. But you should imagine this particular kind of
-sandbox as having a cage of thick steel bars over it so that the
-programs playing in it can't actually get out.
+以这样的方式将编程环境分离而出，我们称之为 _((沙箱))化_，意思是程序像是在一个沙箱中无害地进行玩闹。但是你应该将这种沙箱想像成被铜墙铁壁所包围，所以事实上在其中玩闹的程序是出不去的。
 
-The hard part of sandboxing is allowing the programs enough room to be
-useful yet at the same time restricting them from doing anything
-dangerous. Lots of useful functionality, such as communicating with
-other servers or reading the content of the copy-paste ((clipboard)),
-can also be used to do problematic, ((privacy))-invading things.
+沙箱化的难点在于，在给程序足够的空间使其能发挥作用的同时，也得限制它们使其不能做出危险的事。有很多有用的功能 —— 比如说与别的服务器通信，或是读取复制粘贴的((剪贴板))的内容 —— 这些功能也会被用来做糟糕的、侵犯((隐私))的事情。
 
 {{index leak, exploit, security}}
 
-Every now and then, someone comes up with a new way to circumvent the
-limitations of a ((browser)) and do something harmful, ranging from
-leaking minor private information to taking over the whole machine
-that the browser runs on. The browser developers respond by fixing the
-hole, and all is well again—until the next problem is discovered, and
-hopefully publicized, rather than secretly exploited by some
-government agency or ((mafia)).
+每过一段时间，总有人会想出新的办法去规避((浏览器))的限制，并且做出有害的事情，从泄漏少量的私人信息到控制浏览器运行其上的整个机器不等。浏览器开发者则会以修补漏洞来回应，然后岁月静好 —— 直到下一个漏洞被发现，最好是公之于众的，而不是被一些政府机构或((黑帮))私下利用。
 
-## Compatibility and the browser wars
+## 兼容性与浏览器大战
 
 {{index Microsoft, "World Wide Web"}}
 
-In the early stages of the Web, a browser called ((Mosaic)) dominated
-the market. After a few years, the balance shifted to
-((Netscape)), which was then, in turn, largely supplanted by
-Microsoft's ((Internet Explorer)). At any point where a single
-((browser)) was dominant, that browser's vendor would feel entitled to
-unilaterally invent new features for the Web. Since most users used
-the most popular browser, ((website))s would simply start using those
-features—never mind the other browsers.
+在万维网的早期，一个名为 ((Mosaic)) 的浏览器统治着市场。过了短短几年之后，天平移向了((Netscape))，而它随后又被微软的((Internet Explorer))占据了大部分市场。无论何时，每当有一个((浏览器))统治了市场，该浏览器厂商便会想要独自为万维网发明新的特性。由于大多数用户使用最流行的浏览器，((网站))便会开始使用这些特性 —— 而不管别的浏览器是否兼容。
 
-This was the dark age of ((compatibility)), often called the
-_((browser wars))_. Web developers were left with not one unified Web
-but two or three incompatible platforms. To make things worse, the
-browsers in use around 2003 were all full of ((bug))s, and of course
-the bugs were different for each ((browser)). Life was hard for people
-writing web pages.
+这是((兼容性))的黑暗时代，通常被称为 _((浏览器大战))_。网页开发者并没有一个统一的万维网，摆在他们面前的是两到三个互不兼容的平台。更糟糕的是，2003 年左右的浏览器有很多 ((bug))，当然每个((浏览器))的 bug 还都不一样。那时候网页开发者的生活糟透了。
 
 {{index Apple, "Internet Explorer", Mozilla}}
 
-Mozilla ((Firefox)), a not-for-profit offshoot of ((Netscape)),
-challenged Internet Explorer's position in the late 2000s. Because
-((Microsoft)) was not particularly interested in staying competitive
-at the time, Firefox took a lot of market share away from it. Around
-the same time, ((Google)) introduced its ((Chrome)) browser, and
-Apple's ((Safari)) browser gained popularity, leading to a situation
-where there were four major players, rather than one.
+Mozilla ((Firefox)) 是 ((Netscape)) 的一个非盈利性分支，它在本世纪头十年末期挑战 Internet Explorer 的霸主地位。由于那时候((微软))并不是很在意巩固自己的竞争性，Firefox(译者注：火狐浏览器) 从 Internet Explorer 手中夺去了大片市场份额。差不多同一时期，((谷歌))推出了自己的 ((Chrome)) 浏览器，而苹果的 ((Safari)) 浏览器的人气也在上升，一时间呈现出四足鼎立的局势，而不是一家独大。
 
 {{index compatibility}}
 
-The new players had a more serious attitude toward ((standards)) and
-better ((engineering)) practices, giving us less incompatibility and
-fewer ((bug))s. Microsoft, seeing its market share crumble, came
-around and adopted these attitudes in its Edge browser, which replaces
-Internet Explorer. If you are starting to learn web development today,
-consider yourself lucky. The latest versions of the major browsers
-behave quite uniformly and have relatively few bugs.
+新晋的竞争者们对于((标准))和更好的((工程))实践有着更严肃认真的态度，减少了兼容性的问题，((bug)) 也变少了。微软看到自己的江山不保，于是悬崖勒马，在自己的 Edge 浏览器中采取了这些认真的态度，取代了 Internet Explorer。如果你今天才开始学习网页开发的话，已经很幸运了。几家主流浏览器的最新版本的行为较为一致，并且相对来说很少有 bug。
